@@ -1,23 +1,16 @@
-import Practica from "./Practica.js"
+import { NivelCobertura } 	from "./Enums.js";
+import Practica 			from "./Practica.js"
 
 export default class CoberturaPractica {
-  practica; 
-  nivel; 
+	practica;
+	nivel;
 
-  /** 
-   * @param {Practica} practica 
-    */
-
-  constructor(practica, nivel) {
-    this.practica = practica;
-    this.nivel = nivel;
-  }
-
-  getPractica() {
-    return this.practica;
-  }
-  getNivel() { 
-    return this.nivel; 
-  }
-
+	/**
+	 * @param {Practica} practica 
+	 * @param {NivelCobertura} nivel 
+	 */
+	constructor(practica, nivel) {
+		this.practica = practica;
+		this.nivel = nivel;
+	}
 }

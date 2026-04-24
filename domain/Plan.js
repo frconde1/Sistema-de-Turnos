@@ -1,39 +1,47 @@
-import CoberturaEspecialidad from "./CoberturaEspecialidad.js";
-import CoberturaPractica from "./CoberturaPractica.js";
-import Especialidad from "./Especialidad.js";
-import Practica from "./Practica.js";
+import CoberturaEspecialidad	from "./CoberturaEspecialidad.js";
+import CoberturaPractica		from "./CoberturaPractica.js";
+import { NivelCobertura } 		from "./Enums.js";
+import Especialidad 			from "./Especialidad.js";
+import Practica 				from "./Practica.js";
 
 export default class Plan {
-  id; 
-  nombre;
-  coberturasEspecialidad;
-  coberturasPracticas;
+	id; 
+	nombre;
+	coberturasEspecialidad;
+	coberturasPracticas;
 
-  constructor(id, nombre, coberturasEspecialidad, coberturasPracticas) {
-    this.id = id; 
-    this.nombre = nombre;
-    this.coberturasEspecialidad = coberturasEspecialidad;
-    this.coberturasPracticas = coberturasPracticas;
-  }
+	/**
+	 * @param {String} id 
+	 * @param {String} nombre 
+	 * @param {CoberturaEspecialidad[]} coberturasEspecialidad 
+	 * @param {CoberturaPractica[]} coberturasPracticas 
+	 */
+	constructor(id, nombre, coberturasEspecialidad, coberturasPracticas) {
+		this.id = id; 
+		this.nombre = nombre;
+		this.coberturasEspecialidad = coberturasEspecialidad;
+		this.coberturasPracticas = coberturasPracticas;
+	}
 
-  obtenerCobertura(elementoCobertura) {
-    if (elementoCobertura instanceof Especialidad)
-    {
-      for(const cobertura of this.coberturasEspecialidad) {
-      if (Especialidad.esIgual(elementoCobertura, cobertura.getEspecialidad()))
-      return cobertura.getNivel();
-    }
-    } else if (elementoCobertura instanceof Practica) {
-      
-      for(const cobertura of this.coberturasPracticas) {
-      if (Practica.esIgual(elementoCobertura, cobertura.getPractica()))
-      return cobertura.getNivel();
-    }
+	/**
+	 * 
+	 * @param	{Especialidad | Practica} elementoCobertura 
+	 * @returns	{NivelCobertura}
+	 */
+	ObtenerCobertura(situacion) {
+		if (situacion instanceof Especialidad)
+			for (const cobertura of this.coberturasEspecialidad)
+				if (Especialidad.EsIgual(situacion, cobertura.especialidad))
+					return cobertura.nivel;
 
-    }else {
-      throw new Exception("No se ingreso una practica o una especialidad");
-    }
+		if (situacion instanceof Practica)
+			for (const cobertura of this.coberturasPracticas)
+				if (Practica.EsIgual(situacion, cobertura.practica))
+					return cobertura.nivel;
 
-    }
-  }
+		// no se encontro
+		throw new Exception("No se ingreso una practica o una especialidad");
+	}
+
+	}
 
