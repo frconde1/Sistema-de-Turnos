@@ -25,4 +25,8 @@ export class MedicoService {
     agregarDisponibilidad(medicoId, body) {
         this.medicosRepository.agregarDisponibilidad(medicoId, body.disponibilidad)
     }
+
+    agregarSede(medicoId, body) {
+        this.medicosRepository.agregarSede(medicoId, body.sede)
+    }
 }

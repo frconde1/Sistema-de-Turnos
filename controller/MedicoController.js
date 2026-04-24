@@ -19,4 +19,9 @@ export class MedicoController {
         this.medicoService.agregarDisponibilidad(req.params.id, req.body)
         return res.status(201).json({ status: "success" })
     }
+    
+    agregarSede = (req, res) => {
+        this.medicoService.agregarSede(req.params.id, req.body)
+        return res.status(201).json({ status: "success" })
+    }
 }

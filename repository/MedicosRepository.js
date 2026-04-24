@@ -1,8 +1,11 @@
+import { Medico } from "../domain/Medico.js";
+
 export class MedicosRepository {
     medicos;
 
     constructor() {
         this.medicos = []
+        this.medicos.push(new Medico(1, "Usuario01", "123-123", "Favaloro"))
     }
 
     findAll() {
@@ -22,6 +25,13 @@ export class MedicosRepository {
         const medico = this.findMedicoById(medicoId)
         if (medico) {
             medico.agregarDisponibilidad(disponibilidad)
+        }
+    }
+
+    agregarSede(medicoId, sede) {
+        const medico = this.findMedicoById(medicoId)
+        if (medico) {
+            medico.agregarSede(sede)
         }
     }
 

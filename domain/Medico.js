@@ -27,4 +27,8 @@ export class Medico {
         this.disponibilidades = this.disponibilidades.filter(d => d !== disponibilidad)
     }
 
+    agregarSede(sede) {
+        this.sedes.push(sede)
+    }
+
 }
