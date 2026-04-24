@@ -1,5 +1,5 @@
 import express from "express"
-import { MedicoController } from "../controller/medico/MedicoController.js"
+import { MedicoController } from "../controller/MedicoController.js"
 
 const medicoController = new MedicoController();
 

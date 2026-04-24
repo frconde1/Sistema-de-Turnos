@@ -1,4 +1,4 @@
-import { MedicoService } from "../../service/MedicoService.js"
+import { MedicoService } from "../service/MedicoService.js"
 
 export class MedicoController {
 
