@@ -1,5 +1,3 @@
-import InputError from "./Errors/InputError.js";
-
 /**
  * @readonly
  * @enum {Number}
@@ -14,20 +12,6 @@ export const DiaSemana = Object.freeze({
 	DOMINGO: 	6
 });
 
-
-/**
- * @param {String} dia 
- * @returns {StreamPipeOptions}
- */
-export function toDiasSemana(dia){
-	let valor = DiaSemana[dia.toUpperCase()];
-	
-	if(valor == undefined)
-		throw new InputError(404, "El dia de la semana es invalido");
-
-	return valor;
-}
-
 /**
  * @readonly
  * @enum {Number}
@@ -38,20 +22,7 @@ export const EstadoTurno = Object.freeze({
 	CONFIRMADO:	2,
 	CANCELADO: 	3,
 	REALIZADO: 	4
-}); 
-
-/**
- * @param {String} estado 
- * @returns {EstadoTurno}
- */
-export function toEstadoTurno(estado){
-	let valor = EstadoTurno[estado.toUpperCase()];
-	
-	if(valor == undefined)
-		throw new InputError(404, "El estado del turno es invalido");
-
-	return valor;
-}
+});
 
 /**
  * @readonly
@@ -62,17 +33,3 @@ export const NivelCobertura = Object.freeze({
 	PARCIAL:	1,
 	NO_CUBIERTA:2
 });
-
-/**
- * @param {String} cobertura 
- * @returns {EstadoTurno}
- */
-export function toNivelCobertura(cobertura){
-	let valor = EstadoTurno[cobertura.toUpperCase().replaceAll(' ', '_')];
-	
-	if(valor == undefined)
-		throw new InputError(404, "La cobertura es invalida");
-	
-	return valor;
-}
-

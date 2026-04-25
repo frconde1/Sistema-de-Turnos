@@ -11,7 +11,6 @@ export default class CambioEstadoTurno {
 	motivo; 
 
 	/**
-	 * 
 	 * @param {Date} fechaHoraIngreso 
 	 * @param {EstadoTurno} estado 
 	 * @param {Turno} turno 

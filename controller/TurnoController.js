@@ -1,4 +1,3 @@
-import InputError 	from "../domain/Errors/InputError.js";
 import TurnoService	from "../service/TurnoService.js"
 
 export default class TurnoController {
@@ -14,7 +13,7 @@ export default class TurnoController {
 	 * @returns {import('express').Response}
 	 */
 	Create (req, res) {
-		var turnoDTO = this.turnoService.Create(req.body);
+		const turnoDTO = this.turnoService.Create(req.body);
 		return res.status(201).json({ status: "success", data: turnoDTO});
 	}
 	
@@ -24,7 +23,7 @@ export default class TurnoController {
 	 * @returns {import('express').Response}
 	 */
 	async FindAll (req, res) {
-		return res.json(this.turnoService.FindAll());
+		return res.status(200).json({status: "succes", data: this.turnoService.FindAll()});
 	}
 
 	/**
@@ -43,7 +42,7 @@ export default class TurnoController {
 	 * @returns {import('express').Response}
 	 */
 	async FindById(req, res) {
-		let turnoDTO = this.turnoService.FindById(req.params.id);
+		const turnoDTO = this.turnoService.Find(req.params.id);
 		return res.status(200).json({status: "succes", data: turnoDTO});
 	}
 

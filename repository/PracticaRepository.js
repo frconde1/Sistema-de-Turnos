@@ -1,4 +1,5 @@
-import Practica from "../domain/Practica.js";
+import Practica 		from "../domain/Practica.js";
+import { InputError } 	from "../errors/Errors.js";
 
 export default class PracticaRepository {
 	
@@ -38,16 +39,10 @@ export default class PracticaRepository {
 	 * @returns {Practica}
 	 */
 	FindPracticaById(practicaId) {
-		console.log(this.practicas)
-		console.log("\n");
-		let practica = this.practicas.find(p => {
-			if(p)
-				return p.id == practicaId
-			return false
-		});
+		let practica = this.practicas.find(p => p ? p.id == practicaId : false);
 		
 		if (!practica) 
-			throw new Error("La practica no existe")
+			throw new InputError("La practica buscada no existe")
 
 		return practica 
 	}

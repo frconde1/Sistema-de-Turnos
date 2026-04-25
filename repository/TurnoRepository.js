@@ -1,4 +1,5 @@
-import Turno from "../domain/Turno.js";
+import Turno 			from "../domain/Turno.js";
+import { InputError }	from "../errors/Errors.js";
 
 export default class TurnoRepository {
 	
@@ -8,8 +9,13 @@ export default class TurnoRepository {
 	nextID;
 
 	constructor() {
+		if(TurnoRepository.instance)
+			return TurnoRepository.instance;
+
 		this.turnos = []
 		this.nextId = 0;
+
+		TurnoRepository.instance = this;
 	}
 
 	/** @returns {Turno[]}*/
@@ -35,7 +41,7 @@ export default class TurnoRepository {
 		if(this.turnos[id])
 			this.turnos[id] = undefined;
 		else
-			throw new Error("El medico no existe")
+			throw new InputError("El turno no existe")
 	}
 
 	/**
@@ -43,15 +49,10 @@ export default class TurnoRepository {
 	 * @returns {Turno}
 	 */
 	FindTurnoById(turnoId) {
-		let turno = this.turnos.find(t => {
-			if(t)
-				return t.id == turnoId;
-			return false;
-		}
-		);
+		let turno = this.turnos.find(t => t ? t.id == turnoId : false);
 		
 		if (!turno) 
-			throw new Error("El turno no existe")
+			throw new InputError("El turno buscado no existe")
 
 		return turno 
 	}

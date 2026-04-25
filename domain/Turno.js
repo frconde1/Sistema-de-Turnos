@@ -17,9 +17,7 @@ export default class Turno {
 	historialEstados;
 	costo;
 
-	/**
-	 * 
-	 * @param {String} id 
+	/** 
 	 * @param {Medico} medico 
 	 * @param {Paciente} paciente 
 	 * @param {Date} fechaHora 
@@ -31,7 +29,7 @@ export default class Turno {
 	 */
 	constructor(medico, paciente, fechaHora, sede, practica, estado, historialEstados, costo) { 
 		this.medico = medico; 
-		this.paciente = paciente; 	// MOCKEADO
+		this.paciente = paciente;
 		this.fechaHora = fechaHora; 
 		this.sede = sede; 
 		this.practica = practica;
@@ -40,16 +38,28 @@ export default class Turno {
 		this.costo = costo; 
 	}
 
-
 	/**
-	 * @param {EstadoTurno} nuevoEstado 
-	 * @param {Usuario} quien 
+	 * @param {Turno} turnoNuevo 
+	 * @returns {CambioEstadoTurno[]} 
+	 */
+	CambiarReferenciasDeEstados(turnoNuevo){
+		return this.historialEstados.forEach(e => {e.turno = turnoNuevo});
+	}
+
+	
+	/**
+	 * 
+	 * @param {Usuario} usuario 
 	 * @param {String} motivo 
 	 */
-	ActualizarEstado(nuevoEstado, quien, motivo) {
-		this.estado = nuevoEstado; 
-		this.historialEstados.push(
-			new CambioEstadoTurno(this.fechaHora, nuevoEstado, this, quien, motivo)
-		);
+	guardarEstadoActual(usuario, motivo){
+		const estadoActual = new CambioEstadoTurno(
+			Date.now(),
+			this.estado,
+			this,
+			usuario,
+			motivo
+		)
+		this.historialEstados.push(estadoActual);
 	}
 }
