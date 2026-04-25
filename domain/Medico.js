@@ -5,6 +5,7 @@ import Sede 					from "./Sede.js";
 import Usuario 					from "./Usuario.js";
 
 export default class Medico {
+	/**@type {String} */
 	id;
 	usuario;
 	matricula;
@@ -15,7 +16,6 @@ export default class Medico {
 	disponibilidades;
 
 	/**
-	 * @param {String} id 
 	 * @param {Usuario} usuario 
 	 * @param {String} matricula 
 	 * @param {String} nombre 
@@ -25,7 +25,6 @@ export default class Medico {
 	 * @param {DisponibilidadHoraria[]} disponibilidades 
 	 */
 	constructor(id, usuario, matricula, nombre, especialidades, practicas, sedes, disponibilidades) {
-		this.id = id;
 		this.usuario = usuario;
 		this.matricula = matricula;
 		this.nombre = nombre;

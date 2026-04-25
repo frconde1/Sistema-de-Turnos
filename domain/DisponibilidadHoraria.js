@@ -1,4 +1,4 @@
-import { DiasSemana } from "./Enums";
+import { DiaSemana } from "./Enums.js";
 
 export default class DisponibilidadHoraria {
 	diaSemana; 
@@ -6,7 +6,7 @@ export default class DisponibilidadHoraria {
 	horaHasta; 
 
 	/**
-	 * @param {DiasSemana} diaSemana 
+	 * @param {DiaSemana} diaSemana 
 	 * @param {String} horaDesde 
 	 * @param {String} horaHasta 
 	 */

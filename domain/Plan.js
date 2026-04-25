@@ -40,7 +40,7 @@ export default class Plan {
 					return cobertura.nivel;
 
 		// no se encontro
-		throw new Exception("No se ingreso una practica o una especialidad");
+		throw new Error("No se ingreso una practica o una especialidad");
 	}
 
 	}

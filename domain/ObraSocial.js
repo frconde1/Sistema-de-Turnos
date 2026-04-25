@@ -1,4 +1,4 @@
-import Plan from "./Planes/Plan.js";
+import Plan from "./Plan.js";
 
 export default class ObraSocial { 
 	id; 

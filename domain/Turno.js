@@ -9,7 +9,7 @@ import Usuario 				from "./Usuario.js";
 export default class Turno {
 	id; 
 	medico; 
-	paciente;
+	// paciente;
 	fechaHora;
 	sede; 
 	practica; 
@@ -29,10 +29,9 @@ export default class Turno {
 	 * @param {CambioEstadoTurno[]} historialEstados 
 	 * @param {Number} costo 
 	 */
-	constructor(id, medico, paciente, fechaHora, sede, practica, estado, historialEstados, costo) { 
-		this.id = id; 
+	constructor(medico, paciente, fechaHora, sede, practica, estado, historialEstados, costo) { 
 		this.medico = medico; 
-		this.paciente = paciente; 
+		this.paciente = paciente; 	// MOCKEADO
 		this.fechaHora = fechaHora; 
 		this.sede = sede; 
 		this.practica = practica;

@@ -1,28 +1,60 @@
-import  TurnoService  from "../service/TurnoService.js"
+import InputError 	from "../domain/Errors/InputError.js";
+import TurnoService	from "../service/TurnoService.js"
 
 export default class TurnoController {
+	
+	/** @param {TurnoService} turnoService */
+	constructor(turnoService = new TurnoService()){
+		this.turnoService = turnoService;
+	}
 
-    constructor(turnoService = new TurnoService()){
-        this.turnoService = turnoService;
-    }
+	/**
+	 * @param {import('express').Request} req 
+	 * @param {import('express').Response} res 
+	 * @returns {import('express').Response}
+	 */
+	Create (req, res) {
+		var turnoDTO = this.turnoService.Create(req.body);
+		return res.status(201).json({ status: "success", data: turnoDTO});
+	}
+	
+	/**
+	 * @param {import('express').Request} req 
+	 * @param {import('express').Response} res 
+	 * @returns {import('express').Response}
+	 */
+	async FindAll (req, res) {
+		return res.json(this.turnoService.FindAll());
+	}
 
-    create = (req, res) => {
-        var turno = this.turnoService.create(req.body)
-        return res.status(201).json({ status: "success", data: turno})
-    }
-    
-    findAll = async (req, res) => {
-        res.json(this.turnoService.findAll())
-    }
-    updateStatus = async (req, res) => {
-      try {
-        let turno = this.turnoService.updateStatus(req.params.id, req.body)
-        return res.status(200).json({status: "success"}) 
-      } catch (error) {
-        return res.status(404).json({status:"Error", reason:error.message});
+	/**
+	 * @param {import('express').Request} req 
+	 * @param {import('express').Response} res 
+	 * @returns {import('express').Response}
+	 */
+	async Delete(req, res) {
+		this.turnoService.Delete(req.params.id);
+		return res.status(200).json({status: "succes"});
+	}
 
-      }
-    }
-    
+	/**
+	 * @param {import('express').Request} req 
+	 * @param {import('express').Response} res 
+	 * @returns {import('express').Response}
+	 */
+	async FindById(req, res) {
+		let turnoDTO = this.turnoService.FindById(req.params.id);
+		return res.status(200).json({status: "succes", data: turnoDTO});
+	}
+
+	/**
+	 * @param {import('express').Request} req 
+	 * @param {import('express').Response} res 
+	 * @returns {import('express').Response}
+	 */
+	async Update(req, res) {
+		let turnoDTO = this.turnoService.Update(req.params.id, req.body);
+		return res.status(200).json({status: "succes", data: turnoDTO});
+	}
 }
 

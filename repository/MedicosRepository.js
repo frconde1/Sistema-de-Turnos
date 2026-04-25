@@ -2,20 +2,37 @@ export class MedicosRepository {
     medicos;
 
     constructor() {
-        this.medicos = []
+        // se hace singleton por el momento
+		if(MedicosRepository.instance)
+			return MedicosRepository.instance;
+
+		this.medicos = []
+		this.nextId = 0;
+
+		MedicosRepository.instance = this;
     }
 
     findAll() {
         return this.medicos;
     }
 
-    create(medico) {
-        this.medicos.push(medico)
-        return medico;
+    Save(medico) {
+        medico.id = medico.id ?? (this.nextId++).toString();
+        this.medicos[medico.id] = medico;
+		return medico;
     }
 
     findMedicoById(medicoId) {
-        return this.medicos.find(m => m.id == medicoId)
+        let medico = this.medicos.find(t => {
+            if(t)
+                return t.id == medicoId;
+            return false;
+        });
+		
+		if (!medico) 
+			throw new Error("El medico no existe")
+
+		return medico 
     }
 
     agregarDisponibilidad(medicoId, disponibilidad) {
@@ -23,6 +40,6 @@ export class MedicosRepository {
         if (medico) {
             medico.agregarDisponibilidad(disponibilidad)
         }
-    }
+    } 
 
 }

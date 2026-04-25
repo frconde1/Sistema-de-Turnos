@@ -1,4 +1,4 @@
-import { Medico } from "../domain/Medico.js";
+import Medico from "../domain/Medico.js";
 import { MedicosRepository } from "../repository/MedicosRepository.js";
 
 export class MedicoService {
@@ -9,13 +9,20 @@ export class MedicoService {
     create(medicoReq) {
         //TODO validaciones
         const medico = new Medico(
-            Date.now(),
             medicoReq.usuario,
             medicoReq.matricula,
             medicoReq.nombre
         )
 
-        return this.medicosRepository.create(medico)
+        return this.medicosRepository.Save(medico)
+    }
+
+    /**
+     * @param {String} id 
+     * @returns {Medico}
+     */
+    FindById(id){
+        return this.medicosRepository.findMedicoById(id)
     }
 
     findAll() {
