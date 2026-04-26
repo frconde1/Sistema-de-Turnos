@@ -1,4 +1,5 @@
 import TurnoDTO 			from "../domain/DTOs/TurnoDTO.js";
+import { EstadoTurno } from "../domain/Enums.js";
 import Paciente 			from "../domain/Paciente.js";
 import Sede 				from "../domain/Sede.js";
 import Turno				from "../domain/Turno.js";
@@ -89,17 +90,31 @@ export default class TurnoService {
 		return this.turnoRepository.FindTurnoById(id);
 	}
 
+	FindTurnosByMedicoId(id){
+		return this.turnoRepository.FindAll().filter(t => t.medico.id == id);
+	}
+
 	//////////////////////
 	//		 REST		//
 	//////////////////////
 
 	/** @returns {TurnoDTO} */
 	Create(reqBody){
+		
 		this.ValidarDatos(reqBody);
 
-		const turno = this.CreateTurno(reqBody);
+		const nuevoTurno = this.CreateTurno(reqBody);
 		
 		// TODO: validar la disponibilidad del medico
+
+		// validamos que no hay turnos superpuestos
+		const turnosSuperpuestos = this.FindTurnosByMedicoId(reqBody.medico)
+		.filter(t => t.estado != EstadoTurno.CANCELADO && t.estado != EstadoTurno.REALIZADO)
+		.filter(t =>t.fechaHora < nuevoTurno.FechaFinalizacion() && nuevoTurno.fechaHora < t.FechaFinalizacion());
+
+		if(turnosSuperpuestos.length > 0)
+			throw new InputError("se esta solicitando un horario con un turno ay asignado");
+
 
 		// TODO: notificar al medico 
 		// Al reservar un turno, se notifica al médico 
@@ -109,8 +124,8 @@ export default class TurnoService {
 		// TODO: notificar al paciente
 		// Al aceptar un turno, se notifica al paciente
 
-		this.turnoRepository.Save(turno);
-		return new TurnoDTO(turno);
+		this.turnoRepository.Save(nuevoTurno);
+		return new TurnoDTO(nuevoTurno);
 	}
 
 	Find(id){

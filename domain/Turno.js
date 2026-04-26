@@ -45,14 +45,12 @@ export default class Turno {
 	CambiarReferenciasDeEstados(turnoNuevo){
 		return this.historialEstados.forEach(e => {e.turno = turnoNuevo});
 	}
-
 	
 	/**
-	 * 
 	 * @param {Usuario} usuario 
 	 * @param {String} motivo 
 	 */
-	guardarEstadoActual(usuario, motivo){
+	GuardarEstadoActual(usuario, motivo){
 		const estadoActual = new CambioEstadoTurno(
 			Date.now(),
 			this.estado,
@@ -61,5 +59,12 @@ export default class Turno {
 			motivo
 		)
 		this.historialEstados.push(estadoActual);
+	}
+
+	/**@returns {Date} */
+	FechaFinalizacion(){
+		const fechaFinalizacion = new Date(this.fechaHora);
+		fechaFinalizacion.setMinutes(fechaFinalizacion.getMinutes() + this.practica.duracionTurnoEnMins);
+		return fechaFinalizacion;
 	}
 }

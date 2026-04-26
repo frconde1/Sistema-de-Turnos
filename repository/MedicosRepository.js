@@ -23,11 +23,7 @@ export class MedicosRepository {
     }
 
     findMedicoById(medicoId) {
-        let medico = this.medicos.find(t => {
-            if(t)
-                return t.id == medicoId;
-            return false;
-        });
+        let medico = this.medicos.find(t => t ? t.id == medicoId : false);
 		
 		if (!medico) 
 			throw new Error("El medico no existe")
