@@ -1,6 +1,6 @@
 import express from "express"
 import medicoRouter from "./medicoRouter.js"
-import sedeRouter from "./sedeRputer.js"
+import sedeRouter from "./sedeRouter.js"
 
 const router = express.Router()
 
