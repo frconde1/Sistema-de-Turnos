@@ -91,36 +91,14 @@ export default class TurnoController {
 			estado: 	query.estado
 		}
 		
-		if(filtros.medico	) this.validarEnteroPositivo(filtros.medico,   "medico"	 )
-		if(filtros.paciente ) this.validarEnteroPositivo(filtros.paciente, "paciente")
-		if(filtros.sede		) this.validarEnteroPositivo(filtros.sede, 	   "sede"	 )
-		if(filtros.practica ) this.validarEnteroPositivo(filtros.practica, "practica")
-		
-		if(filtros.estado){
-			const numero = Number(filtros.estado)
-			if (numero == NaN || !Number.isInteger(numero) || !(-1 < numero && numero < 5))
-				throw new BadRequestError(`El parámetro estado debe ser un numero entero en el rango [0,4]`);
-		}
-
-        return filtros
+		return filtros
     }
 
 	/** @returns {{page: number|undefined, limit: number|undefined}} */
     extraerPaginacion(query) {
         const numeroPagina 	  = query?.page  === undefined ? 1  : Number(query.page)
         const limitePorPagina = query?.limit === undefined ? 10 : Number(query.limit)
-
-        this.validarEnteroPositivo(numeroPagina, 	"page" )
-        this.validarEnteroPositivo(limitePorPagina, "limit")
-
         return { numeroPagina, limitePorPagina }
-    }
-
-    validarEnteroPositivo(numero, parametro) {
-		numero = Number(numero);
-        if (numero == NaN || !Number.isInteger(numero) || numero < 0) {
-            throw new BadRequestError(`El parámetro ${parametro} debe ser un entero positivo`)
-        }
     }
 }
 

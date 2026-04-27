@@ -259,6 +259,14 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Conseguir Paginado Turnos",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
         }
       ]
     },

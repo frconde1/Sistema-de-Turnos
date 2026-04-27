@@ -59,7 +59,8 @@ export default class TurnoService {
 	 * @param {String} name
 	*/
 	ValidarId(id, name){
-		if(typeof id !== "string" || id.length === 0 || Number(id) === NaN)
+		id = Number(id);
+		if(id === NaN || !Number.isInteger(id) || id < 0)
 			throw new InputError(`Error al enviar el ID de ${name}`);
 	}
 	
@@ -125,6 +126,24 @@ export default class TurnoService {
 			throw new InputError("el estado es invalido");
         if(typeof motivo !== "string" || motivo === "")
 			throw new InputError("el motivo es invalido");
+	}
+
+	ValidarQuery(numeroPagina, limitePorPagina, {medico, paciente, sede, practica, estado}){
+		if(numeroPagina < 1 || !Number.isInteger(numeroPagina))
+			throw new BadRequestError(`El numero de pagina debe ser un entero positivo`);
+		if(limitePorPagina < 1 || !Number.isInteger(limitePorPagina))
+			throw new BadRequestError(`El limite de pagina debe ser un entero positivo`);
+
+		if(medico	) this.ValidarId(medico,   "medico"	 )
+		if(paciente ) this.ValidarId(paciente, "paciente")
+		if(sede		) this.ValidarId(sede, 	   "sede"	 )
+		if(practica ) this.ValidarId(practica, "practica")
+						
+		if(estado){
+			const numero = Number(estado)
+			if (numero == NaN || !Number.isInteger(numero) || !(-1 < numero && numero < 5))
+				throw new BadRequestError(`El parámetro estado debe ser un numero entero en el rango [0,4]`);
+		}
 	}
 
 	//////////////////////
@@ -201,6 +220,7 @@ export default class TurnoService {
 	}
 
 	FindPaginado({numeroPagina = 1, limitePorPagina = 10, filtros = {}} = {}) {
+		this.ValidarQuery(numeroPagina, limitePorPagina, filtros);
 
 		let {turnos, totalTurnos} = this.turnoRepository.FindPaginado(numeroPagina, limitePorPagina, filtros)
 		
@@ -214,9 +234,7 @@ export default class TurnoService {
 		    totalTurnos,
 		    totalPaginas
 		}
-	}
-
-	
+	}	
 
 	/**
 	 * @param {String} id 
