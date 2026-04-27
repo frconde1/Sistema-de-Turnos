@@ -1,4 +1,4 @@
-import Sede from "../domain/Sede.js";
+import { Sede } from "../domain/Sede.js";
 
 export class SedeRepository {
     sedes;

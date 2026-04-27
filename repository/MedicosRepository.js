@@ -1,3 +1,5 @@
+import { Medico } from "../domain/Medico.js";
+
 export class MedicosRepository {
     medicos;
 
