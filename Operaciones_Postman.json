@@ -1,0 +1,444 @@
+{
+  "info": {
+    "_postman_id": "af58bb42-cd71-49d0-906e-7c0ec877ad96",
+    "name": "Tp DSW",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54309933",
+    "_collection_link": "https://go.postman.co/collection/54309933-af58bb42-cd71-49d0-906e-7c0ec877ad96?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Operaciones Medico",
+      "item": [
+        {
+          "name": "Crear medico",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"usuario\": \"medico1\",\r\n    \"matricula\": \"matricula1\",\r\n    \"nombre\": \"Juan\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://{{servidor}}:{{puerto}}/medicos",
+              "protocol": "http",
+              "host": [
+                "{{servidor}}"
+              ],
+              "port": "{{puerto}}",
+              "path": [
+                "medicos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Asignar Sede a Medico",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"sede\":\r\n        {\r\n            \"id\": \"1\"\r\n        }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://{{servidor}}:{{puerto}}/medicos/0/sedes",
+              "protocol": "http",
+              "host": [
+                "{{servidor}}"
+              ],
+              "port": "{{puerto}}",
+              "path": [
+                "medicos",
+                "0",
+                "sedes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Asignar Disponibilidad a Medico",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"disponibilidad\": {\r\n        \"diaSemana\" : 1,\r\n        \"horaDesde\" : \"12:00\",\r\n        \"horaHasta\" : \"13:00\"\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://{{servidor}}:{{puerto}}/medicos/0/disponibilidades",
+              "protocol": "http",
+              "host": [
+                "{{servidor}}"
+              ],
+              "port": "{{puerto}}",
+              "path": [
+                "medicos",
+                "0",
+                "disponibilidades"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Conseguir medicos",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"usuario\": \"user2\",\r\n    \"matricula\": \"matricula2\",\r\n    \"nombre\": \"Pedro\"\r\n}"
+            },
+            "url": {
+              "raw": "http://{{servidor}}:{{puerto}}/medicos",
+              "protocol": "http",
+              "host": [
+                "{{servidor}}"
+              ],
+              "port": "{{puerto}}",
+              "path": [
+                "medicos"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Operaciones Turno",
+      "item": [
+        {
+          "name": "Crear Turno",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"medico\":    \"0\",\r\n    \"sede\":      \"1\",\r\n    \"practica\":  \"0\",\r\n    \"fechaHora\": \"2026-05-04T12:40:00\", // formato localizado en Arg, para UTC sumar 3 horas\r\n    \"estado\":     0,\r\n    \"costo\":      50\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://{{servidor}}:{{puerto}}/turnos",
+              "protocol": "http",
+              "host": [
+                "{{servidor}}"
+              ],
+              "port": "{{puerto}}",
+              "path": [
+                "turnos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Turno",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://{{servidor}}:{{puerto}}/turnos/0",
+              "protocol": "http",
+              "host": [
+                "{{servidor}}"
+              ],
+              "port": "{{puerto}}",
+              "path": [
+                "turnos",
+                "0"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Conseguir Turno",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://{{servidor}}:{{puerto}}/turnos/1",
+              "protocol": "http",
+              "host": [
+                "{{servidor}}"
+              ],
+              "port": "{{puerto}}",
+              "path": [
+                "turnos",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Turno",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"medico\": \"0\",\r\n    \"sede\": \"0\",\r\n    \"practica\": \"0\",\r\n    \"fechaHora\": \"2023-04-10T10:10:00Z\",\r\n    \"estado\": 0,\r\n    \"costo\": 287549.47\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://{{servidor}}:{{puerto}}/turnos/0",
+              "protocol": "http",
+              "host": [
+                "{{servidor}}"
+              ],
+              "port": "{{puerto}}",
+              "path": [
+                "turnos",
+                "0"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Estado de Turno",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \r\n    \"estado\": 3, \r\n    \"usuario\": \"0\", \r\n    \"motivo\": \"porque si\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://{{servidor}}:{{puerto}}/turnos/1/estado",
+              "protocol": "http",
+              "host": [
+                "{{servidor}}"
+              ],
+              "port": "{{puerto}}",
+              "path": [
+                "turnos",
+                "1",
+                "estado"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Flujo Creacion Turno",
+      "item": [
+        {
+          "name": "Crear medico",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"usuario\": \"medico1\",\r\n    \"matricula\": \"matricula1\",\r\n    \"nombre\": \"Juan\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://{{servidor}}:{{puerto}}/medicos",
+              "protocol": "http",
+              "host": [
+                "{{servidor}}"
+              ],
+              "port": "{{puerto}}",
+              "path": [
+                "medicos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Asignar Sede a Medico",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"sede\":\r\n        {\r\n            \"id\": \"1\"\r\n        }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://{{servidor}}:{{puerto}}/medicos/0/sedes",
+              "protocol": "http",
+              "host": [
+                "{{servidor}}"
+              ],
+              "port": "{{puerto}}",
+              "path": [
+                "medicos",
+                "0",
+                "sedes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Asignar Disponibilidad a Medico",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"disponibilidad\": {\r\n        \"diaSemana\" : 1,\r\n        \"horaDesde\" : \"12:00\",\r\n        \"horaHasta\" : \"13:00\"\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://{{servidor}}:{{puerto}}/medicos/0/disponibilidades",
+              "protocol": "http",
+              "host": [
+                "{{servidor}}"
+              ],
+              "port": "{{puerto}}",
+              "path": [
+                "medicos",
+                "0",
+                "disponibilidades"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Practica",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"codigo\": \"ByKASJGY\",\r\n    \"nombre\": \"practica 1\",\r\n    \"duracion\": 20,\r\n    \"costo\": 100\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://{{servidor}}:{{puerto}}/practicas",
+              "protocol": "http",
+              "host": [
+                "{{servidor}}"
+              ],
+              "port": "{{puerto}}",
+              "path": [
+                "practicas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Turno",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"medico\":    \"0\",\r\n    \"sede\":      \"1\",\r\n    \"practica\":  \"0\",\r\n    \"fechaHora\": \"2026-05-04T12:40:00\", // formato localizado en Arg, para UTC sumar 3 horas\r\n    \"estado\":     0,\r\n    \"costo\":      50\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://{{servidor}}:{{puerto}}/turnos",
+              "protocol": "http",
+              "host": [
+                "{{servidor}}"
+              ],
+              "port": "{{puerto}}",
+              "path": [
+                "turnos"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Aca se pueden ver las operaciones necesarias que se deben realizar para poder crear un Turno, desde la creacion del medico hasta la del turno"
+    },
+    {
+      "name": "Crear Practica",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"codigo\": \"ByKASJGY\",\r\n    \"nombre\": \"practica 1\",\r\n    \"duracion\": 20,\r\n    \"costo\": 100\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{servidor}}:{{puerto}}/practicas",
+          "protocol": "http",
+          "host": [
+            "{{servidor}}"
+          ],
+          "port": "{{puerto}}",
+          "path": [
+            "practicas"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

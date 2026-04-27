@@ -164,9 +164,6 @@ export default class TurnoService {
 		// indicando paciente y servicio solicitado 
 		// (especialidad o práctica)
 
-		// TODO: notificar al paciente
-		// Al aceptar un turno, se notifica al paciente
-
 		nuevoTurno.CambiarEstado(nuevoEstado);
 		this.turnoRepository.Save(nuevoTurno);
 		return new TurnoDTO(nuevoTurno);
@@ -193,10 +190,6 @@ export default class TurnoService {
 		turnoViejo.CambiarReferenciasDeEstados(turnoNuevo);
 		turnoNuevo.historialEstados = turnoViejo.historialEstados
 		turnoNuevo.id = id;
-
-		// TODO: notificar en caso de cancelacion
-		// Ante cancelaciones de turnos, 
-		// se notifica a la contraparte correspondiente.
 
 		this.turnoRepository.Save(turnoNuevo);
 		return new TurnoDTO(turnoNuevo);
@@ -231,6 +224,13 @@ export default class TurnoService {
 			if((turno.fechaHora - nuevoEstado.fechaHoraIngreso) / (1000 * 60 * 60) <= 1)
 				throw new InputError("se quiere cancelar con menos de 1 hora de anticipacion");
 		
+		// TODO: notificar al paciente
+		// Al aceptar un turno, se notifica al paciente
+		
+		// TODO: notificar en caso de cancelacion
+		// Ante cancelaciones de turnos, se notifica a la contraparte correspondiente.
+
+
 		turno.CambiarEstado(nuevoEstado);
 		this.turnoRepository.Save(turno);
 		return new CambioEstadoTurnoDTO(nuevoEstado)
