@@ -6,7 +6,7 @@ import Turno				from "../domain/Turno.js";
 import { InputError } 		from "../errors/Errors.js";
 import TurnoRepository		from "../repository/TurnoRepository.js";
 import { MedicoService }	from "./MedicoService.js";
-import { serviceProvider } from "./ServiceProvider.js";
+import PracticaService 		from "./PracticaService.js";
 
 export default class TurnoService {
 	/**
@@ -15,8 +15,8 @@ export default class TurnoService {
 	*/
 	constructor(
 		turnoRepository = new TurnoRepository(), 
-		medicoService 	 = serviceProvider.getMedicoService(),
-		practicaService	 = serviceProvider.getPracticaService()
+		medicoService 	 = new MedicoService(),
+		practicaService	 = new PracticaService()
 	) {
 		this.turnoRepository 	= turnoRepository;
 		this.medicoService 		= medicoService
