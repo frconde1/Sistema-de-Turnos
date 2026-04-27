@@ -71,6 +71,7 @@ export default class TurnoService {
 		const { medico, sede, practica, fechaHora, estado, costo } = datosTurnoNuevo;
 
 		this.ValidarId(medico,	 "medico");
+		this.ValidarId(medico,	 "paciente");
 		this.ValidarId(sede, 	 "sede");
 		this.ValidarId(practica, "practica");
 
@@ -195,10 +196,27 @@ export default class TurnoService {
 		return new TurnoDTO(turnoNuevo);
 	}
 
-	/** @returns {TurnoDTO[]} */
-	FindAll() {
+	FindAll(){
 		return this.turnoRepository.FindAll().map(t => new TurnoDTO(t));
 	}
+
+	FindPaginado({numeroPagina = 1, limitePorPagina = 10, filtros = {}} = {}) {
+
+		let {turnos, totalTurnos} = this.turnoRepository.FindPaginado(numeroPagina, limitePorPagina, filtros)
+		
+		const totalPaginas = totalTurnos === 0 ? 0 : Math.ceil(totalTurnos / limitePorPagina)
+		
+		turnos = turnos.map(t => new TurnoDTO(t));
+		return {
+		    turnos,
+		    numeroPagina,
+		    limitePorPagina,
+		    totalTurnos,
+		    totalPaginas
+		}
+	}
+
+	
 
 	/**
 	 * @param {String} id 

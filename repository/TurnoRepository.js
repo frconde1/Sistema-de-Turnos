@@ -23,6 +23,27 @@ export default class TurnoRepository {
 		return this.turnos;
 	}
 
+	/** @returns {Turno[]}*/
+	FindPaginado(numeroPagina, limitePorPagina, filtros) {
+		const {medico, paciente, sede, practica, estado} = filtros;
+		
+		let turnos = this.FindAll();
+
+		if(medico)	 turnos = turnos.filter((t => t.medico.id 	== medico	));
+		if(paciente) turnos = turnos.filter((t => t.paciente.id == paciente	));
+		if(sede)	 turnos = turnos.filter((t => t.sede.id 	== sede		));
+		if(practica) turnos = turnos.filter((t => t.practica.id == practica ));
+		if(estado)	 turnos = turnos.filter((t => t.estado 		== estado	));
+
+        const inicio = (numeroPagina - 1) * limitePorPagina;
+        const fin 	 = inicio + limitePorPagina;
+
+        return {
+            turnos: 	 turnos.slice(inicio, fin),
+            totalTurnos: turnos.length
+        }
+	}
+
 	/** 
 	 * @param {Turno} turno 
 	 * @returns {Turno}

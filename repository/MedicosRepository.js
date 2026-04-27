@@ -1,3 +1,5 @@
+import { InputError } from "../errors/Errors.js";
+
 export class MedicosRepository {
     medicos;
 
@@ -64,7 +66,7 @@ export class MedicosRepository {
         let medico = this.medicos.find(t => t ? t.id == medicoId : false);
 		
 		if (!medico) 
-			throw new Error("El medico no existe")
+			throw new InputError("El medico no existe")
 
 		return medico 
     }
