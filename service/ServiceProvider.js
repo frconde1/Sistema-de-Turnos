@@ -8,7 +8,8 @@ class ServiceProvider {
         this.medicoService = new MedicoService();
         this.sedeService = new SedeService();
         this.practicaService = new PracticaService();
-        this.turnoService = new TurnoService();
+        //Agrego para evitar dependencia circular entre TurnoService y ServicioProvider
+        this.turnoService = null;
     }
 
     getMedicoService() {

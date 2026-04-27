@@ -6,22 +6,105 @@ export class MedicoController {
         this.medicoService = medicoService;
     }
 
-    create = (req, res) => {
-        var medico = this.medicoService.create(req.body)
+    create = async (req, res) => {
+        try {
+        var medico = await this.medicoService.create(req.body)
         return res.status(201).json({ status: "success", data: medico})
+    } catch (error) {
+        next(error)
+    }
     }
     
-    findAll = async (req, res) => {
-        res.json(this.medicoService.findAll())
+    findAll = async (req, res, next) => {
+        try {
+            const filtros = this.extraerFiltros(req.query)
+            const paginacion = this.extraerPaginacion(req.query)
+
+            const resultado = await this.medicoService.findAll({ ...paginacion, filtros })
+
+            return res.status(200).json({ 
+                status: "success",
+                data: resultado.medicos,
+                paginacion: {
+                    numeroPagina: resultado.numeroPagina,
+                    limitePorPagina: resultado.limitePorPagina,
+                    totalMedicos: resultado.totalMedicos,
+                    totalPaginas: resultado.totalPaginas
+                }
+            })
+        }catch (error) {
+            next(error)
+        }        
+        
     }
     
-    agregarDisponibilidad = (req, res) => {
-        this.medicoService.agregarDisponibilidad(req.params.id, req.body)
-        return res.status(201).json({ status: "success" })
+    agregarDisponibilidad = async (req, res) => {
+        try {
+            await this.medicoService.agregarDisponibilidad(req.params.id, req.body)
+            return res.status(201).json({ status: "success" })
+        } catch (error) {
+            next(error)
+        }
     }
     
-    agregarSede = (req, res) => {
-        this.medicoService.agregarSede(req.params.id, req.body)
-        return res.status(201).json({ status: "success" })
+    agregarSede = async (req, res) => {
+        try {
+            await this.medicoService.agregarSede(req.params.id, req.body)
+            return res.status(201).json({ status: "success" })
+        } catch (error) {
+            next(error)
+        }
     }
+
+
+    eliminarDisponibilidad = async (req, res) => {
+        try {
+            await this.medicoService.eliminarDisponibilidad(req.params.id, req.body)
+            return res.status(200).json({ status: "success" })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+
+     extraerFiltros(query) {
+        const filtros = {}
+
+        if (query.nombre !== undefined) {
+            filtros.nombre = query.nombre
+        }
+
+        if (query.especialidad !== undefined) {
+            filtros.especialidad = query.especialidad
+        }
+
+        if (query.practica !== undefined) {
+            filtros.practica = query.practica
+        }
+
+        if (query.sede !== undefined) {
+            filtros.sede = query.sede
+        }
+
+
+        return filtros
+    }
+
+    extraerPaginacion(query) {
+        const numeroPagina = query?.page === undefined ? 1 : Number(query.page)
+        const limitePorPagina = query?.limit === undefined ? 10 : Number(query.limit)
+
+        this.validarEnteroPositivo(numeroPagina, "page")
+        this.validarEnteroPositivo(limitePorPagina, "limit")
+
+        return { numeroPagina, limitePorPagina }
+    }
+
+    validarEnteroPositivo(numero, parametro) {
+        if (!Number.isInteger(numero) || numero <= 0) {
+            throw new BadRequestError(`El parámetro ${parametro} debe ser un entero positivo`)
+        }
+    }
+
+    
 }
