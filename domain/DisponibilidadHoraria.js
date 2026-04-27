@@ -29,3 +29,12 @@ export default class DisponibilidadHoraria {
 	}
 
 }
+
+/**
+ * @param {String} horario 
+ * @returns {number}
+ */
+function horaStringAMinutos(horario){
+	const [hora, minutos] = horario.split(':');
+	return Number(hora) * 60 + Number(minutos);
+}

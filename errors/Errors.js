@@ -25,3 +25,10 @@ export class NotFoundError extends AppError {
 		this.name = "URL incorrecta";
 	}
 }
+
+export class BadRequestError extends AppError {
+	constructor(mensaje){
+		super(400, mensaje);
+		this.name = "Error de petición"
+	}
+}

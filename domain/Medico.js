@@ -24,7 +24,7 @@ export default class Medico {
 	 * @param {Sede[]} sedes 
 	 * @param {DisponibilidadHoraria[]} disponibilidades 
 	 */
-	constructor(id, usuario, matricula, nombre, especialidades, practicas, sedes, disponibilidades) {
+	constructor(usuario, matricula, nombre, especialidades = [], practicas = [], sedes = [], disponibilidades = []) {
 		this.usuario = usuario;
 		this.matricula = matricula;
 		this.nombre = nombre;

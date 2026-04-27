@@ -12,7 +12,7 @@ export default class TurnoDTO {
 		this.sede 				= turno.sede.id; 
 		this.practica 			= turno.practica.id; 
 
-		this.fechaHora 			= turno.fechaHora.toDateString();
+		this.fechaHora 			= turno.fechaHora.toISOString();
 		this.estado 			= turno.estado;
 		this.historialEstado 	= turno.historialEstados.map(e => new CambioEstadoTurnoDTO(e));
 		this.costo 				= turno.costo;

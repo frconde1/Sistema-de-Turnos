@@ -11,11 +11,11 @@ router.route('')
 
 router.route('/:id/disponibilidades')
 	.get((req, res) => {})
-    .post((req, res) => medicoController.agregarDisponibilidad(req, res))
+    .post((req, res, next) => medicoController.agregarDisponibilidad(req, res, next))
     .delete((req, res) => medicoController.eliminarDisponibilidad(req, res))
 
 
 router.route('/:id/sedes')
-    .post((req, res) => medicoController.agregarSede(req, res))
+    .post((req, res, next) => medicoController.agregarSede(req, res, next))
 
 export default router

@@ -45,26 +45,17 @@ export default class Turno {
 	CambiarReferenciasDeEstados(turnoNuevo){
 		return this.historialEstados.forEach(e => {e.turno = turnoNuevo});
 	}
-	
-	/**
-	 * @param {Usuario} usuario 
-	 * @param {String} motivo 
-	 */
-	GuardarEstadoActual(usuario, motivo){
-		const estadoActual = new CambioEstadoTurno(
-			Date.now(),
-			this.estado,
-			this,
-			usuario,
-			motivo
-		)
-		this.historialEstados.push(estadoActual);
-	}
 
 	/**@returns {Date} */
 	FechaFinalizacion(){
 		const fechaFinalizacion = new Date(this.fechaHora);
 		fechaFinalizacion.setMinutes(fechaFinalizacion.getMinutes() + this.practica.duracionTurnoEnMins);
 		return fechaFinalizacion;
+	}
+
+	/** @param {CambioEstadoTurno} nuevoEstado */
+	CambiarEstado(nuevoEstado) { 
+		this.historialEstados.push(nuevoEstado);
+		this.estado = nuevoEstado.estado;
 	}
 }

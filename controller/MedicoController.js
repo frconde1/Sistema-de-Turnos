@@ -6,7 +6,7 @@ export class MedicoController {
         this.medicoService = medicoService;
     }
 
-    create = async (req, res) => {
+    create = async (req, res, next) => {
         try {
         var medico = await this.medicoService.create(req.body)
         return res.status(201).json({ status: "success", data: medico})
@@ -38,7 +38,7 @@ export class MedicoController {
         
     }
     
-    agregarDisponibilidad = async (req, res) => {
+    agregarDisponibilidad = async (req, res, next) => {
         try {
             await this.medicoService.agregarDisponibilidad(req.params.id, req.body)
             return res.status(201).json({ status: "success" })
@@ -47,7 +47,7 @@ export class MedicoController {
         }
     }
     
-    agregarSede = async (req, res) => {
+    agregarSede = async (req, res, next) => {
         try {
             await this.medicoService.agregarSede(req.params.id, req.body)
             return res.status(201).json({ status: "success" })
@@ -57,7 +57,7 @@ export class MedicoController {
     }
 
 
-    eliminarDisponibilidad = async (req, res) => {
+    eliminarDisponibilidad = async (req, res, next) => {
         try {
             await this.medicoService.eliminarDisponibilidad(req.params.id, req.body)
             return res.status(200).json({ status: "success" })

@@ -1,6 +1,7 @@
 import Medico from "../domain/Medico.js";
 import { MedicosRepository } from "../repository/MedicosRepository.js";
 import { InputError } 		from "../errors/Errors.js";
+import DisponibilidadHoraria from "../domain/DisponibilidadHoraria.js";
 
 
 export class MedicoService {
@@ -49,7 +50,9 @@ export class MedicoService {
     }
 
     agregarDisponibilidad(medicoId, body) {
-        this.medicosRepository.agregarDisponibilidad(medicoId, body.disponibilidad)
+        const {diaSemana, horaDesde, horaHasta} = body.disponibilidad;
+        const disponibilidadHoraria = new DisponibilidadHoraria(diaSemana, horaDesde, horaHasta);
+        this.medicosRepository.agregarDisponibilidad(medicoId, disponibilidadHoraria)
     }
 
     agregarSede(medicoId, body) {

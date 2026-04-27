@@ -52,8 +52,18 @@ export default class TurnoController {
 	 * @returns {import('express').Response}
 	 */
 	async Update(req, res) {
-		let turnoDTO = this.turnoService.Update(req.params.id, req.body);
+		const turnoDTO = this.turnoService.Update(req.params.id, req.body);
 		return res.status(200).json({status: "succes", data: turnoDTO});
+	}
+
+	/**
+	 * @param {import('express').Request} req 
+	 * @param {import('express').Response} res 
+	 * @returns {import('express').Response}
+	 */
+	async UpdateStatus(req, res){
+		const nuevoEstado = this.turnoService.UpdateTurnoStatus(req.params.id, req.body);
+		return res.status(200).json({status: "succes", data: nuevoEstado})
 	}
 }
 
