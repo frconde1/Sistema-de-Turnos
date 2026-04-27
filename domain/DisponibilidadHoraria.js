@@ -15,4 +15,17 @@ export default class DisponibilidadHoraria {
 		this.horaDesde = horaDesde;
 		this.horaHasta = horaHasta;
 	}
+
+	incluyeRangoHorario(fechaHora, duracionMinutos) {
+
+		const inicio = fechaHora.getHours() * 60 + fechaHora.getMinutes()
+		const fin = inicio + duracionMinutos
+
+		const desde = horaStringAMinutos(this.horaDesde)
+		const hasta = horaStringAMinutos(this.horaHasta)
+
+  		return inicio >= desde && fin <= hasta
+
+	}
+
 }

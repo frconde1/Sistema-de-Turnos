@@ -41,9 +41,21 @@ export default class Medico {
 
 	/** @param {DisponibilidadHoraria} disponibilidad */
 	eliminarDisponibilidad(disponibilidad) {
-		this.disponibilidades = this.disponibilidades.filter(
-			d => d !== disponibilidad
-		)
+		this.disponibilidades = this.disponibilidades.filter(d =>
+   			!(
+				d.diaSemana === disponibilidad.diaSemana &&
+				d.horaDesde === disponibilidad.horaDesde &&
+				d.horaHasta === disponibilidad.horaHasta
+			)
+		)		
+	}
+
+	validarDisponibilidad(fechaHora, duracionMinutos) {
+		const diaSemana = fechaHora.getDay();
+
+		return this.disponibilidades
+			.filter(d => d.diaSemana === diaSemana)
+			.some(d => d.incluyeRangoHorario(fechaHora, duracionMinutos))
 	}
 
     agregarSede(sede) {
