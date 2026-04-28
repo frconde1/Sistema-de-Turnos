@@ -10,7 +10,6 @@ router.route('')
     .post((req, res, next) => medicoController.create(req, res, next))
 
 router.route('/:id/disponibilidades')
-	.get((req, res) => {})
     .post((req, res, next) => medicoController.agregarDisponibilidad(req, res, next))
     .delete((req, res) => medicoController.eliminarDisponibilidad(req, res))
 
