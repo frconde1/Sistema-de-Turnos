@@ -18,5 +18,8 @@
   },
   "jest": {
     "transform": {}
+  },
+  "devDependencies": {
+    "@jest/globals": "^30.3.0"
   }
 }

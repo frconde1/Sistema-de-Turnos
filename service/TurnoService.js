@@ -255,7 +255,6 @@ export default class TurnoService {
 			this.usuarioService.FindById(reqBody.usuario),
 			reqBody.motivo
 		);
-
 		if(nuevoEstado.estado == EstadoTurno.CANCELADO)
 			if((turno.fechaHora - nuevoEstado.fechaHoraIngreso) / (1000 * 60 * 60) <= 1)
 				throw new InputError("se quiere cancelar con menos de 1 hora de anticipacion");
