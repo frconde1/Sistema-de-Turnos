@@ -112,6 +112,12 @@ export default class TurnoService {
 	 * @param {Medico} medico 
 	 */
 	ValidarDisponibilidad(turno, medico){
+		if(!medico.sedes.some(s => s.id == turno.sede.id))
+			throw new InputError("El médico no trabaja en la sede");
+
+		if(!medico.practicas.some(p => p.id == turno.practica.id))
+			throw new InputError("El médico no cuenta con esa práctica");
+
 		if (!medico.validarDisponibilidad(turno.fechaHora, turno.practica.duracionTurnoEnMins))
 			throw new InputError("El médico no se encuentra disponible en ese horario");
 	}
