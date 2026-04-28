@@ -76,7 +76,7 @@ export default class TurnoService {
 		this.ValidarId(sede, 	 "sede");
 		this.ValidarId(practica, "practica");
 
-		if(typeof fechaHora !== "string" || Date.parse(fechaHora) === NaN)
+		if(typeof fechaHora !== "string" || Date.parse(fechaHora) === NaN || new Date(fechaHora + "-03:00") < new Date() )
 			throw new InputError("la fecha es invalida");
         if(typeof estado !== "number" || !Number.isInteger(estado) || !(-1 < estado && estado < 5) ) 
 			throw new InputError("el estado es invalido");
