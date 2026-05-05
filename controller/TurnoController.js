@@ -15,7 +15,7 @@ export default class TurnoController {
 	 */
 	Create (req, res) {
 		const turnoDTO = this.turnoService.Create(req.body);
-		return res.status(201).json({ status: "success", data: turnoDTO});
+		return res.status(201).json(turnoDTO);
 	}
 	
 	/**
@@ -48,7 +48,7 @@ export default class TurnoController {
 	 */
 	async Delete(req, res) {
 		this.turnoService.Delete(req.params.id);
-		return res.status(200).json({status: "succes"});
+		return res.status(200);
 	}
 
 	/**
@@ -58,7 +58,7 @@ export default class TurnoController {
 	 */
 	async FindById(req, res) {
 		const turnoDTO = this.turnoService.Find(req.params.id);
-		return res.status(200).json({status: "succes", data: turnoDTO});
+		return res.status(200).json(turnoDTO);
 	}
 
 	/**
@@ -68,7 +68,7 @@ export default class TurnoController {
 	 */
 	async Update(req, res) {
 		const turnoDTO = this.turnoService.Update(req.params.id, req.body);
-		return res.status(200).json({status: "succes", data: turnoDTO});
+		return res.status(200).json(turnoDTO);
 	}
 
 	/**
@@ -78,7 +78,7 @@ export default class TurnoController {
 	 */
 	async UpdateStatus(req, res){
 		const nuevoEstado = this.turnoService.UpdateTurnoStatus(req.params.id, req.body);
-		return res.status(200).json({status: "succes", data: nuevoEstado})
+		return res.status(200).json(nuevoEstado)
 	}
 
 	/** @returns {{medico: number|undefined, paciente: number|undefined, sede: number|undefined, practica: number|undefined, estado: number|undefined}}*/
