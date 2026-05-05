@@ -4,7 +4,7 @@ import Medico 				from "../domain/Medico.js";
 import Paciente 			from "../domain/Paciente.js";
 import Sede 				from "../domain/Sede.js";
 import Turno				from "../domain/Turno.js";
-import { InputError } 		from "../errors/Errors.js";
+import { InputError, BadRequestError } 		from "../errors/Errors.js";
 import TurnoRepository		from "../repository/TurnoRepository.js";
 import PracticaService 		from "./PracticaService.js";
 import { MedicoService }	from "./MedicoService.js";
