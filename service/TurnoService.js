@@ -60,7 +60,7 @@ export default class TurnoService {
 	*/
 	ValidarId(id, name){
 		id = Number(id);
-		if(id === NaN || !Number.isInteger(id) || id < 0)
+		if(Number.isNaN(id) || !Number.isInteger(id) || id < 0)
 			throw new InputError(`Error al enviar el ID de ${name}`);
 	}
 	
@@ -76,7 +76,7 @@ export default class TurnoService {
 		this.ValidarId(sede, 	 "sede");
 		this.ValidarId(practica, "practica");
 
-		if(typeof fechaHora !== "string" || Date.parse(fechaHora) === NaN || new Date(fechaHora + "-03:00") < new Date() )
+		if(typeof fechaHora !== "string" || Number.isNaN(Date.parse(fechaHora)) || new Date(fechaHora + "-03:00") < new Date() )
 			throw new InputError("la fecha es invalida");
         if(typeof estado !== "number" || !Number.isInteger(estado) || !(-1 < estado && estado < 5) ) 
 			throw new InputError("el estado es invalido");
@@ -141,7 +141,7 @@ export default class TurnoService {
 						
 		if(estado){
 			const numero = Number(estado)
-			if (numero == NaN || !Number.isInteger(numero) || !(-1 < numero && numero < 5))
+			if (Number.isNaN(numero) || !Number.isInteger(numero) || !(-1 < numero && numero < 5))
 				throw new BadRequestError(`El parámetro estado debe ser un numero entero en el rango [0,4]`);
 		}
 	}

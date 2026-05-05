@@ -19,7 +19,7 @@ export default class PracticaService {
 
 	/** @param {String} id */
 	validarId(id){
-		if (typeof id !== "string" || Number(id) == NaN) {
+		if (typeof id !== "string" || Number.isNaN(Number(id))) {
             throw new InputError("El id de la practica no es valido");
         }
 	}
