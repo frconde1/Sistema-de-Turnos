@@ -69,10 +69,10 @@ export default class TurnoService {
 		if(!datosTurnoNuevo || typeof datosTurnoNuevo !== "object" || Array.isArray(datosTurnoNuevo))
             throw new InputError("No se envio un objeto como body de la request");
         
-		const { medico, sede, practica, fechaHora, estado, costo } = datosTurnoNuevo;
+		const { medico, paciente, sede, practica, fechaHora, estado, costo } = datosTurnoNuevo;
 
 		this.ValidarId(medico,	 "medico");
-		this.ValidarId(medico,	 "paciente");
+		this.ValidarId(paciente,	 "paciente");
 		this.ValidarId(sede, 	 "sede");
 		this.ValidarId(practica, "practica");
 

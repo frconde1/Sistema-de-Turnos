@@ -10,7 +10,7 @@ router.route('')
 
     
 router.route('/:id/estado')
-    .post(   (req, res) => turnoController.UpdateStatus(req, res))
+    .patch(   (req, res) => turnoController.UpdateStatus(req, res))
 
 router.route('/:id')
     .get(   (req, res) => turnoController.FindById(req, res))
