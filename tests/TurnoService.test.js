@@ -32,7 +32,7 @@ describe("TurnoService", () => {
 
         let disponibilidad = {
             disponibilidad: {
-                diaSemana: 1,
+                diaSemana: "LUNES",
                 horaDesde: "12:00",
                 horaHasta: "13:00"
             }
