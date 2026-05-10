@@ -1,18 +1,19 @@
 import { MedicoService } from "../service/MedicoService.js"
 import { BadRequestError } from "../errors/Errors.js";
+
 export class MedicoController {
 
-    constructor(medicoService = new MedicoService()){
+    constructor(medicoService = new MedicoService()) {
         this.medicoService = medicoService;
     }
 
     create = async (req, res, next) => {
         try {
-        var medico = await this.medicoService.create(req.body)
-        return res.status(201).json({ status: "success", data: medico})
-    } catch (error) {
-        next(error)
-    }
+            var medico = await this.medicoService.create(req.body)
+            return res.status(201).json({ status: "success", data: medico})
+        } catch (error) {
+            next(error)
+        }
     }
     
     findAll = async (req, res, next) => {
@@ -35,7 +36,6 @@ export class MedicoController {
         }catch (error) {
             next(error)
         }        
-        
     }
     
     agregarDisponibilidad = async (req, res, next) => {
@@ -86,7 +86,6 @@ export class MedicoController {
             filtros.sede = query.sede
         }
 
-
         return filtros
     }
 
@@ -105,6 +104,5 @@ export class MedicoController {
             throw new BadRequestError(`El parámetro ${parametro} debe ser un entero positivo`)
         }
     }
-
     
 }
