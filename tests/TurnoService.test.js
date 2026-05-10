@@ -64,8 +64,10 @@ describe("TurnoService", () => {
     });
 
     it("debería crear un turno a las 12:40 con un médico disponible correctamente", () => {
+      jest.useFakeTimers();
+      jest.setSystemTime(new Date("2026-05-04T11:00:00")); // uso Jest faketimers para simular la hora
         const turno = turnoService.Create({
-            medico: "0",
+            medico: "10",
             paciente: "0",
             sede: "1",
             practica: "0",
@@ -93,7 +95,7 @@ describe("TurnoService", () => {
     it("debería lanzar error si el médico no está disponible en ese horario", () => {
       expect(() => {
           turnoService.Create({
-            medico: "0",
+            medico: "10",
             paciente: "0",
             sede: "1",
             practica: "0",
@@ -111,7 +113,7 @@ describe("TurnoService", () => {
       jest.setSystemTime(new Date("2026-05-04T11:50:00")); // uso Jest faketimers para simular la hora
 
       const turno = turnoService.Create({
-            medico: "0",
+            medico: "10",
             paciente: "0",
             sede: "1",
             practica: "0",
@@ -139,7 +141,7 @@ describe("TurnoService", () => {
     jest.useFakeTimers();
     jest.setSystemTime(new Date("2026-05-04T11:00:00")); // uso Jest faketimers para simular la hora
       const turno = turnoService.Create({
-            medico: "0",
+            medico: "10",
             paciente: "0",
             sede: "1",
             practica: "0",
