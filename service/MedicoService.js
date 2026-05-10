@@ -3,11 +3,20 @@ import { MedicosRepository } from "../repository/MedicosRepository.js";
 import { InputError, BadRequestError } 		from "../errors/Errors.js";
 import DisponibilidadHoraria from "../domain/DisponibilidadHoraria.js";
 import { z } from "zod/v3";
+import { DiaSemana } from "../domain/Enums.js";
 
 const medicoSchema = z.object({
     usuario: z.string({required_error: "El usuario es obligatorio", invalid_type_error: "El usuario debe ser un string" }).min(1, "El usuario no puede estar vacío"),
     matricula: z.string({ required_error: "La matricula es obligatoria", invalid_type_error: "La matricula debe ser un string" }).min(1, "La matrícula no puede estar vacía"),
     nombre: z.string({ required_error: "El nombre es obligatorio", invalid_type_error: "El nombre debe ser un string" }).min(1, "El nombre no puede estar vacío")
+});
+
+const disponibilidadSchema = z.object({
+    diaSemana: z.nativeEnum(DiaSemana, {
+        errorMap: () => ({ message: "Día de semana incorrecto" })
+    }),
+    horaDesde: z.string(),
+    horaHasta: z.string()
 });
 
 export class MedicoService {
@@ -60,8 +69,8 @@ export class MedicoService {
     }
 
     agregarDisponibilidad(medicoId, body) {
-        const {diaSemana, horaDesde, horaHasta} = body.disponibilidad;
-        const disponibilidadHoraria = new DisponibilidadHoraria(diaSemana, horaDesde, horaHasta);
+        const disponibilidad = disponibilidadSchema.parse(body.disponibilidad);
+        const disponibilidadHoraria = new DisponibilidadHoraria(disponibilidad.diaSemana, disponibilidad.horaDesde, disponibilidad.horaHasta);
         this.medicosRepository.agregarDisponibilidad(medicoId, disponibilidadHoraria)
     }
 
