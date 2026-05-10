@@ -85,7 +85,7 @@ export default class TurnoService {
 	}
 
 	CreateTurno(reqBody){
-		let sede  	  = this.sedeService.findAll().filter(s => s.id == reqBody.sede)[0];
+		let sede  	  = this.sedeService.findById(reqBody.sede);
 
 		if (!sede) throw new InputError("La sede ingresada no existe");
 		

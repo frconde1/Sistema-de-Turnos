@@ -21,4 +21,8 @@ export class SedeService {
         return this.sedeRepository.findAll();
     }
 
+    findById(id) {
+        return this.sedeRepository.findById(id)
+    }
+
 }
