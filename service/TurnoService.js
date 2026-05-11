@@ -2,7 +2,6 @@ import TurnoDTO 			from "../domain/DTOs/TurnoDTO.js";
 import { EstadoTurno } 		from "../domain/Enums.js";
 import Medico 				from "../domain/Medico.js";
 import Paciente 			from "../domain/Paciente.js";
-import Sede 				from "../domain/Sede.js";
 import Turno				from "../domain/Turno.js";
 import { InputError, BadRequestError } 		from "../errors/Errors.js";
 import TurnoRepository		from "../repository/TurnoRepository.js";
@@ -12,6 +11,23 @@ import { SedeService } 		from "./SedeService.js";
 import CambioEstadoTurnoDTO from "../domain/DTOs/CambioEstadoTurnoDTO.js";
 import CambioEstadoTurno from "../domain/CambioEstadoTurno.js";
 import Usuario from "../domain/Usuario.js";
+import z from "zod/v3";
+
+//coerse convierte "123" a 123
+//refine agrega una validacion personalizada
+//lo del !Number.isNaN(Date.parse(v)) es porque, por ejemplo Date.parse("2026-05-04T12:40:00") devuelve un numero
+//caso contrario devuelve NaN, por eso me fijo que sea !NaN
+const turnoSchema = z.object({
+    medico: z.coerce.number().int().nonnegative({ message: "Error al enviar el ID de medico" }),
+    paciente: z.coerce.number().int().nonnegative({ message: "Error al enviar el ID de paciente" }),
+    sede: z.coerce.number().int().nonnegative({ message: "Error al enviar el ID de sede" }),
+    practica: z.coerce.number().int().nonnegative({ message: "Error al enviar el ID de practica" }),
+    fechaHora: z.string()
+        .refine((v) => !Number.isNaN(Date.parse(v)), { message: "la fecha es invalida" })
+        .refine((v) => new Date(v + "-03:00") >= new Date(), { message: "la fecha no puede ser anterior a hoy" }),
+    estado: z.nativeEnum(EstadoTurno, { errorMap: () => ({ message: "el estado es invalido" }) }),
+    costo: z.number().nonnegative({ message: "el costo es invalido" })
+});
 
 export default class TurnoService {
 	/**
@@ -69,19 +85,10 @@ export default class TurnoService {
 		if(!datosTurnoNuevo || typeof datosTurnoNuevo !== "object" || Array.isArray(datosTurnoNuevo))
             throw new InputError("No se envio un objeto como body de la request");
         
-		const { medico, paciente, sede, practica, fechaHora, estado, costo } = datosTurnoNuevo;
-
-		this.ValidarId(medico,	 "medico");
-		this.ValidarId(paciente,	 "paciente");
-		this.ValidarId(sede, 	 "sede");
-		this.ValidarId(practica, "practica");
-
-		if(typeof fechaHora !== "string" || Number.isNaN(Date.parse(fechaHora)) || new Date(fechaHora + "-03:00") < new Date() )
-			throw new InputError("la fecha es invalida");
-        if(typeof estado !== "number" || !Number.isInteger(estado) || !(-1 < estado && estado < 5) ) 
-			throw new InputError("el estado es invalido");
-        if(typeof costo !== "number" || costo < 0)
-			throw new InputError("el costo es invalido");
+		const result = turnoSchema.safeParse(datosTurnoNuevo);
+		if (!result.success) {
+			throw new InputError(result.error.issues.map(i => i.message).join(", "));
+		}
 	}
 
 	CreateTurno(reqBody){

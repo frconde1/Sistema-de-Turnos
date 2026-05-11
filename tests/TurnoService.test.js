@@ -67,7 +67,7 @@ describe("TurnoService", () => {
             sede: "1",
             practica: "0",
             fechaHora: "2026-05-04T12:40:00", // formato localizado en Arg, para UTC sumar 3 horas
-            estado: 2,
+            estado: "CONFIRMADO",
             costo: 5000
         })
         expect(() => {
@@ -109,13 +109,13 @@ describe("TurnoService", () => {
             sede: "1",
             practica: "0",
             fechaHora: "2026-05-04T12:00:00", // formato localizado en Arg, para UTC sumar 3 horas
-            estado: 2,
+            estado: "CONFIRMADO",
             costo: 5000
         })
 
         const nuevoEstado = new CambioEstadoTurno(
             "2026-05-04T11:50:00",  // fechaHoraIngreso 
-            3,                      // estadoTurno
+            "CANCELADO",            // estadoTurno
             turno,                  // turno 
             "0",                    // usuario 
             "porque si",            // motivo
@@ -135,7 +135,7 @@ describe("TurnoService", () => {
             sede: "1",
             practica: "0",
             fechaHora: "2026-05-04T12:20:00", // formato localizado en Arg, para UTC sumar 3 horas
-            estado: 2,
+            estado: "CONFIRMADO",
             costo: 5000
         })
         const nuevoEstado = new CambioEstadoTurno(
