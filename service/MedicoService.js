@@ -2,7 +2,13 @@ import Medico from "../domain/Medico.js";
 import { MedicosRepository } from "../repository/MedicosRepository.js";
 import { InputError } 		from "../errors/Errors.js";
 import DisponibilidadHoraria from "../domain/DisponibilidadHoraria.js";
+import { z } from "zod/v3";
 
+const medicoSchema = z.object({
+    usuario: z.string({required_error: "El usuario es obligatorio", invalid_type_error: "El usuario debe ser un string" }).min(1, "El usuario no puede estar vacío"),
+    matricula: z.string({ required_error: "La matricula es obligatoria", invalid_type_error: "La matricula debe ser un string" }).min(1, "La matrícula no puede estar vacía"),
+    nombre: z.string({ required_error: "El nombre es obligatorio", invalid_type_error: "El nombre debe ser un string" }).min(1, "El nombre no puede estar vacío")
+});
 
 export class MedicoService {
     constructor(medicosRepository = new MedicosRepository) {
@@ -10,7 +16,11 @@ export class MedicoService {
     }
 
     create(medicoReq) {
-        //TODO validaciones
+        const result = medicoSchema.safeParse(medicoReq);
+        if (!result.success) {
+            throw new InputError(result.error.issues.map(err => err.message).join(", "));
+        }
+
         const medico = new Medico(
             medicoReq.usuario,
             medicoReq.matricula,

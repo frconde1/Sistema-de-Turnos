@@ -1,3 +1,4 @@
+import { InputError } from "../errors/Errors.js";
 import CoberturaEspecialidad	from "./CoberturaEspecialidad.js";
 import CoberturaPractica		from "./CoberturaPractica.js";
 import { NivelCobertura } 		from "./Enums.js";
@@ -40,7 +41,7 @@ export default class Plan {
 					return cobertura.nivel;
 
 		// no se encontro
-		throw new Error("No se ingreso una practica o una especialidad");
+		throw new InputError("No se ingreso una practica o una especialidad");
 	}
 
 	}

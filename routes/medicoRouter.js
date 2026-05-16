@@ -7,10 +7,9 @@ const router = express.Router()
 
 router.route('')
     .get((req, res) => medicoController.findAll(req, res))
-    .post((req, res) => medicoController.create(req, res))
+    .post((req, res, next) => medicoController.create(req, res, next))
 
 router.route('/:id/disponibilidades')
-	.get((req, res) => {})
     .post((req, res, next) => medicoController.agregarDisponibilidad(req, res, next))
     .delete((req, res) => medicoController.eliminarDisponibilidad(req, res))
 

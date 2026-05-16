@@ -1,3 +1,4 @@
+import { BadRequestError } from "../errors/Errors.js";
 import TurnoService	from "../service/TurnoService.js"
 
 export default class TurnoController {
@@ -23,7 +24,21 @@ export default class TurnoController {
 	 * @returns {import('express').Response}
 	 */
 	async FindAll (req, res) {
-		return res.status(200).json({status: "succes", data: this.turnoService.FindAll()});
+		const filtros 	 = this.extraerFiltros	 (req.query)
+		const paginacion = this.extraerPaginacion(req.query)
+		
+		const resultado = await this.turnoService.FindPaginado({ ...paginacion, filtros })
+		
+		return res.status(200).json({ 
+			status: "success",
+			data: resultado.turnos,
+			paginacion: {
+				numeroPagina: 	 resultado.numeroPagina,
+				limitePorPagina: resultado.limitePorPagina,
+				totalTurnos: 	 resultado.totalTurnos,
+				totalPaginas: 	 resultado.totalPaginas
+			}
+		})
 	}
 
 	/**
@@ -34,11 +49,7 @@ export default class TurnoController {
 	async Delete(req, res) {
     const turnoDTO = this.turnoService.Find(req.params.id);
 		this.turnoService.Delete(req.params.id);
-<<<<<<< HEAD
-		return res.status(200).json({status: "succes"});
-=======
 		return res.status(200).json(turnoDTO);
->>>>>>> aa93a13 (Agrego queryparam Orden para ordenar por costo ascendente y descendente)
 	}
 
 	/**
@@ -74,28 +85,15 @@ export default class TurnoController {
 	/** @returns {{medico: number|undefined, paciente: number|undefined, sede: number|undefined, practica: number|undefined, estado: number|undefined}}*/
 	extraerFiltros(query) {
         const filtros = {
-<<<<<<< HEAD
 			medico: 	  query.medico, 
 			paciente:   query.paciente, 
 			sede: 		  query.sede, 
 			practica:   query.practica, 
 			estado: 	  query.estado,
       ordenCosto: query.ordenCosto,
-<<<<<<< HEAD
       ordenFecha: query.ordenFecha,
       fechaInicio:query.fechaInicio,
       fechaFin:   query.fechaFin
-=======
-      ordenFecha: query.ordenFecha
->>>>>>> def4575 (Agrego orden por fecha ascendente y descendente)
-=======
-			medico: 	query.medico, 
-			paciente: query.paciente, 
-			sede: 		query.sede, 
-			practica: query.practica, 
-			estado: 	query.estado,
-      orden:    query.orden
->>>>>>> aa93a13 (Agrego queryparam Orden para ordenar por costo ascendente y descendente)
 		}
 		
 		return filtros

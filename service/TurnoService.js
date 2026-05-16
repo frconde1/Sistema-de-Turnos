@@ -59,7 +59,8 @@ export default class TurnoService {
 	 * @param {String} name
 	*/
 	ValidarId(id, name){
-		if(typeof id !== "string" || id.length === 0 || Number(id) === NaN)
+		id = Number(id);
+		if(id === NaN || !Number.isInteger(id) || id < 0)
 			throw new InputError(`Error al enviar el ID de ${name}`);
 	}
 	
@@ -71,10 +72,11 @@ export default class TurnoService {
 		const { medico, sede, practica, fechaHora, estado, costo } = datosTurnoNuevo;
 
 		this.ValidarId(medico,	 "medico");
+		this.ValidarId(medico,	 "paciente");
 		this.ValidarId(sede, 	 "sede");
 		this.ValidarId(practica, "practica");
 
-		if(typeof fechaHora !== "string" || Date.parse(fechaHora) === NaN)
+		if(typeof fechaHora !== "string" || Date.parse(fechaHora) === NaN || new Date(fechaHora + "-03:00") < new Date() )
 			throw new InputError("la fecha es invalida");
         if(typeof estado !== "number" || !Number.isInteger(estado) || !(-1 < estado && estado < 5) ) 
 			throw new InputError("el estado es invalido");
@@ -110,6 +112,12 @@ export default class TurnoService {
 	 * @param {Medico} medico 
 	 */
 	ValidarDisponibilidad(turno, medico){
+		if(!medico.sedes.some(s => s.id == turno.sede.id))
+			throw new InputError("El médico no trabaja en la sede");
+
+		if(!medico.practicas.some(p => p.id == turno.practica.id))
+			throw new InputError("El médico no cuenta con esa práctica");
+
 		if (!medico.validarDisponibilidad(turno.fechaHora, turno.practica.duracionTurnoEnMins))
 			throw new InputError("El médico no se encuentra disponible en ese horario");
 	}
@@ -124,6 +132,24 @@ export default class TurnoService {
 			throw new InputError("el estado es invalido");
         if(typeof motivo !== "string" || motivo === "")
 			throw new InputError("el motivo es invalido");
+	}
+
+	ValidarQuery(numeroPagina, limitePorPagina, {medico, paciente, sede, practica, estado}){
+		if(numeroPagina < 1 || !Number.isInteger(numeroPagina))
+			throw new BadRequestError(`El numero de pagina debe ser un entero positivo`);
+		if(limitePorPagina < 1 || !Number.isInteger(limitePorPagina))
+			throw new BadRequestError(`El limite de pagina debe ser un entero positivo`);
+
+		if(medico	) this.ValidarId(medico,   "medico"	 )
+		if(paciente ) this.ValidarId(paciente, "paciente")
+		if(sede		) this.ValidarId(sede, 	   "sede"	 )
+		if(practica ) this.ValidarId(practica, "practica")
+						
+		if(estado){
+			const numero = Number(estado)
+			if (numero == NaN || !Number.isInteger(numero) || !(-1 < numero && numero < 5))
+				throw new BadRequestError(`El parámetro estado debe ser un numero entero en el rango [0,4]`);
+		}
 	}
 
 	//////////////////////
@@ -164,9 +190,6 @@ export default class TurnoService {
 		// indicando paciente y servicio solicitado 
 		// (especialidad o práctica)
 
-		// TODO: notificar al paciente
-		// Al aceptar un turno, se notifica al paciente
-
 		nuevoTurno.CambiarEstado(nuevoEstado);
 		this.turnoRepository.Save(nuevoTurno);
 		return new TurnoDTO(nuevoTurno);
@@ -194,18 +217,30 @@ export default class TurnoService {
 		turnoNuevo.historialEstados = turnoViejo.historialEstados
 		turnoNuevo.id = id;
 
-		// TODO: notificar en caso de cancelacion
-		// Ante cancelaciones de turnos, 
-		// se notifica a la contraparte correspondiente.
-
 		this.turnoRepository.Save(turnoNuevo);
 		return new TurnoDTO(turnoNuevo);
 	}
 
-	/** @returns {TurnoDTO[]} */
-	FindAll() {
+	FindAll(){
 		return this.turnoRepository.FindAll().map(t => new TurnoDTO(t));
 	}
+
+	FindPaginado({numeroPagina = 1, limitePorPagina = 10, filtros = {}} = {}) {
+		this.ValidarQuery(numeroPagina, limitePorPagina, filtros);
+
+		let {turnos, totalTurnos} = this.turnoRepository.FindPaginado(numeroPagina, limitePorPagina, filtros)
+		
+		const totalPaginas = totalTurnos === 0 ? 0 : Math.ceil(totalTurnos / limitePorPagina)
+		
+		turnos = turnos.map(t => new TurnoDTO(t));
+		return {
+		    turnos,
+		    numeroPagina,
+		    limitePorPagina,
+		    totalTurnos,
+		    totalPaginas
+		}
+	}	
 
 	/**
 	 * @param {String} id 
@@ -226,11 +261,17 @@ export default class TurnoService {
 			this.usuarioService.FindById(reqBody.usuario),
 			reqBody.motivo
 		);
-
 		if(nuevoEstado.estado == EstadoTurno.CANCELADO)
 			if((turno.fechaHora - nuevoEstado.fechaHoraIngreso) / (1000 * 60 * 60) <= 1)
 				throw new InputError("se quiere cancelar con menos de 1 hora de anticipacion");
 		
+		// TODO: notificar al paciente
+		// Al aceptar un turno, se notifica al paciente
+		
+		// TODO: notificar en caso de cancelacion
+		// Ante cancelaciones de turnos, se notifica a la contraparte correspondiente.
+
+
 		turno.CambiarEstado(nuevoEstado);
 		this.turnoRepository.Save(turno);
 		return new CambioEstadoTurnoDTO(nuevoEstado)

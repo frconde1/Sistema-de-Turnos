@@ -9,7 +9,7 @@ export class SedeService {
     create(sedeReq) {
         //TODO validaciones
         const sede = new Sede(
-            Date.now(),
+            new Date(),
             sedeReq.nombre,
             sedeReq.direccion
         )
