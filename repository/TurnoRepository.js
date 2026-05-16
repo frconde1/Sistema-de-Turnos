@@ -25,7 +25,11 @@ export default class TurnoRepository {
 
 	/** @returns {Turno[]}*/
 	FindPaginado(numeroPagina, limitePorPagina, filtros) {
+<<<<<<< HEAD
 		const {medico, paciente, sede, practica, estado, ordenCosto, ordenFecha, fechaInicio, fechaFin} = filtros;
+=======
+		const {medico, paciente, sede, practica, estado, ordenCosto, ordenFecha} = filtros;
+>>>>>>> def4575 (Agrego orden por fecha ascendente y descendente)
 		
 		let turnos = this.FindAll();
 
@@ -45,6 +49,7 @@ export default class TurnoRepository {
     } else if (ordenFecha == 1) {
     turnos.sort((a, b) => new Date(b.fechaHora)- new Date(a.fechaHora));
     }
+<<<<<<< HEAD
 
     
     const estaEnRango = (inicio, fin, fecha) => fecha >= inicio && fecha <= fin;
@@ -54,6 +59,8 @@ export default class TurnoRepository {
       const desde = new Date(filtros.fechaInicio);
       turnos = turnos.filter(t => estaEnRango(desde, hasta, new Date(t.fechaHora)));
     }
+=======
+>>>>>>> def4575 (Agrego orden por fecha ascendente y descendente)
 
         const inicio = (numeroPagina - 1) * limitePorPagina;
         const fin 	 = inicio + limitePorPagina;

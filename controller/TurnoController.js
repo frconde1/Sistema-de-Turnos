@@ -75,9 +75,13 @@ export default class TurnoController {
 			practica:   query.practica, 
 			estado: 	  query.estado,
       ordenCosto: query.ordenCosto,
+<<<<<<< HEAD
       ordenFecha: query.ordenFecha,
       fechaInicio:query.fechaInicio,
       fechaFin:   query.fechaFin
+=======
+      ordenFecha: query.ordenFecha
+>>>>>>> def4575 (Agrego orden por fecha ascendente y descendente)
 		}
 		
 		return filtros
