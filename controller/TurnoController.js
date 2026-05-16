@@ -65,5 +65,29 @@ export default class TurnoController {
 		const nuevoEstado = this.turnoService.UpdateTurnoStatus(req.params.id, req.body);
 		return res.status(200).json({status: "succes", data: nuevoEstado})
 	}
+
+	/** @returns {{medico: number|undefined, paciente: number|undefined, sede: number|undefined, practica: number|undefined, estado: number|undefined}}*/
+	extraerFiltros(query) {
+        const filtros = {
+			medico: 	  query.medico, 
+			paciente:   query.paciente, 
+			sede: 		  query.sede, 
+			practica:   query.practica, 
+			estado: 	  query.estado,
+      ordenCosto: query.ordenCosto,
+      ordenFecha: query.ordenFecha,
+      fechaInicio:query.fechaInicio,
+      fechaFin:   query.fechaFin
+		}
+		
+		return filtros
+    }
+
+	/** @returns {{page: number|undefined, limit: number|undefined}} */
+    extraerPaginacion(query) {
+        const numeroPagina 	  = query?.page  === undefined ? 1  : Number(query.page)
+        const limitePorPagina = query?.limit === undefined ? 10 : Number(query.limit)
+        return { numeroPagina, limitePorPagina }
+    }
 }
 
