@@ -26,10 +26,14 @@ export default class TurnoRepository {
 	/** @returns {Turno[]}*/
 	FindPaginado(numeroPagina, limitePorPagina, filtros) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		const {medico, paciente, sede, practica, estado, ordenCosto, ordenFecha, fechaInicio, fechaFin} = filtros;
 =======
 		const {medico, paciente, sede, practica, estado, ordenCosto, ordenFecha} = filtros;
 >>>>>>> def4575 (Agrego orden por fecha ascendente y descendente)
+=======
+		const {medico, paciente, sede, practica, estado, orden} = filtros;
+>>>>>>> aa93a13 (Agrego queryparam Orden para ordenar por costo ascendente y descendente)
 		
 		let turnos = this.FindAll();
 
@@ -38,6 +42,7 @@ export default class TurnoRepository {
 		if(sede)	 turnos = turnos.filter((t => t.sede.id 	== sede		));
 		if(practica) turnos = turnos.filter((t => t.practica.id == practica ));
 		if(estado)	 turnos = turnos.filter((t => t.estado 		== estado	));
+<<<<<<< HEAD
     if (ordenCosto == 0) {
     turnos.sort((a, b) => a.costo - b.costo);
     } else if (ordenCosto == 1) {
@@ -61,6 +66,13 @@ export default class TurnoRepository {
     }
 =======
 >>>>>>> def4575 (Agrego orden por fecha ascendente y descendente)
+=======
+    if (orden == 0) {
+    turnos.sort((a, b) => a.costo - b.costo);
+    } else if (orden == 1) {
+    turnos.sort((a, b) => b.costo - a.costo);
+    }
+>>>>>>> aa93a13 (Agrego queryparam Orden para ordenar por costo ascendente y descendente)
 
         const inicio = (numeroPagina - 1) * limitePorPagina;
         const fin 	 = inicio + limitePorPagina;
@@ -86,10 +98,12 @@ export default class TurnoRepository {
 	 * @returns {Turno}
 	*/
 	Delete(id) {
-		if(this.turnos[id])
-			this.turnos[id] = undefined;
-		else
+    let productoEliminado = this.turnos[id];
+		if(!this.turnos[id])
 			throw new InputError("El turno no existe")
+
+    delete this.turnos[id];
+    return productoEliminado;
 	}
 
 	/**
