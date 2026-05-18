@@ -8,18 +8,27 @@ export class SedeRepository {
 			return SedeRepository.instance;
 
         this.sedes = []
-        this.sedes.push(new Sede(1, "Sede1", "Calle Falsa 123"))
-        this.sedes.push(new Sede(2, "Sede2", "Calle Muy Falsa 123"))
 
 		SedeRepository.instance = this;
     }
 
+    /**
+     * @param {Sede} sede
+     * @returns {Sede}
+    */
     create(sede) {
         this.sedes.push(sede)
+        sede.id = String(this.sedes.length);
         return sede;
     }
 
+    /**@returns {Array<Sede>} */
     findAll() {
-        return this.sedes;
+        return new Array(this.sedes);
+    }
+
+    /**@returns {Sede}*/
+    FindById(id){
+        return this.sedes.find(s=> s.id == id);
     }
 }

@@ -1,4 +1,6 @@
 import CambioEstadoTurno from "../domain/CambioEstadoTurno.js"
+import { EstadoTurno } from "../domain/Enums.js"
+import Medico from "../domain/Medico.js"
 import { InputError } from "../errors/Errors.js"
 import { MedicoService } from "../service/MedicoService.js"
 import PracticaService from "../service/PracticaService.js"
@@ -7,163 +9,126 @@ import TurnoService  from "../service/TurnoService.js"
 import { jest, describe, it, expect, beforeAll, beforeEach } from '@jest/globals';
 
 describe("TurnoService", () => {
-    let turnoService;
-    let medicoService;
-    let sedeService;
-    let practicaService;
+	const medicoService 	= new MedicoService();
+	const sedeService 	= new SedeService();
+	const practicaService = new PracticaService();
+	const turnoService 	= new TurnoService();
+
+	beforeAll(() => {
+		/**@type {Medico} */
+		let medico = medicoService.create({
+			usuario: "medico1",
+			matricula: "matricula1",
+			nombre: "Juan"
+		})
+
+		let sede = sedeService.create({
+			sede: {
+				id: "1"
+			}
+		})
+
+		medico.agregarSede(sede);
+
+		const disponibilidades = [
+			{disponibilidad: {diaSemana: 1, horaDesde: "12:00", horaHasta: "13:00"}},
+			{disponibilidad: {diaSemana: 5, horaDesde: "00:00", horaHasta: "10:00"}},
+		]
 
 
-    beforeAll(() => {
+		let practica = practicaService.Create({
+			codigo: "ByKASJGY",
+			nombre: "practica 1",
+			duracion: 20,
+			costo: 100
+		})
 
-      const medicoService = new MedicoService();
-      const practicaService = new PracticaService();
-      const sedeService = new SedeService();
+		for(const disponibilidad of disponibilidades)
+			medicoService.agregarDisponibilidad(medico.id, disponibilidad);
+	})
 
-      medico = medicoService.create({
-      usuario: "medico1",
-      matricula: "matricula1",
-      nombre: "Juan"
-      
-    })
-    sede = sedeService.create({
-      sede: {
-        id: "1"
-      }
-    }
-    )
+	beforeEach(() => {
+		// todos los test usan este horario
+		turnoService.turnoRepository.turnos = [];
+		jest.useFakeTimers();
+		jest.setSystemTime(new Date("2026-05-01T00:00:00-03:00"));
+	})
 
-    let disponibilidad = {
-      disponibilidad: {
-        diaSemana: 1, 
-        horaDesde: "12:00",
-        horaHasta: "13:00"
-      }
-    }  
+	afterEach(() => {
+		jest.useRealTimers();
+	});
 
-    medicoService.agregarDisponibilidad(medico.id, disponibilidad);
+	it("debería crear un turno a las 12:40 con un médico disponible correctamente", () => {
+		expect(() => {
+			turnoService.Create({
+				medico:    "0",
+				sede:      "1",
+				paciente:  "0",
+				practica:  "0",
+				fechaHora: "2026-05-04T12:40:00-03:00" // formato localizado en Arg, para UTC -03:00 debe ser z
+			})
+		}).not.toThrow(InputError);
+	})
 
-    practica = practicaService.Create({
-      codigo: "ByKASJGY",
-      nombre: "practica 1",
-      duracion: 20,
-      costo: 100
-    })
+	it("debería lanzar error si falta el médico", () => {
+		expect(() => {
+			turnoService.Create({
+				paciente: "0",
+				costo: 5000
+			})
+		}).toThrow(InputError)
+	})
 
+	it("debería lanzar error si el médico no está disponible en ese horario", () => {
+		expect(() => 
+			{
+			turnoService.Create({
+				medico:    "0",
+				sede:      "1",
+				paciente:  "0",
+				practica:  "0",
+				fechaHora: "2026-05-04T23:40:00-03:00" // formato localizado en Arg, para UTC -03:00 debe ser z
+			}).toThrow(InputError);
+		})
+	})
+	
+	it("debería lanzar error si se busca cancelar el turno con menos de 1 hora de antelación", () => {
+		const turno = turnoService.Create({
+			medico:    "0",
+			sede:      "1",
+			paciente:  "0",
+			practica:  "0",
+			fechaHora: "2026-05-01T00:40:00-03:00",
+		})
 
-    })
-
-    
-
-
-    beforeEach(() => {
-        turnoService = new TurnoService()
-    })
-    afterEach(() => {
-        // Nos aseguramos de volver al tiempo real después de cada it
-        jest.useRealTimers();
-    });
-
-    it("debería crear un turno a las 12:40 con un médico disponible correctamente", () => {
-        const turno = turnoService.Create({
-            medico: "0",
-            paciente: "0",
-            sede: "1",
-            practica: "0",
-            fechaHora: "2026-05-04T12:40:00", // formato localizado en Arg, para UTC sumar 3 horas
-            estado: 2,
-            costo: 5000
-        })
-        expect(() => {
-          const medico = medicoService.FindById(turno.medico);
-
-          turnoService.ValidarDisponibilidad(turno, turno.medico);
-        }).not.toThrow(InputError);
-
-    })
-
-    it("debería lanzar error si falta el médico", () => {
-        expect(() => {
-            turnoService.Create({
-                paciente: "0",
-                costo: 5000
-            })
-        }).toThrow()
-    })
-
-    it("debería lanzar error si el médico no está disponible en ese horario", () => {
-      expect(() => {
-          turnoService.Create({
-            medico: "0",
-            paciente: "0",
-            sede: "1",
-            practica: "0",
-            fechaHora: "2026-05-04T15:40:00", // formato localizado en Arg, para UTC sumar 3 horas
-            estado: 2,
-            costo: 5000
-
-          }).toThrow(InputError);
-
-      })
-    })
-      it("debería lanzar error si se busca cancelar el turno con menos de 1 hora de antelación", () => {
-      
-      jest.useFakeTimers();
-      jest.setSystemTime(new Date("2026-05-04T11:50:00")); // uso Jest faketimers para simular la hora
-
-      const turno = turnoService.Create({
-            medico: "0",
-            paciente: "0",
-            sede: "1",
-            practica: "0",
-            fechaHora: "2026-05-04T12:00:00", // formato localizado en Arg, para UTC sumar 3 horas
-            estado: 2,
-            costo: 5000
-        })
-      const nuevoEstado = new CambioEstadoTurno(
-        "2026-05-04T11:50:00",  // fechaHoraIngreso 
-        3,                      // estadoTurno
-        turno,                  // turno 
-        "0",                    // usuario 
-        "porque si",            // motivo
-    );
-
-    expect(() => {
-      turnoService.UpdateTurnoStatus(turno.id, nuevoEstado);
-    }).toThrow(InputError);
- 
+		const nuevoEstado = {
+			estado: "CANCELADO",
+			usuario: "0",
+			razon: "porque si"
+		}
 
 
-    })
+		expect(() => {
+			turnoService.UpdateTurnoStatus(turno.id, nuevoEstado);
+		}).toThrow(InputError);
+	})
 
-  it("debería cancelar el turno exitosamente", () => {
-    jest.useFakeTimers();
-    jest.setSystemTime(new Date("2026-05-04T11:00:00")); // uso Jest faketimers para simular la hora
-      const turno = turnoService.Create({
-            medico: "0",
-            paciente: "0",
-            sede: "1",
-            practica: "0",
-            fechaHora: "2026-05-04T12:20:00", // formato localizado en Arg, para UTC sumar 3 horas
-            estado: 2,
-            costo: 5000
-        })
-    const nuevoEstado = new CambioEstadoTurno(
-       new Date(),
-       3,             // estadoTurno
-       turno,           // turno 
-       "0",             // usuario 
-       "porque quiero",
+	it("debería cancelar el turno exitosamente", () => {
+		const turno = turnoService.Create({
+			medico: "0",
+			sede: "1",
+			paciente: "0",
+			practica: "0",
+			fechaHora: "2026-05-01T01:40:00-03:00",
+		})
+		const nuevoEstado = {
+			estado: "CANCELADO",
+			usuario: "0",
+			razon: "porque si"
+		};
 
-
-    );
-    expect(() => {
-      turnoService.UpdateTurnoStatus(turno.id, nuevoEstado);
-    }).not.toThrow();
- 
-
-
-    })
-
-
-    
+		expect(() => {
+			turnoService.UpdateTurnoStatus(turno.id, nuevoEstado);
+		}).not.toThrow();
+	})
 })

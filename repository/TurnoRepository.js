@@ -88,15 +88,10 @@ export default class TurnoRepository {
 
 	/**
 	 * @param {String} turnoId 
-	 * @returns {Turno}
+	 * @returns {Turno | undefined}
 	 */
 	FindTurnoById(turnoId) {
-		let turno = this.turnos.find(t => t ? t.id == turnoId : false);
-		
-		if (!turno) 
-			throw new InputError("El turno buscado no existe")
-
-		return turno 
+		return this.turnos.find(t => t ? t.id == turnoId : false);
 	}
 	
 

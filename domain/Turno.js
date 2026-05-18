@@ -9,7 +9,7 @@ import Usuario 				from "./Usuario.js";
 export default class Turno {
 	id; 
 	medico; 
-	// paciente;
+	paciente;
 	fechaHora;
 	sede; 
 	practica; 
@@ -28,14 +28,14 @@ export default class Turno {
 	 * @param {Number} costo 
 	 */
 	constructor(medico, paciente, fechaHora, sede, practica, estado, historialEstados, costo) { 
-		this.medico = medico; 
-		this.paciente = paciente;
-		this.fechaHora = fechaHora; 
-		this.sede = sede; 
-		this.practica = practica;
-		this.estado = estado; 
+		this.medico 		  = medico; 
+		this.paciente 		  = paciente;
+		this.fechaHora 		  = fechaHora; 
+		this.sede 			  = sede; 
+		this.practica 		  = practica;
+		this.estado 		  = estado; 
 		this.historialEstados = historialEstados;
-		this.costo = costo; 
+		this.costo 			  = costo; 
 	}
 
 	/**

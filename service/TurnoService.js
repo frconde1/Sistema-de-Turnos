@@ -1,23 +1,22 @@
-import TurnoDTO 			from "../domain/DTOs/TurnoDTO.js";
 import { EstadoTurno } 		from "../domain/Enums.js";
+import { InputError } 		from "../errors/Errors.js";
+import { MedicoService }	from "./MedicoService.js";
+import { SedeService } 		from "./SedeService.js";
+import PracticaService 		from "./PracticaService.js";
+import TurnoRepository		from "../repository/TurnoRepository.js";
+import Turno				from "../domain/Turno.js";
+import CambioEstadoTurno 	from "../domain/CambioEstadoTurno.js";
 import Medico 				from "../domain/Medico.js";
 import Paciente 			from "../domain/Paciente.js";
 import Sede 				from "../domain/Sede.js";
-import Turno				from "../domain/Turno.js";
-import { InputError } 		from "../errors/Errors.js";
-import TurnoRepository		from "../repository/TurnoRepository.js";
-import PracticaService 		from "./PracticaService.js";
-import { MedicoService }	from "./MedicoService.js";
-import { SedeService } 		from "./SedeService.js";
+import Usuario 				from "../domain/Usuario.js";
+import TurnoDTO 			from "../domain/DTOs/TurnoDTO.js";
 import CambioEstadoTurnoDTO from "../domain/DTOs/CambioEstadoTurnoDTO.js";
-import CambioEstadoTurno from "../domain/CambioEstadoTurno.js";
-import Usuario from "../domain/Usuario.js";
+import { da } from "zod/locales";
+
+
 
 export default class TurnoService {
-	/**
-	 *	@param {TurnoRepository} turnoRepository 
-	 * 	@param {MedicoService} medicoService
-	*/
 	constructor(
 		turnoRepository = new TurnoRepository(), 
 		medicoService 	= new MedicoService(),
@@ -45,111 +44,7 @@ export default class TurnoService {
 		}
 
 		// TODO: recoradorios por dia?
-		// El día previo al turno, se envía un 
-		// recordatorio tanto al paciente como al médico
-	}
-
-	//////////////////////
-	//		UTILS		//
-	//////////////////////
-
-
-	/** 
-	 * @param {String} id 
-	 * @param {String} name
-	*/
-	ValidarId(id, name){
-		id = Number(id);
-		if(id === NaN || !Number.isInteger(id) || id < 0)
-			throw new InputError(`Error al enviar el ID de ${name}`);
-	}
-	
-	
-	ValidarDatosTurno(datosTurnoNuevo){
-		if(!datosTurnoNuevo || typeof datosTurnoNuevo !== "object" || Array.isArray(datosTurnoNuevo))
-            throw new InputError("No se envio un objeto como body de la request");
-        
-		const { medico, sede, practica, fechaHora, estado, costo } = datosTurnoNuevo;
-
-		this.ValidarId(medico,	 "medico");
-		this.ValidarId(medico,	 "paciente");
-		this.ValidarId(sede, 	 "sede");
-		this.ValidarId(practica, "practica");
-
-		if(typeof fechaHora !== "string" || Date.parse(fechaHora) === NaN || new Date(fechaHora + "-03:00") < new Date() )
-			throw new InputError("la fecha es invalida");
-        if(typeof estado !== "number" || !Number.isInteger(estado) || !(-1 < estado && estado < 5) ) 
-			throw new InputError("el estado es invalido");
-        if(typeof costo !== "number" || costo < 0)
-			throw new InputError("el costo es invalido");
-	}
-
-	CreateTurno(reqBody){
-		let sede  	  = this.sedeService.findAll().filter(s => s.id == reqBody.sede)[0];
-
-		if (!sede) throw new InputError("La sede ingresada no existe");
-		
-		let medico    = this.medicoService	.FindById(reqBody.medico	);
-		let paciente  = this.pacienteService.FindById(reqBody.paciente	);
-		let practica  = this.practicaService.FindById(reqBody.practica	);
-		let fechaHora = new Date(reqBody.fechaHora + "-03:00");
-		let estado	  = reqBody.estado;
-		let costo	  = reqBody.costo;
-
-		return new Turno(medico, paciente, fechaHora, sede, practica, estado, [], costo);
-	}
-
-	FindById(id){
-		return this.turnoRepository.FindTurnoById(id);
-	}
-
-	FindTurnosByMedico(id){
-		return this.turnoRepository.FindAll().filter(t => t.medico.id == id);
-	}
-
-	/**
-	 * @param {Turno} turno 
-	 * @param {Medico} medico 
-	 */
-	ValidarDisponibilidad(turno, medico){
-		if(!medico.sedes.some(s => s.id == turno.sede.id))
-			throw new InputError("El médico no trabaja en la sede");
-
-		if(!medico.practicas.some(p => p.id == turno.practica.id))
-			throw new InputError("El médico no cuenta con esa práctica");
-
-		if (!medico.validarDisponibilidad(turno.fechaHora, turno.practica.duracionTurnoEnMins))
-			throw new InputError("El médico no se encuentra disponible en ese horario");
-	}
-
-	
-	/** @param {{ estado: Number, usuario: string, motivo: string}} reqBody */
-	ValidarDatosEstado(reqBody) {
-		const {estado, usuario, motivo} = reqBody;
-
-		this.ValidarId(usuario, "usuario");
-        if(typeof estado !== "number" || !Number.isInteger(estado) || !(-1 < estado && estado < 5))
-			throw new InputError("el estado es invalido");
-        if(typeof motivo !== "string" || motivo === "")
-			throw new InputError("el motivo es invalido");
-	}
-
-	ValidarQuery(numeroPagina, limitePorPagina, {medico, paciente, sede, practica, estado}){
-		if(numeroPagina < 1 || !Number.isInteger(numeroPagina))
-			throw new BadRequestError(`El numero de pagina debe ser un entero positivo`);
-		if(limitePorPagina < 1 || !Number.isInteger(limitePorPagina))
-			throw new BadRequestError(`El limite de pagina debe ser un entero positivo`);
-
-		if(medico	) this.ValidarId(medico,   "medico"	 )
-		if(paciente ) this.ValidarId(paciente, "paciente")
-		if(sede		) this.ValidarId(sede, 	   "sede"	 )
-		if(practica ) this.ValidarId(practica, "practica")
-						
-		if(estado){
-			const numero = Number(estado)
-			if (numero == NaN || !Number.isInteger(numero) || !(-1 < numero && numero < 5))
-				throw new BadRequestError(`El parámetro estado debe ser un numero entero en el rango [0,4]`);
-		}
+		// El día previo al turno, se envía un recordatorio tanto al paciente como al médico
 	}
 
 	//////////////////////
@@ -158,71 +53,33 @@ export default class TurnoService {
 
 	/** @returns {TurnoDTO} */
 	Create(reqBody){
-		
-		this.ValidarDatosTurno(reqBody);
-
 		const nuevoTurno = this.CreateTurno(reqBody);
-		
-		// validar la disponibilidad del medico
-
-		const medico = this.medicoService.FindById(reqBody.medico);
-		this.ValidarDisponibilidad(nuevoTurno, medico);
-
-
-		// validamos que no hay turnos superpuestos
-		const turnosSuperpuestos = this.FindTurnosByMedico(medico.id)
-		.filter(t => t.estado 	 != EstadoTurno.CANCELADO && t.estado != EstadoTurno.REALIZADO)
-		.some(t => t.fechaHora 	 < nuevoTurno.FechaFinalizacion() && nuevoTurno.fechaHora < t.FechaFinalizacion());
-
-		if(turnosSuperpuestos)
-			throw new InputError("se esta solicitando un horario con un turno ya asignado");
-
-		const nuevoEstado = new CambioEstadoTurno(
-			new Date(),
-			reqBody.estado,
-			nuevoTurno,
-			this.pacienteService.FindById(reqBody.paciente).usuario,
-			"creacion de turno"
-		);
-
+		this.validarTurno(nuevoTurno);
 		// TODO: notificar al medico 
 		// Al reservar un turno, se notifica al médico 
 		// indicando paciente y servicio solicitado 
 		// (especialidad o práctica)
 
-		nuevoTurno.CambiarEstado(nuevoEstado);
 		this.turnoRepository.Save(nuevoTurno);
 		return new TurnoDTO(nuevoTurno);
 	}
 
-	Find(id){
-		this.ValidarId(id, "turno");
-		return new TurnoDTO(this.FindById(id));
+	FindById(id){
+		return new TurnoDTO(this.getTurnoById(id));
 	}
 
 	Delete(id){
+		if(this.getTurnoById(id) === undefined)
+			throw new InputError("El turno no existe")
 		this.turnoRepository.Delete(id);
 	}
 
 	Update(id, reqBody){
-		this.ValidarDatosTurno(reqBody);
-		
-		this.ValidarId(id, "turno");
-		const turnoViejo = this.FindById(id);
-		
-		const turnoNuevo = this.CreateTurno(reqBody);
-		
-		
-		turnoViejo.CambiarReferenciasDeEstados(turnoNuevo);
-		turnoNuevo.historialEstados = turnoViejo.historialEstados
-		turnoNuevo.id = id;
-
+		const turnoViejo = this.getTurnoById(id);
+		this.turnoRepository.Delete(turnoViejo)
+		this.modificarTurno(turnoViejo, reqBody)
 		this.turnoRepository.Save(turnoNuevo);
 		return new TurnoDTO(turnoNuevo);
-	}
-
-	FindAll(){
-		return this.turnoRepository.FindAll().map(t => new TurnoDTO(t));
 	}
 
 	FindPaginado({numeroPagina = 1, limitePorPagina = 10, filtros = {}} = {}) {
@@ -234,7 +91,8 @@ export default class TurnoService {
 		
 		turnos = turnos.map(t => new TurnoDTO(t));
 		return {
-		    turnos,
+		    /**@type {TurnoDTO[]} */
+			turnos ,
 		    numeroPagina,
 		    limitePorPagina,
 		    totalTurnos,
@@ -248,32 +106,111 @@ export default class TurnoService {
 	 * @returns {CambioEstadoTurnoDTO}
 	 */
 	UpdateTurnoStatus(id, reqBody){
-		// Al dar de baja un turno, debería poder 
-		// hacerse solo hasta una hora antes del horario del mismo.
-		this.ValidarId(id, "turno");
-		const turno = this.FindById(id);
+		const turno = this.getTurnoById(id);
 		
-		this.ValidarDatosEstado(reqBody);
+		const ahora = new Date()
 		const nuevoEstado = new CambioEstadoTurno(
-			new Date(),
+			ahora,
 			reqBody.estado,
 			turno,
 			this.usuarioService.FindById(reqBody.usuario),
 			reqBody.motivo
 		);
-		if(nuevoEstado.estado == EstadoTurno.CANCELADO)
-			if((turno.fechaHora - nuevoEstado.fechaHoraIngreso) / (1000 * 60 * 60) <= 1)
-				throw new InputError("se quiere cancelar con menos de 1 hora de anticipacion");
+
+		const menosDe1Hora = ({fechaHora}) => 
+			(fechaHora - new Date()) < (1000/*mili*/ * 60/*seg*/ * 60/*min*/)
+
+		if(reqBody.estado == EstadoTurno.CANCELADO && menosDe1Hora(turno))
+			throw new InputError("Se quiere cancelar un turno con menos de 1 hora de anticipación")
 		
+		turno.CambiarEstado(nuevoEstado);
+
 		// TODO: notificar al paciente
 		// Al aceptar un turno, se notifica al paciente
 		
 		// TODO: notificar en caso de cancelacion
 		// Ante cancelaciones de turnos, se notifica a la contraparte correspondiente.
-
-
-		turno.CambiarEstado(nuevoEstado);
+		
 		this.turnoRepository.Save(turno);
 		return new CambioEstadoTurnoDTO(nuevoEstado)
+	}
+
+	//////////////////////
+	//		UTILS		//
+	//////////////////////
+
+	CreateTurno(reqBody){
+		const sede  	= this.sedeService	  .FindById(reqBody.sede	);
+		const medico    = this.medicoService  .FindById(reqBody.medico	);
+		const paciente  = this.pacienteService.FindById(reqBody.paciente);
+		const practica  = this.practicaService.FindById(reqBody.practica);
+		const fechaHora = new Date(reqBody.fechaHora);
+		
+		// TODO agregar lógica de costo en el turno
+		const turno = new Turno(medico, paciente, fechaHora, sede, practica, EstadoTurno.RESERVADO, new Array(), Number.NaN);
+
+		turno.CambiarEstado(
+			new CambioEstadoTurno(
+				new Date(),
+				EstadoTurno.RESERVADO,
+				turno,
+				paciente.usuario,
+				"creación de turno"
+			)
+		);
+		return turno;
+	}
+
+	/**
+	 * @param {Medico} medico 
+	 * @param {Turno} turno 
+	 * @returns {boolean}
+	 */
+	validarTurno(turno){
+		if(turno.fechaHora <= new Date())
+			throw new InputError("La fecha y hora especificada ya pasó");
+		if(!turno.medico.sedes.some( s => s.id == turno.sede.id))
+			throw new InputError("El medico no trabaja en esa sede");
+		// TODO APLICAR VALIDACIONES DE LAS PRACTICAS DEL MEDICO 
+		//if(!turno.medico.practicas.some( p => p.id == practica.id))
+		//	throw new InputError("El medico no se especializa en esa práctica");
+
+		const medicoDisponible = turno.medico.validarDisponibilidad(
+			turno.fechaHora, turno.practica.duracionTurnoEnMins
+		)
+
+		if(!medicoDisponible)
+			throw new InputError("El medico no se no se encuentra disponible en esa fecha y hora");
+
+		const superposicion = (t1, t2) => 
+			t1.fechaHora < t2.FechaFinalizacion() && 
+			t2.fechaHora < t1.FechaFinalizacion();
+
+		const turnoSuperpuesto = this.turnoRepository.FindAll()
+		.filter(t => t.medico.id == turno.medico.id)
+		.filter(t => t.estado !== EstadoTurno.CANCELADO) 
+		.some(t => superposicion(t, turno))
+
+		if(turnoSuperpuesto)
+			throw new InputError("El medico ya tiene un turno a esa hora");
+	}
+
+	/**
+	 * @param {Turno} turno 
+	 */
+	modificarTurno(turno, {medico, sede, paciente, practica, fechaHora}){
+		if(medico 	 != undefined) turno.medico    = this.medicoService	 .FindById(medico);
+		if(sede 	 != undefined) turno.sede 	   = this.sedeService	 .FindById(sede)
+		if(paciente  != undefined) turno.paciente  = this.pacienteService.FindById(paciente);
+		if(practica  != undefined) turno.practica  = this.practicaService.FindById(practica)
+		if(fechaHora != undefined) turno.fechaHora = fechaHora;
+		this.validarTurno(turno);
+	}
+
+	getTurnoById(id){
+		const turno = this.turnoRepository.FindTurnoById(id);
+		if(turno == undefined)
+				throw new InputError("El turno buscado no existe")
+		return turno;
 	}
 }

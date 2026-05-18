@@ -1,4 +1,5 @@
 import { SedeService } from "../service/SedeService.js";
+import { crearSedeSchema, idSchema } from "./Schemas.js";
 
 export class SedeController {
 
@@ -6,13 +7,15 @@ export class SedeController {
         this.sedeService = sedeService;
     }
 
-    create = (req, res) => {
-        var respuesta = this.sedeService.create(req.body)
-        return res.status(201).json({ status: "success", data: respuesta})
+    Create(req, res){
+        return res.status(201).json(this.sedeService.create(req.body))
     }
     
-    findAll = async (req, res) => {
-        res.json(this.sedeService.findAll())
+    FindAll(req, res) {
+        return res.json(this.sedeService.findAll())
     }
-    
+
+    FindById(req, res){
+        return res.json(this.sedeService.FindById(idSchema(req.data.id)))
+    }
 }
