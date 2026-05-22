@@ -6,7 +6,7 @@ const sedeController = new SedeController();
 const router = express.Router()
 
 router.route('')
-    .get((req, res) => sedeController.findAll(req, res))
-    .post((req, res) => sedeController.create(req, res))
+    .get(async (req, res) => await sedeController.findAll(req, res))
+    .post(async (req, res) => await sedeController.create(req, res))
 
 export default router

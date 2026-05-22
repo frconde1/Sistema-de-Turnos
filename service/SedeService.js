@@ -6,7 +6,7 @@ export class SedeService {
         this.sedeRepository = sedeRepository;
     }
 
-    create(sedeReq) {
+    async create(sedeReq) {
         //TODO validaciones
         const sede = new Sede(
             new Date(),
@@ -14,15 +14,15 @@ export class SedeService {
             sedeReq.direccion
         )
 
-        return this.sedeRepository.create(sede)
+        return await this.sedeRepository.create(sede)
     }
 
-    findAll() {
-        return this.sedeRepository.findAll();
+    async findAll() {
+        return await this.sedeRepository.findAll();
     }
 
-    findById(id) {
-        return this.sedeRepository.findById(id)
+    async findById(id) {
+        return await this.sedeRepository.findById(id)
     }
 
 }
