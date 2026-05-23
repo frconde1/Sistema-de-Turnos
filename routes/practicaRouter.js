@@ -5,7 +5,7 @@ const practicaController = new PracticaController();
 const router = express.Router();
 
 router.route('')
-	.get ((req, res) => practicaController.FindAll(req, res))
-	.post((req, res) => practicaController.Create(req, res))
+	.get (async (req, res) => await practicaController.FindAll(req, res))
+	.post(async (req, res) => await practicaController.Create(req, res))
 
 export default router;

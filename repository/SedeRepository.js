@@ -30,8 +30,8 @@ export class SedeRepository {
         return await SedeModel.find();
     }
 
-    findById(id) {
+    async findById(id) {
         // return this.sedes.find(e => e.id == id)
-        return SedeModel.findById(id);
+        return await SedeModel.findById(id);
     }
 }

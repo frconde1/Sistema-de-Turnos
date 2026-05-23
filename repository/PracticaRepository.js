@@ -1,5 +1,6 @@
 import Practica 		from "../domain/Practica.js";
 import { InputError } 	from "../errors/Errors.js";
+import { PracticaModel } from "../schemas/PracticaSchema.js";
 
 export default class PracticaRepository {
 	
@@ -20,7 +21,7 @@ export default class PracticaRepository {
 	}
 
 	/** @returns {Practica[]}*/
-	FindAll() {
+	async FindAll() {
 		return this.practicas;
 	}
 
@@ -28,9 +29,13 @@ export default class PracticaRepository {
 	 * @param {Practica} practica 
 	 * @returns {Practica}
 	*/
-	Save(practica) {
-		practica.id = practica.id ?? (this.nextId++).toString();
-        this.practicas[practica.id] = practica;
+	async Save(practica) {
+		await PracticaModel.create({
+			codigo: practica.codigo,
+			nombre: practica.nombre,
+			duracionEnMins: practica.duracionTurnoEnMins,
+			costoConsulta: practica.costo
+		});
 		return practica;
 	}
 
@@ -38,8 +43,8 @@ export default class PracticaRepository {
 	 * @param {String} practicaId 
 	 * @returns {Practica}
 	 */
-	FindPracticaById(practicaId) {
-		let practica = this.practicas.find(p => p ? p.id == practicaId : false);
+	async FindPracticaById(practicaId) {
+		let practica = await PracticaModel.findById(practicaId);
 		
 		if (!practica) 
 			throw new InputError("La practica buscada no existe")
