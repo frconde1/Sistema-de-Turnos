@@ -1,28 +1,13 @@
 import { EstadoTurno } 		from "../domain/Enums.js";
-import { InputError } 		from "../errors/Errors.js";
 import { MedicoService }	from "./MedicoService.js";
 import { SedeService } 		from "./SedeService.js";
 import PracticaService 		from "./PracticaService.js";
 import TurnoRepository		from "../repository/TurnoRepository.js";
 import Turno				from "../domain/Turno.js";
-import CambioEstadoTurno 	from "../domain/CambioEstadoTurno.js";
+import TurnoDTO 			from "../domain/DTOs/TurnoDTO.js";
 import Medico 				from "../domain/Medico.js";
 import Paciente 			from "../domain/Paciente.js";
-<<<<<<< HEAD
-import Sede 				from "../domain/Sede.js";
-import Usuario 				from "../domain/Usuario.js";
-import TurnoDTO 			from "../domain/DTOs/TurnoDTO.js";
-import CambioEstadoTurnoDTO from "../domain/DTOs/CambioEstadoTurnoDTO.js";
-import { da } from "zod/locales";
-
-
-=======
-import Turno				from "../domain/Turno.js";
 import { InputError, BadRequestError } 		from "../errors/Errors.js";
-import TurnoRepository		from "../repository/TurnoRepository.js";
-import PracticaService 		from "./PracticaService.js";
-import { MedicoService }	from "./MedicoService.js";
-import { SedeService } 		from "./SedeService.js";
 import CambioEstadoTurnoDTO from "../domain/DTOs/CambioEstadoTurnoDTO.js";
 import CambioEstadoTurno from "../domain/CambioEstadoTurno.js";
 import Usuario from "../domain/Usuario.js";
@@ -43,7 +28,6 @@ const turnoSchema = z.object({
     estado: z.nativeEnum(EstadoTurno, { errorMap: () => ({ message: "el estado es invalido" }) }),
     costo: z.number().nonnegative({ message: "el costo es invalido" })
 });
->>>>>>> main
 
 export default class TurnoService {
 	constructor(
@@ -73,9 +57,6 @@ export default class TurnoService {
 		}
 
 		// TODO: recoradorios por dia?
-<<<<<<< HEAD
-		// El día previo al turno, se envía un recordatorio tanto al paciente como al médico
-=======
 		// El día previo al turno, se envía un 
 		// recordatorio tanto al paciente como al médico
 	}
@@ -108,6 +89,7 @@ export default class TurnoService {
 
 	CreateTurno(reqBody){
 		let sede  	  = this.sedeService.findById(reqBody.sede);
+		console.log(sede);
 
 		if (!sede) throw new InputError("La sede ingresada no existe");
 		
@@ -166,7 +148,6 @@ export default class TurnoService {
 			if (Number.isNaN(numero) || !Number.isInteger(numero) || !(-1 < numero && numero < 5))
 				throw new BadRequestError(`El parámetro estado debe ser un numero entero en el rango [0,4]`);
 		}
->>>>>>> main
 	}
 
 	//////////////////////
@@ -198,10 +179,9 @@ export default class TurnoService {
 
 	Update(id, reqBody){
 		const turnoViejo = this.getTurnoById(id);
-		this.turnoRepository.Delete(turnoViejo)
-		this.modificarTurno(turnoViejo, reqBody)
-		this.turnoRepository.Save(turnoNuevo);
-		return new TurnoDTO(turnoNuevo);
+		this.modificarTurno(turnoViejo, reqBody);
+		this.turnoRepository.Save(turnoViejo);
+		return new TurnoDTO(turnoViejo);
 	}
 
 	FindPaginado({numeroPagina = 1, limitePorPagina = 10, filtros = {}} = {}) {
@@ -267,9 +247,11 @@ export default class TurnoService {
 		const paciente  = this.pacienteService.FindById(reqBody.paciente);
 		const practica  = this.practicaService.FindById(reqBody.practica);
 		const fechaHora = new Date(reqBody.fechaHora);
+		const estado	= reqBody.estado;
+		const costo 	= reqBody.costo;
 		
 		// TODO agregar lógica de costo en el turno
-		const turno = new Turno(medico, paciente, fechaHora, sede, practica, EstadoTurno.RESERVADO, new Array(), Number.NaN);
+		const turno = new Turno(medico, paciente, fechaHora, sede, practica, EstadoTurno.RESERVADO, new Array(), costo);
 
 		turno.CambiarEstado(
 			new CambioEstadoTurno(
@@ -321,11 +303,12 @@ export default class TurnoService {
 	 * @param {Turno} turno 
 	 */
 	modificarTurno(turno, {medico, sede, paciente, practica, fechaHora}){
-		if(medico 	 != undefined) turno.medico    = this.medicoService	 .FindById(medico);
+		if(medico != undefined && medico == turno.medico.id) turno.medico    = this.medicoService	 .FindById(medico)
+			else throw new InputError("El medico debe ser el mismo");
 		if(sede 	 != undefined) turno.sede 	   = this.sedeService	 .FindById(sede)
 		if(paciente  != undefined) turno.paciente  = this.pacienteService.FindById(paciente);
 		if(practica  != undefined) turno.practica  = this.practicaService.FindById(practica)
-		if(fechaHora != undefined) turno.fechaHora = fechaHora;
+		if(fechaHora != undefined) turno.fechaHora = new Date(fechaHora);
 		this.validarTurno(turno);
 	}
 

@@ -21,16 +21,11 @@ export class SedeService {
         return this.sedeRepository.findAll();
     }
 
-<<<<<<< HEAD
     FindById(id) {
         const sede = this.sedeRepository.FindById(id);
         if(sede == undefined)
             throw new InputError("la sede no existe");
         return sede;
-=======
-    findById(id) {
-        return this.sedeRepository.findById(id)
->>>>>>> main
     }
 
 }
