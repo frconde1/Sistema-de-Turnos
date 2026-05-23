@@ -47,12 +47,12 @@ export default class PracticaService {
 	}
 
 	/** @returns {Practica} */
-	Create(reqBody) {
+	async Create(reqBody) {
 		this.ValidarDatos(reqBody);
 
 		const practica = this.CreatePractica(reqBody);
 		
-		this.practicaRepository.Save(practica);
+		await this.practicaRepository.Save(practica);
 		return practica;
 	}
 }

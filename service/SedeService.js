@@ -7,25 +7,23 @@ export class SedeService {
         this.sedeRepository = sedeRepository;
     }
 
-    create(sedeReq) {
+    async create(sedeReq) {
+        //TODO validaciones
         const sede = new Sede(
             null,
             sedeReq.nombre,
             sedeReq.direccion
         )
 
-        return this.sedeRepository.create(sede)
+        return await this.sedeRepository.create(sede)
     }
 
-    findAll() {
-        return this.sedeRepository.findAll();
+    async findAll() {
+        return await this.sedeRepository.findAll();
     }
 
-    FindById(id) {
-        const sede = this.sedeRepository.FindById(id);
-        if(sede == undefined)
-            throw new InputError("la sede no existe");
-        return sede;
+    async findById(id) {
+        return await this.sedeRepository.findById(id)
     }
 
 }

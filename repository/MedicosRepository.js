@@ -4,6 +4,7 @@ import Medico from "../domain/Medico.js";
 import Practica from "../domain/Practica.js";
 import Sede from "../domain/Sede.js";
 import { InputError } from "../errors/Errors.js";
+import { MedicoModel } from "../schemas/MedicoSchema.js";
 
 export class MedicosRepository {
     medicos;
@@ -68,20 +69,34 @@ export class MedicosRepository {
         }
     }
 
-
-
-    findAll() {
+    async findAll() {
         return this.medicos;
     }
 
-    Save(medico) {
-        medico.id = medico.id ?? (this.nextId++).toString();
-        this.medicos[medico.id] = medico;
-		return medico;
+    async Save(medico) {
+        const doc = {
+            usuario: medico.usuario,
+            matricula: medico.matricula,
+            nombre: medico.nombre,
+            especialidades: medico.especialidades,
+            practicas: medico.practicas,
+            sedes: medico.sedes,
+            disponibilidades: medico.disponibilidades
+        };
+
+        // Si medico.id existe, lo usamos como _id para actualizar; si no, creamos uno nuevo
+        if (medico.id) {
+            await MedicoModel.findByIdAndUpdate(medico.id, doc, { new: true, upsert: true });
+        } else {
+            const created = await MedicoModel.create(doc);
+            medico.id = created._id.toString();
+        }
+
+        return medico;
     }
 
-    findMedicoById(medicoId) {
-        let medico = this.medicos.find(t => t ? t.id == medicoId : false);
+    async findMedicoById(medicoId) {
+        let medico = await MedicoModel.findById(medicoId);
 		
 		if (!medico) 
 			throw new InputError("El medico no existe")
@@ -89,18 +104,19 @@ export class MedicosRepository {
 		return medico 
     }
 
-    agregarDisponibilidad(medicoId, disponibilidad) {
-        const medico = this.findMedicoById(medicoId)
+    async agregarDisponibilidad(medicoId, disponibilidad) {
+        const medico = await this.findMedicoById(medicoId)
         if (medico) {
             medico.agregarDisponibilidad(disponibilidad)
         }
     } 
 
-    agregarSede(medicoId, sede) {
-        const medico = this.findMedicoById(medicoId)
+    async agregarSede(medicoId, sede) {
+        const medico = await this.findMedicoById(medicoId)
         if (medico) {
             medico.agregarSede(sede)
         }
+        this.Save(medico)
     }
 
 }

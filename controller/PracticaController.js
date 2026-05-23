@@ -12,8 +12,8 @@ export default class PracticaController {
 	 * @param {import('express').Response} res 
 	 * @returns {import('express').Response}
 	 */
-	Create (req, res) {
-		const practica = this.practicaService.Create(req.body);
+	async Create (req, res) {
+		const practica = await this.practicaService.Create(req.body);
 		return res.status(201).json({ status: "success", data: practica});
 	}
 }

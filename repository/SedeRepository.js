@@ -1,4 +1,5 @@
 import Sede from "../domain/Sede.js";
+import { SedeModel } from "../schemas/SedeSchema.js";
 
 export class SedeRepository {
     sedes;
@@ -12,27 +13,23 @@ export class SedeRepository {
 		SedeRepository.instance = this;
     }
 
-    /**
-     * @param {Sede} sede
-     * @returns {Sede}
-    */
-    create(sede) {
-        this.sedes.push(sede)
-        sede.id = String(this.sedes.length);
+    async create(sede) {
+        // const sedeModel = new SedeModel(sede);
+        await SedeModel.create({
+            nombre: sede.nombre,
+            direccion: sede.direccion
+        });
+        // this.sedes.push(sede)
         return sede;
     }
 
-    /**@returns {Array<Sede>} */
-    findAll() {
-        return new Array(this.sedes);
+    async findAll() {
+        // return this.sedes;
+        return await SedeModel.find();
     }
 
-    /**@returns {Sede}*/
-    FindById(id){
-        return this.sedes.find(s=> s.id == id);
-    }
-
-    findById(id) {
-        return this.sedes.find(e => e.id == id)
+    async findById(id) {
+        // return this.sedes.find(e => e.id == id)
+        return await SedeModel.findById(id);
     }
 }
