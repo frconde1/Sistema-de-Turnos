@@ -24,7 +24,7 @@ export class MedicoService {
         this.medicosRepository = medicosRepository;
     }
 
-    create(medicoReq) {
+    async create(medicoReq) {
         const result = medicoSchema.safeParse(medicoReq);
         if (!result.success) {
             throw new InputError(result.error.issues.map(err => err.message).join(", "));
@@ -36,7 +36,7 @@ export class MedicoService {
             medicoReq.nombre
         )
 
-        return this.medicosRepository.Save(medico)
+        return await this.medicosRepository.Save(medico)
     }
 
     /**

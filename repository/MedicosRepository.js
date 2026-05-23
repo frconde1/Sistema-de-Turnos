@@ -4,6 +4,7 @@ import Medico from "../domain/Medico.js";
 import Practica from "../domain/Practica.js";
 import Sede from "../domain/Sede.js";
 import { InputError } from "../errors/Errors.js";
+import { MedicoModel } from "../schemas/MedicoSchema.js";
 
 export class MedicosRepository {
     medicos;
@@ -74,9 +75,17 @@ export class MedicosRepository {
         return this.medicos;
     }
 
-    Save(medico) {
-        medico.id = medico.id ?? (this.nextId++).toString();
-        this.medicos[medico.id] = medico;
+    async Save(medico) {
+        await MedicoModel.create({
+            usuario: medico.usuario,
+            matricula: medico.matricula,
+            nombre: medico.nombre,
+            especialidades: medico.especialidades,
+            practicas: medico.practicas,
+            sedes: medico.sedes,
+            disponibilidades: medico.disponibilidades
+        });
+
 		return medico;
     }
 
