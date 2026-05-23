@@ -5,8 +5,8 @@ const turnoController = new TurnoController();
 const router = express.Router();
 
 router.route('')
-    .get (  (req, res) => turnoController.FindAll(req, res))
-    .post(  (req, res) => turnoController.Create(req, res))
+    .get (async (req, res) => await turnoController.FindAll(req, res))
+    .post(async  (req, res) => await turnoController.Create(req, res))
 
     
 router.route('/:id/estado')

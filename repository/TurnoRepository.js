@@ -20,7 +20,7 @@ export default class TurnoRepository {
 	}
 
 	/** @returns {Turno[]}*/
-	FindAll() {
+	async FindAll() {
 		return this.turnos;
 	}
 
@@ -90,9 +90,12 @@ export default class TurnoRepository {
 	 * @param {String} turnoId 
 	 * @returns {Turno | undefined}
 	 */
-	FindTurnoById(turnoId) {
-		return this.turnos.find(t => t ? t.id == turnoId : false);
-	}
+	async FindTurnoById(turnoId) {
+
+        let turno = await TurnoModel.findOne({id: turnoId});	
+		return turno;
+
+    }
 	
 
 }

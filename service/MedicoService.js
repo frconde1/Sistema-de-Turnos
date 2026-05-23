@@ -48,11 +48,11 @@ export class MedicoService {
      * @param {String} id 
      * @returns {Medico}
      */
-    FindById(id){
+    async FindById(id){
         return this.medicosRepository.findMedicoById(id)
     }
 
-    findAll({ numeroPagina = 1, limitePorPagina = 10, filtros = {} } = {}) {
+    async findAll({ numeroPagina = 1, limitePorPagina = 10, filtros = {} } = {}) {
         this.validarPaginacion(numeroPagina, limitePorPagina)
         this.validarFiltros(filtros)
 
