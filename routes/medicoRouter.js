@@ -6,7 +6,7 @@ const medicoController = new MedicoController();
 const router = express.Router()
 
 router.route('')
-    .get((req, res) => medicoController.findAll(req, res))
+    .get((req, res, next) => medicoController.findAll(req, res, next))
     .post((req, res, next) => medicoController.create(req, res, next))
 
 router.route('/:id/disponibilidades')

@@ -69,14 +69,12 @@ export class MedicosRepository {
         }
     }
 
-
-
-    findAll() {
+    async findAll() {
         return this.medicos;
     }
 
     async Save(medico) {
-        await MedicoModel.create({
+        const doc = {
             usuario: medico.usuario,
             matricula: medico.matricula,
             nombre: medico.nombre,
@@ -84,13 +82,21 @@ export class MedicosRepository {
             practicas: medico.practicas,
             sedes: medico.sedes,
             disponibilidades: medico.disponibilidades
-        });
+        };
 
-		return medico;
+        // Si medico.id existe, lo usamos como _id para actualizar; si no, creamos uno nuevo
+        if (medico.id) {
+            await MedicoModel.findByIdAndUpdate(medico.id, doc, { new: true, upsert: true });
+        } else {
+            const created = await MedicoModel.create(doc);
+            medico.id = created._id.toString();
+        }
+
+        return medico;
     }
 
-    findMedicoById(medicoId) {
-        let medico = this.medicos.find(t => t ? t.id == medicoId : false);
+    async findMedicoById(medicoId) {
+        let medico = await MedicoModel.findById(medicoId);
 		
 		if (!medico) 
 			throw new InputError("El medico no existe")
@@ -98,18 +104,19 @@ export class MedicosRepository {
 		return medico 
     }
 
-    agregarDisponibilidad(medicoId, disponibilidad) {
-        const medico = this.findMedicoById(medicoId)
+    async agregarDisponibilidad(medicoId, disponibilidad) {
+        const medico = await this.findMedicoById(medicoId)
         if (medico) {
             medico.agregarDisponibilidad(disponibilidad)
         }
     } 
 
-    agregarSede(medicoId, sede) {
-        const medico = this.findMedicoById(medicoId)
+    async agregarSede(medicoId, sede) {
+        const medico = await this.findMedicoById(medicoId)
         if (medico) {
             medico.agregarSede(sede)
         }
+        this.Save(medico)
     }
 
 }

@@ -4,6 +4,7 @@ import { InputError, BadRequestError } 		from "../errors/Errors.js";
 import DisponibilidadHoraria from "../domain/DisponibilidadHoraria.js";
 import { z } from "zod/v3";
 import { DiaSemana } from "../domain/Enums.js";
+import { SedeRepository } from "../repository/SedeRepository.js";
 
 const medicoSchema = z.object({
     usuario: z.string({required_error: "El usuario es obligatorio", invalid_type_error: "El usuario debe ser un string" }).min(1, "El usuario no puede estar vacío"),
@@ -20,8 +21,12 @@ const disponibilidadSchema = z.object({
 });
 
 export class MedicoService {
-    constructor(medicosRepository = new MedicosRepository) {
+    constructor(
+        medicosRepository = new MedicosRepository,
+        sedeRepository = new SedeRepository
+    ) {
         this.medicosRepository = medicosRepository;
+        this.sedeRepository = sedeRepository;
     }
 
     async create(medicoReq) {
@@ -74,12 +79,15 @@ export class MedicoService {
         this.medicosRepository.agregarDisponibilidad(medicoId, disponibilidadHoraria)
     }
 
-    agregarSede(medicoId, body) {
-        this.medicosRepository.agregarSede(medicoId, body.sede)
+    async agregarSede(medicoId, body) {
+        const medico = await this.medicosRepository.findMedicoById(medicoId)
+        const sede = await this.sedeRepository.findById(body.sede.id)
+        medico.agregarSede(sede)
+        await this.medicosRepository.Save(medico)
     }
 
-    eliminarDisponibilidad(medicoId, body) {
-        const medico = this.FindById(medicoId)
+    async eliminarDisponibilidad(medicoId, body) {
+        const medico = await this.medicosRepository.findMedicoById(medicoId)
         medico.eliminarDisponibilidad(body.disponibilidad)
     }
 
