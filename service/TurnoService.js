@@ -11,6 +11,7 @@ import { InputError, BadRequestError } 		from "../errors/Errors.js";
 import CambioEstadoTurnoDTO from "../domain/DTOs/CambioEstadoTurnoDTO.js";
 import CambioEstadoTurno from "../domain/CambioEstadoTurno.js";
 import Usuario from "../domain/Usuario.js";
+import { TurnoModel } from "../schemas/TurnoSchema.js";
 import z from "zod/v3";
 
 //coerse convierte "123" a 123
@@ -303,6 +304,7 @@ export default class TurnoService {
 	 * @param {Turno} turno 
 	 */
 	modificarTurno(turno, {medico, sede, paciente, practica, fechaHora}){
+		// TODO: si una validación salta en el medio, el turno se modifica a medias
 		if(medico != undefined && medico == turno.medico.id) turno.medico    = this.medicoService	 .FindById(medico)
 			else throw new InputError("El medico debe ser el mismo");
 		if(sede 	 != undefined) turno.sede 	   = this.sedeService	 .FindById(sede)

@@ -1,4 +1,5 @@
 import Turno 			from "../domain/Turno.js";
+import { TurnoModel } from "../schemas/TurnoSchema.js";
 import { InputError }	from "../errors/Errors.js";
 
 export default class TurnoRepository {
@@ -67,9 +68,8 @@ export default class TurnoRepository {
 	 * @param {Turno} turno 
 	 * @returns {Turno}
 	*/
-	Save(turno) {
-		turno.id = turno.id ?? (this.nextId++).toString();
-        this.turnos[turno.id] = turno;
+	async Save(turno) {
+		await TurnoModel.create(turno);
 		return turno;
 	}
 
