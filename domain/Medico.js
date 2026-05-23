@@ -1,4 +1,5 @@
 import DisponibilidadHoraria 	from "./DisponibilidadHoraria.js";
+import { DiaSemana } from "./Enums.js";
 import Especialidad 			from "./Especialidad.js";
 import Practica 				from "./Practica.js";
 import Sede 					from "./Sede.js";
@@ -51,7 +52,7 @@ export default class Medico {
 	}
 
 	validarDisponibilidad(fechaHora, duracionMinutos) {
-		const diaSemana = fechaHora.getDay();
+		const diaSemana = Object.values(DiaSemana)[fechaHora.getDay()];
 
 		return this.disponibilidades
 			.filter(d => d.diaSemana === diaSemana)

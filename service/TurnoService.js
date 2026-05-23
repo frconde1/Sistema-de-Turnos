@@ -8,6 +8,7 @@ import Turno				from "../domain/Turno.js";
 import CambioEstadoTurno 	from "../domain/CambioEstadoTurno.js";
 import Medico 				from "../domain/Medico.js";
 import Paciente 			from "../domain/Paciente.js";
+<<<<<<< HEAD
 import Sede 				from "../domain/Sede.js";
 import Usuario 				from "../domain/Usuario.js";
 import TurnoDTO 			from "../domain/DTOs/TurnoDTO.js";
@@ -15,6 +16,34 @@ import CambioEstadoTurnoDTO from "../domain/DTOs/CambioEstadoTurnoDTO.js";
 import { da } from "zod/locales";
 
 
+=======
+import Turno				from "../domain/Turno.js";
+import { InputError, BadRequestError } 		from "../errors/Errors.js";
+import TurnoRepository		from "../repository/TurnoRepository.js";
+import PracticaService 		from "./PracticaService.js";
+import { MedicoService }	from "./MedicoService.js";
+import { SedeService } 		from "./SedeService.js";
+import CambioEstadoTurnoDTO from "../domain/DTOs/CambioEstadoTurnoDTO.js";
+import CambioEstadoTurno from "../domain/CambioEstadoTurno.js";
+import Usuario from "../domain/Usuario.js";
+import z from "zod/v3";
+
+//coerse convierte "123" a 123
+//refine agrega una validacion personalizada
+//lo del !Number.isNaN(Date.parse(v)) es porque, por ejemplo Date.parse("2026-05-04T12:40:00") devuelve un numero
+//caso contrario devuelve NaN, por eso me fijo que sea !NaN
+const turnoSchema = z.object({
+    medico: z.coerce.number().int().nonnegative({ message: "Error al enviar el ID de medico" }),
+    paciente: z.coerce.number().int().nonnegative({ message: "Error al enviar el ID de paciente" }),
+    sede: z.coerce.number().int().nonnegative({ message: "Error al enviar el ID de sede" }),
+    practica: z.coerce.number().int().nonnegative({ message: "Error al enviar el ID de practica" }),
+    fechaHora: z.string()
+        .refine((v) => !Number.isNaN(Date.parse(v)), { message: "la fecha es invalida" })
+        .refine((v) => new Date(v + "-03:00") >= new Date(), { message: "la fecha no puede ser anterior a hoy" }),
+    estado: z.nativeEnum(EstadoTurno, { errorMap: () => ({ message: "el estado es invalido" }) }),
+    costo: z.number().nonnegative({ message: "el costo es invalido" })
+});
+>>>>>>> main
 
 export default class TurnoService {
 	constructor(
@@ -44,7 +73,100 @@ export default class TurnoService {
 		}
 
 		// TODO: recoradorios por dia?
+<<<<<<< HEAD
 		// El día previo al turno, se envía un recordatorio tanto al paciente como al médico
+=======
+		// El día previo al turno, se envía un 
+		// recordatorio tanto al paciente como al médico
+	}
+
+	//////////////////////
+	//		UTILS		//
+	//////////////////////
+
+
+	/** 
+	 * @param {String} id 
+	 * @param {String} name
+	*/
+	ValidarId(id, name){
+		id = Number(id);
+		if(Number.isNaN(id) || !Number.isInteger(id) || id < 0)
+			throw new InputError(`Error al enviar el ID de ${name}`);
+	}
+	
+	
+	ValidarDatosTurno(datosTurnoNuevo){
+		if(!datosTurnoNuevo || typeof datosTurnoNuevo !== "object" || Array.isArray(datosTurnoNuevo))
+            throw new InputError("No se envio un objeto como body de la request");
+        
+		const result = turnoSchema.safeParse(datosTurnoNuevo);
+		if (!result.success) {
+			throw new InputError(result.error.issues.map(i => i.message).join(", "));
+		}
+	}
+
+	CreateTurno(reqBody){
+		let sede  	  = this.sedeService.findById(reqBody.sede);
+
+		if (!sede) throw new InputError("La sede ingresada no existe");
+		
+		let medico    = this.medicoService	.FindById(reqBody.medico	);
+		let paciente  = this.pacienteService.FindById(reqBody.paciente	);
+		let practica  = this.practicaService.FindById(reqBody.practica	);
+		let fechaHora = new Date(reqBody.fechaHora + "-03:00");
+		let estado	  = reqBody.estado;
+		let costo	  = reqBody.costo;
+
+		return new Turno(medico, paciente, fechaHora, sede, practica, estado, [], costo);
+	}
+
+	FindById(id){
+		return this.turnoRepository.FindTurnoById(id);
+	}
+
+	FindTurnosByMedico(id){
+		return this.turnoRepository.FindAll().filter(t => t.medico.id == id);
+	}
+
+	/**
+	 * @param {Turno} turno 
+	 * @param {Medico} medico 
+	 */
+	ValidarDisponibilidad(turno, medico){
+		if (!medico.validarDisponibilidad(turno.fechaHora, turno.practica.duracionTurnoEnMins))
+			throw new InputError("El médico no se encuentra disponible en ese horario");
+	}
+
+	
+	/** @param {{ estado: Number, usuario: string, motivo: string}} reqBody */
+	ValidarDatosEstado(reqBody) {
+		const {estado, usuario, motivo} = reqBody;
+
+		this.ValidarId(usuario, "usuario");
+        if(typeof estado !== "number" || !Number.isInteger(estado) || !(-1 < estado && estado < 5))
+			throw new InputError("el estado es invalido");
+        if(typeof motivo !== "string" || motivo === "")
+			throw new InputError("el motivo es invalido");
+	}
+
+	ValidarQuery(numeroPagina, limitePorPagina, {medico, paciente, sede, practica, estado}){
+		if(numeroPagina < 1 || !Number.isInteger(numeroPagina))
+			throw new BadRequestError(`El numero de pagina debe ser un entero positivo`);
+		if(limitePorPagina < 1 || !Number.isInteger(limitePorPagina))
+			throw new BadRequestError(`El limite de pagina debe ser un entero positivo`);
+
+		if(medico	) this.ValidarId(medico,   "medico"	 )
+		if(paciente ) this.ValidarId(paciente, "paciente")
+		if(sede		) this.ValidarId(sede, 	   "sede"	 )
+		if(practica ) this.ValidarId(practica, "practica")
+						
+		if(estado){
+			const numero = Number(estado)
+			if (Number.isNaN(numero) || !Number.isInteger(numero) || !(-1 < numero && numero < 5))
+				throw new BadRequestError(`El parámetro estado debe ser un numero entero en el rango [0,4]`);
+		}
+>>>>>>> main
 	}
 
 	//////////////////////

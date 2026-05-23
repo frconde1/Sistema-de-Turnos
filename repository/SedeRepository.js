@@ -31,4 +31,8 @@ export class SedeRepository {
     FindById(id){
         return this.sedes.find(s=> s.id == id);
     }
+
+    findById(id) {
+        return this.sedes.find(e => e.id == id)
+    }
 }

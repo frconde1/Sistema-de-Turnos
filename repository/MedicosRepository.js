@@ -1,3 +1,8 @@
+import DisponibilidadHoraria from "../domain/DisponibilidadHoraria.js";
+import Especialidad from "../domain/Especialidad.js";
+import Medico from "../domain/Medico.js";
+import Practica from "../domain/Practica.js";
+import Sede from "../domain/Sede.js";
 import { InputError } from "../errors/Errors.js";
 
 export class MedicosRepository {
@@ -9,7 +14,20 @@ export class MedicosRepository {
 			return MedicosRepository.instance;
 
 		this.medicos = []
-		this.nextId = 0;
+		this.nextId = 10;
+
+        var medico1 = new Medico(
+            "favaloro_capo",
+            "123-123",
+            "Favaloro",
+            [new Especialidad(1, "Cardio", 60, 500)],
+            [new Practica(1, "Cardio", 60, 500)],
+            [new Sede(1, "Sede1", "Calle Falsa 123")],
+            [new DisponibilidadHoraria(1, "08:00", "23:00")]
+        )
+        medico1.id = 1;
+
+        this.medicos.push(medico1)
 
 		MedicosRepository.instance = this;
     }
