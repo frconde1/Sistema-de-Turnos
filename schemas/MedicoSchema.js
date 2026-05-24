@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Medico from "../domain/Medico.js"
+import DisponibilidadSchema from "./DisponibilidadSchema.js";
 
 const MedicoSchema = new mongoose.Schema({
     usuario: {
@@ -27,8 +28,7 @@ const MedicoSchema = new mongoose.Schema({
         ref: 'Sede'
     }],
     disponibilidades: [{
-        type: mongoose.Schema.Types.ObjectId,
-        // ref: 'DisponibilidadHoraria', //como no voy a usar a disponibilidad horaria como una entidad diferente le saco el ref
+        type: DisponibilidadSchema,
         required: false
     }],
 })
