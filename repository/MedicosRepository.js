@@ -108,6 +108,7 @@ export class MedicosRepository {
         const medico = await this.findMedicoById(medicoId)
         if (medico) {
             medico.agregarDisponibilidad(disponibilidad)
+            this.Save(medico)
         }
     } 
 
@@ -115,8 +116,8 @@ export class MedicosRepository {
         const medico = await this.findMedicoById(medicoId)
         if (medico) {
             medico.agregarSede(sede)
+            this.Save(medico)
         }
-        this.Save(medico)
     }
 
 }
