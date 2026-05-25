@@ -14,7 +14,54 @@ import Usuario from "../domain/Usuario.js";
 import { TurnoModel } from "../schemas/TurnoSchema.js";
 import z from "zod/v3";
 
-//coerse convierte "123" a 123
+
+/*
+const crearTurnoSchema =
+	z.object({
+		medico: 	idSchema("medico"),
+		sede: 		idSchema("sede"),
+		paciente:	idSchema("paciente"),
+		practica: 	idSchema("práctica"),
+		fechaHora: 	fechaSchema()
+	})
+
+
+const actualizarTurnoSchema =
+	z.object({
+		medico:    idSchema("medico").optional(),
+		paciente:  idSchema("paciente").optional(),
+		sede: 	   idSchema("medico").optional(),
+		fechaHora: fechaSchema().optional(),
+		costo:	   z.number().nonnegative().optional()
+	})
+
+
+const actualizarEstadoTurnoSchema =
+	z.object({
+		estado: z.enum(EstadoTurno, "el dato estado debe ser un estado de turno válidSchemao"),
+		usuario: idSchema("usuario"),
+		motivo: stringSchema("motivo")
+	})
+
+
+const filtrosTurnoSchema =
+	z.object({
+		medico:		 idSchema("medico").optional(),
+		paciente:	 idSchema("paciente").optional(),
+		sede:		 idSchema("sede").optional(),
+		practica:	 idSchema("practica").optional(),
+		estado:		 z.enum(EstadoTurno, "el dato estado debe ser un estado de turno válido").optional(),
+		ordenCosto:	 z.boolean("el dato ordenCosto debe ser un boolean indicando si es de orden ascendente o descendente").optional(),
+		ordenFecha:	 z.boolean("el dato ordenFecha debe ser un boolean indicando si es de orden ascendente o descendente").optional(),
+		fechaInicio: fechaSchema(),
+		fechaFin:	 fechaSchema()
+	})
+
+
+*/
+
+
+
 //refine agrega una validacion personalizada
 //lo del !Number.isNaN(Date.parse(v)) es porque, por ejemplo Date.parse("2026-05-04T12:40:00") devuelve un numero
 //caso contrario devuelve NaN, por eso me fijo que sea !NaN

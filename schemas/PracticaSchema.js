@@ -14,7 +14,7 @@ const PracticaSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    costoConsulta: {
+    costo: {
         type: Number,
         required: true
     }

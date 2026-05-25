@@ -3,20 +3,20 @@ export default class Practica {
 	id; 
 	codigo; 
 	nombre; 
-	duracionTurnoEnMins;
+	duracionEnMins;
 	costo; 
 
 	/**
 	 * @param {String} codigo 
 	 * @param {String} nombre 
-	 * @param {Number} duracionTurnoEnMins 
+	 * @param {Number} duracionEnMins 
 	 * @param {Number} costo 
 	 */
-	constructor(codigo, nombre, duracionTurnoEnMins, costo) { 
+	constructor(codigo, nombre, duracionEnMins, costo) { 
 		this.codigo = codigo; 
 		this.nombre = nombre; 
-		this.duracionTurnoEnMins = duracionTurnoEnMins; 
-		this.costo = costo; 
+		this.costo  = costo; 
+		this.duracionEnMins = duracionEnMins; 
 	}
 
 	/**

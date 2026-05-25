@@ -26,6 +26,13 @@ export class NotFoundError extends AppError {
 	}
 }
 
+export class ResurceNotFoundError extends AppError {
+	constructor(mensaje){
+		super(404, mensaje);
+		this.name = "Objeto no encontrado";
+	}
+}
+
 export class BadRequestError extends AppError {
 	constructor(mensaje){
 		super(400, mensaje);

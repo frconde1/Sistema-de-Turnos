@@ -1,5 +1,15 @@
 import { SedeService } from "../service/SedeService.js";
-import { crearSedeSchema, idSchema } from "./Schemas.js";
+
+
+/*
+const crearSedeSchema = (entity) => validar(
+	z.object({
+    	nombre:    string("nombre"),
+    	direccion: string("direccion")
+	}),
+	entity
+)
+*/
 
 export class SedeController {
 

@@ -10,7 +10,7 @@ const EspecialidadSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    costoConsulta: {
+    costo: {
         type: Number,
         required: true
     }
@@ -18,4 +18,5 @@ const EspecialidadSchema = new mongoose.Schema({
 
 EspecialidadSchema.loadClass(Especialidad);
 
-export const EspecialidadModel = mongoose.model('Especialidad', EspecialidadSchema)
+const EspecialidadModel = mongoose.model('Especialidad', EspecialidadSchema);
+export default EspecialidadModel;
