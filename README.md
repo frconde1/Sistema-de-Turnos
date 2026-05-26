@@ -21,6 +21,10 @@ En el grupo decidimos utilizar `git flow` para el desarrollo, contamos con la br
 ### Servidor
 El servidor se encuentra corriendo en `localhost` sobre el puerto `3000` y el repo cuenta con un `JSON` de postman con algunas peticiones ya hechas
 
+### Swagger
+- La documentación queda disponible en `http://localhost:3000/docs`
+- La configuración global está en `swagger.js`
+
 #### Endpoints implementados
 - /healthcheck
     - con este checkpoint podemos verificar el estado de salud del sistema
