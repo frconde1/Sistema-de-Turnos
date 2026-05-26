@@ -18,6 +18,8 @@ import Medico from "../domain/Medico.js";
 import { BadRequestError, InputError } from "../errors/Errors.js";
 import UsuarioService from "./UsuarioService.js";
 import PacienteRepository from "../repository/PacienteRepository.js";
+import NotificationService from "./NotificacionService.js";
+import FactoryNotificacion from "../domain/FactoryNotificacion.js";
 
 
 const crearTurnoSchema =
@@ -73,18 +75,20 @@ export default class TurnoService {
 	constructor(
 		turnoRepository = new TurnoRepository(), 
 
-		medicoService 	= new MedicoService(),
-		sedeService		= new SedeService(),
-		practicaService	= new PracticaService(),
-		usuarioService	= new UsuarioService()
+		medicoService 		= new MedicoService(),
+		sedeService			= new SedeService(),
+		practicaService		= new PracticaService(),
+		usuarioService		= new UsuarioService(),
+		notificadorService	= new NotificationService()
 	) {
-		this.repository 	 = turnoRepository;
-		this.medicoService 	 = medicoService;
-		this.practicaService = practicaService;
-		this.sedeService 	 = sedeService;
-		this.usuarioService = usuarioService
+		this.repository 	 	= turnoRepository;
+		this.medicoService 	 	= medicoService;
+		this.practicaService 	= practicaService;
+		this.sedeService 	 	= sedeService;
+		this.usuarioService  	= usuarioService;
+		this.notificadorService = notificadorService;
 		// lo instancio porque si no es referencia circular
-		this.pacienteService = new PacienteService(new PacienteRepository(), usuarioService, this);
+		this.pacienteService 	= new PacienteService(new PacienteRepository(), usuarioService, this);
 	}
 
 	async FindAll(filtros) {
@@ -213,4 +217,28 @@ export default class TurnoService {
 			throw new InputError("El medico ya tiene un turno a esa hora");
 	}
 
+	async notificar(){
+		const manana 		= new Date();
+		const pasadoManana 	= new Date();
+
+		manana.setDate(manana.getDate() + 1);
+		pasadoManana.setDate(pasadoManana.getDate() + 2);
+
+		let cantidadPags = 1
+		for(let i = 1; i <= cantidadPags; i++){
+			const turnos = await this.repository.FindAll({
+				pagina: i, 
+				tamano: 20, 
+				fechaInicio: manana, 
+				fechaFin: pasadoManana
+			})
+			cantidadPags = Math.ceil(turnos.totalTurnos / 20)
+
+			turnos.turnos.forEach(t => 
+				await this.notificadorService.Crear(
+					FactoryNotificacion.crearSegunEstadoTurno(t)
+				)
+			);
+		};
+	}
 }
