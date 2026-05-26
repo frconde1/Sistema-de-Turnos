@@ -16,5 +16,6 @@ export default class TurnoDTO {
 		this.estado 			= turno.estado;
 		this.historialEstado 	= turno.historialEstados.map(e => new CambioEstadoTurnoDTO(e));
 		this.costo 				= turno.costo;
+		this.cubierto			= turno.paciente.Cobertura(turno.practica);
 	}
 }

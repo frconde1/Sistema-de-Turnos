@@ -5,7 +5,7 @@ import PlanMapper from "./PlanMapper.js"
 
 export default class PacienteMapper{
 	
-	static populate = [{path: 'obraSocial'},{path: 'plan'},{path: 'usuario'}]
+	static populate = [{path: 'obraSocial', populate: ObraSocialMapper.populate},{path: 'plan'},{path: 'usuario'}]
 
 	/**@returns {Paciente} */
 	static toEntity({usuario, dni, nombre, obraSocial, plan, _id}){

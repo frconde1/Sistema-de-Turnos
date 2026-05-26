@@ -45,7 +45,13 @@ export default class TurnoRepository {
 	}
 
 	async FindReservadoByMedico(id){
-		return await TurnoModel.find({medico: id, estado: EstadoTurno.RESERVADO}).populate(TurnoMapper.populate);
+		return (await TurnoModel
+			.find({
+				medico: id, 
+				estado: EstadoTurno.CONFIRMADO
+			})
+			.populate(TurnoMapper.populate))
+			.map(TurnoMapper.toEntity);
 	}
 
 	/** 

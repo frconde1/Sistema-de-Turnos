@@ -2,7 +2,8 @@ export default class Usuario {
 	/**@type {String} */
 	id; 
 	username;
-	password; 
+	password;
+	registrado = false;
 
 	/**
 	 * @param {String} username 

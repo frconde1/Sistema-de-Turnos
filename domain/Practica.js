@@ -37,15 +37,13 @@ export default class Practica {
 	 */
 	PrecioFinal({plan, obraSocial}){
 		let precioFinal = this.costo;
-
 		if(plan){
 			const cobertura = plan.ObtenerCobertura(this);
-			precioFinal = precioFinal < this.calcularPrecio(cobertura) ? this.calcularPrecio(cobertura) : precioFinal
+			precioFinal = precioFinal > this.calcularPrecio(cobertura) ? this.calcularPrecio(cobertura) : precioFinal
 		} 
-		
 		if(obraSocial){
 			const cobertura = obraSocial.ObtenerCobertura(this);
-			precioFinal = precioFinal < this.calcularPrecio(cobertura) ? this.calcularPrecio(cobertura) : precioFinal
+			precioFinal = precioFinal > this.calcularPrecio(cobertura) ? this.calcularPrecio(cobertura) : precioFinal
 		} 
 		return precioFinal;
 	}

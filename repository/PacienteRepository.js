@@ -9,7 +9,8 @@ export default class PacienteRepository {
 	constructor() {}
 
 	async FindAll() {
-		return (await PacienteModel.find().populate(PacienteMapper.populate)).map(PacienteMapper.toEntity);
+        const pacientes = await PacienteModel.find().populate(PacienteMapper.populate);
+		return pacientes.map(PacienteMapper.toEntity);
 	}
 
 

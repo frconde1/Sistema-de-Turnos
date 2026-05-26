@@ -7,14 +7,20 @@ const router = express.Router();
 router.route('')
     .get (async (req, res) => await turnoController.FindAll(req, res))
     .post(async  (req, res) => await turnoController.Create(req, res))
-
     
 router.route('/:id/estado')
-    .patch(   (req, res) => turnoController.UpdateStatus(req, res))
+    .patch(async (req, res) => await turnoController.UpdateStatus(req, res))
 
 router.route('/:id')
-    .get(   (req, res) => turnoController.FindById(req, res))
-    .delete((req, res) => turnoController.Delete(req, res))
-    .put(   (req, res) => turnoController.Update(req, res))
+    .get(   async (req, res) => await turnoController.FindById(req, res))
+    .delete(async (req, res) => await turnoController.Delete  (req, res))
+    .put(   async (req, res) => await turnoController.Update  (req, res))
+
+router.route('/:id/estados')
+    .post(async (req, res) => await turnoController.UpdateStatus(req, res))
+
+router.route('/:id/fecha')
+    .put( async (req, res) => await turnoController.updateFecha(req, res))
+
 
 export default router;

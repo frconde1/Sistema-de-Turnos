@@ -36,7 +36,6 @@ export default class TurnoController {
 		return res.status(200);
 	}
 
-	
 	async Update(req, res) {
 		const turnoDTO = await this.service.Update(req.params.id, req.body);
 		return res.status(200).json(turnoDTO);
@@ -44,6 +43,11 @@ export default class TurnoController {
 
 	async UpdateStatus(req, res){
 		const turnoDTO = await this.service.UpdateStatus(req.params.id, req.body);
+		return res.status(200).json(turnoDTO);
+	}
+
+	async updateFecha(req, res){
+		const turnoDTO = await this.service.ChangeFecha(req.params.id, req.body);
 		return res.status(200).json(turnoDTO);
 	}
 

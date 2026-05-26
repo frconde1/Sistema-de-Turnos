@@ -44,6 +44,13 @@ export default class MedicoService {
 
 
         const usuario = await this.usuarioService.FindById(medicoReq.usuario);
+
+        if(usuario.registrado)
+            throw new InputError("El usuario ya se encuentra registrado");
+        else 
+            usuario.registrado = true;
+        await this.usuarioService.actualizar(usuario);
+
         const medico = new Medico(
             usuario,
             medicoReq.matricula,

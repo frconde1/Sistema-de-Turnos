@@ -3,11 +3,7 @@ import PlanMapper from "./PlanMapper.js"
 
 export default class ObraSocialMapper {
 
-	static populate = 
-	{
-		path: "planes",
-		populate: PlanMapper.populate
-	}
+	static populate = [{path: "planes", populate: PlanMapper.populate}]
 
 	/**@param {ObraSocial} obraSocial */
 	static toSchema({nombre, planes}){

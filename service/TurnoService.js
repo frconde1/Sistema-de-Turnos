@@ -15,6 +15,9 @@ import PracticaService	from "./PracticaService.js"
 import Turno from "../domain/Turno.js";
 import CambioEstadoTurno from "../domain/CambioEstadoTurno.js";
 import Medico from "../domain/Medico.js";
+import { BadRequestError, InputError } from "../errors/Errors.js";
+import UsuarioService from "./UsuarioService.js";
+import PacienteRepository from "../repository/PacienteRepository.js";
 
 
 const crearTurnoSchema =
@@ -37,12 +40,17 @@ const actualizarTurnoSchema =
 	});
 
 
-// todo, revisar cuando cambia el estado
+
 const actualizarEstadoTurnoSchema =
 	z.object({
 		estado:  z.enum(EstadoTurno, "el dato estado debe ser un estado de turno válido"),
 		usuario: idSchema("usuario"),
 		motivo:  stringSchema("motivo")
+	});
+
+const actualizarFechaSchema =
+	z.object({
+		fechaHora: fechaSchema()
 	});
 
 
@@ -66,18 +74,17 @@ export default class TurnoService {
 		turnoRepository = new TurnoRepository(), 
 
 		medicoService 	= new MedicoService(),
-		pacienteService = new PacienteService(),
 		sedeService		= new SedeService(),
-		practicaService	= new PracticaService()
+		practicaService	= new PracticaService(),
+		usuarioService	= new UsuarioService()
 	) {
 		this.repository 	 = turnoRepository;
 		this.medicoService 	 = medicoService;
 		this.practicaService = practicaService;
 		this.sedeService 	 = sedeService;
-		this.pacienteService = pacienteService;
-		
-		// Servicio Mockeado
-		this.usuarioService = {FindById(id){return new Usuario(id)}}
+		this.usuarioService = usuarioService
+		// lo instancio porque si no es referencia circular
+		this.pacienteService = new PacienteService(new PacienteRepository(), usuarioService, this);
 	}
 
 	async FindAll(filtros) {
@@ -119,7 +126,7 @@ export default class TurnoService {
 			practica.PrecioFinal(paciente)
 		);
 		
-		this.ValidarTurno(turno);
+		await this.ValidarTurno(turno);
 
 		await this.repository.Save(turno);
 		turno.CambiarEstado(EstadoTurno.CONFIRMADO, paciente.usuario, "creacion del turno");
@@ -134,6 +141,9 @@ export default class TurnoService {
 	async Update(id, req){
 		ValidarZodSchema(actualizarTurnoSchema, req);
 		
+		if(new Date(req.fechaHora) < new Date())
+			throw new BadRequestError("no se puede cambaiar la fecha del turno para el pasado");
+
 		const {medico, paciente, sede, practica, costo, fechaHora} = req;
 		
 		const turno = await this.FindById(id)
@@ -145,18 +155,49 @@ export default class TurnoService {
 		turno.costo		= costo;
 		turno.fechaHora	= fechaHora;
 
+		
+
 		await this.repository.Save(turno);
 		return new TurnoDTO(turno);
 	}
 
 	async UpdateStatus(id, req){
+		ValidarZodSchema(actualizarEstadoTurnoSchema, req);
+		
+		const turno = await this.FindById(id);
 
+		const hora_ms = 60 * 60 * 1000; 
+		const diferencia = Math.abs(new Date().getTime() - turno.fechaHora.getTime());
+		
+		if(diferencia <= hora_ms)
+			throw new BadRequestError("no se puede modificar un turno con menos de una hora de anticipacion");
+
+		const usuario = await this.usuarioService.FindById(req.usuario);
+
+		turno.CambiarEstado(req.estado, usuario, req.motivo);
+
+
+		await this.repository.Save(turno);
+		return new TurnoDTO(turno)
+	}
+
+	async ChangeFecha(id, req){
+		ValidarZodSchema(actualizarFechaSchema, req);
+
+		if(new Date(req.fechaHora) < new Date())
+			throw new BadRequestError("no se puede cambaiar la fecha del turno para el pasado");
+		
+		const turno = await this.FindById(id);
+
+		turno.fechaHora = new Date(req.fechaHora);
+		await this.ValidarTurno(turno);
+		await this.repository.Save(turno);
+		return turno
 	}
 
 	/** @param {Turno} turno */
 	async ValidarTurno(turno){
 		const {medico, practica, fechaHora} = turno;
-
 
 		const medicoDisponible = medico.validarDisponibilidad(fechaHora, practica.duracionEnMins)
 		

@@ -10,6 +10,10 @@ const UsuarioSchema = new mongoose.Schema({
     password: {
         type: String, 
         required: true
+    },
+    registrado: {
+        type: Boolean,
+        requred: true
     }
 })
      

@@ -33,7 +33,15 @@ export default class UsuarioService {
         const {username, password} = reqBody;
         const usuario = new Usuario(username, password);
 
-        await this.repository.Save(usuario);
+        try {
+            await this.repository.Save(usuario);
+        } catch (e) {
+            if(e.code == 11000)
+                throw new InputError("El usuario ya existe");
+            throw e;
+        }
+
+
         return usuario;
     }
 
@@ -46,7 +54,17 @@ export default class UsuarioService {
         usuario.username = username;
         usuario.password = password;
         
-        await this.repository.Save(usuario);
+        try {
+            await this.repository.Save(usuario);
+        } catch (e) {
+            if(e.code == 11000)
+                throw new InputError("El usuario ya existe");
+            throw e;
+        }
         return usuario;
+    }
+
+    async actualizar(usuario){
+        await this.repository.Save(usuario);
     }
 }

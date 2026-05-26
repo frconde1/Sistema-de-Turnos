@@ -26,4 +26,21 @@ export default class PacienteController {
         const paciente = await this.pacienteService.Update(req.params.id, req.body)
         return res.status(201).json(paciente)
     }
+
+    async FindTurnosById(req, res){
+        const turnos = await this.pacienteService.FindTurnosById(req.params.id)
+        return res.status(201).json(turnos)
+    }
+
+
+    async UpdateObraSocial(req, res){
+        const paciente = await this.pacienteService.UpdateObraSocial(req.params.id, req.body)
+        return res.status(201).json(paciente)
+    }
+
+    async UpdateObraPlan(req, res){
+        const paciente = await this.pacienteService.UpdatePlan(req.params.id, req.body)
+        return res.status(201).json(paciente)
+    }
+
 }
