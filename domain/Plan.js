@@ -24,21 +24,18 @@ export default class Plan {
 	}
 
 	/**
-	 * @param	{Especialidad | Practica} elementoCobertura 
-	 * @returns	{NivelCobertura | null}
+	 * @param	{Especialidad | Practica} elemento 
+	 * @returns	{NivelCobertura}
 	 */
-	ObtenerCobertura(situacion) {
-		if (situacion instanceof Especialidad)
-			for (const cobertura of this.coberturasEspecialidad)
-				if (Especialidad.EsIgual(situacion, cobertura.especialidad))
-					return cobertura.nivel;
+	ObtenerCobertura(elemento) {
+		const lista = elemento instanceof Especialidad ? this.coberturasEspecialidad : this.coberturasPractica;
+		
+		const cobertura = lista.find(c => c.id == elemento.id);
+		
+		if(cobertura)
+			return cobertura.nivel;
 
-		if (situacion instanceof Practica)
-			for (const cobertura of this.coberturasPractica)
-				if (Practica.EsIgual(situacion, cobertura.practica))
-					return cobertura.nivel;
-
-		return null;
+		return NivelCobertura.NO_CUBIERTA;
 	}
 
 	}

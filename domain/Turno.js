@@ -7,6 +7,7 @@ import Practica 			from "./Practica.js";
 import Usuario 				from "./Usuario.js";
 
 export default class Turno {
+	/**@type {String} */
 	id; 
 	medico; 
 	paciente;
@@ -38,24 +39,29 @@ export default class Turno {
 		this.costo 			  = costo; 
 	}
 
-	/**
-	 * @param {Turno} turnoNuevo 
-	 * @returns {CambioEstadoTurno[]} 
-	 */
-	CambiarReferenciasDeEstados(turnoNuevo){
-		return this.historialEstados.forEach(e => {e.turno = turnoNuevo});
-	}
-
 	/**@returns {Date} */
 	FechaFinalizacion(){
 		const fechaFinalizacion = new Date(this.fechaHora);
-		fechaFinalizacion.setMinutes(fechaFinalizacion.getMinutes() + this.practica.duracionTurnoEnMins);
+		fechaFinalizacion.setMinutes(fechaFinalizacion.getMinutes() + this.practica.duracionEnMins);
 		return fechaFinalizacion;
 	}
 
-	/** @param {CambioEstadoTurno} nuevoEstado */
-	CambiarEstado(nuevoEstado) { 
-		this.historialEstados.push(nuevoEstado);
+	/**
+	 * @param {EstadoTurno} nuevoEstado 
+	 * @param {Usuario} quien 
+	 * @param {String} motivo 
+	 */
+	CambiarEstado(nuevoEstado, quien, motivo) { 
 		this.estado = nuevoEstado.estado;
+
+		this.historialEstados.push(
+			new CambioEstadoTurno(
+				new Date(),
+				nuevoEstado,
+				this,
+				quien,
+				motivo
+			)
+		);
 	}
 }

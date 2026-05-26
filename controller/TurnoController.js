@@ -4,52 +4,47 @@ import TurnoService from "../service/TurnoService.js"
 
 export default class TurnoController {
 	constructor(turnoService = new TurnoService()){
-		this.turnoService = turnoService;
+		this.service = turnoService;
 	}
 
-	Create (req, res) {
-		const turnoDTO = this.turnoService.Create(req.body);
-		return res.status(201).json(turnoDTO);
-	}
-	
-	async FindAll (req, res) {
-		const filtros 	 = filtrosTurnoSchema(req.query);
-		const paginacion = paginacionSchema(req.query);
-		
-		const resultado = this.turnoService.FindPaginado({ ...paginacion, filtros })
+	async FindAll (req, res) {		
+		const resultado = await this.service.FindAll(req.query);
 		
 		return res.status(200).json({ 
 			data: resultado.turnos,
 			paginacion: {
 				numeroPagina: 	 resultado.numeroPagina,
-				limitePorPagina: resultado.limitePorPagina,
+				limitePorPagina: resultado.limitePagina,
 				totalTurnos: 	 resultado.totalTurnos,
-				totalPaginas: 	 resultado.totalPaginas
+				totalPaginas: 	 Math.ceil(resultado.totalTurnos / resultado.limitePagina)
 			}
 		})
 	}
 
-	async Delete(req, res) {
-		this.turnoService.Delete(req.params.id);
-		return res.status(200);
-	}
-
 	async FindById(req, res) {
-		const turnoDTO = this.turnoService.FindById(req.params.id);
+		const turnoDTO = await this.service.FindById(req.params.id);
 		return res.status(200).json(turnoDTO);
 	}
 
+	async Create (req, res) {
+		const turnoDTO = await this.service.Create(req.body);
+		return res.status(201).json(turnoDTO);
+	}
+
+	async Delete(req, res) {
+		await this.service.Delete(req.params.id);
+		return res.status(200);
+	}
+
+	
 	async Update(req, res) {
-		const turnoDTO = this.turnoService.Update(req.params.id, req.body);
+		const turnoDTO = await this.service.Update(req.params.id, req.body);
 		return res.status(200).json(turnoDTO);
 	}
 
 	async UpdateStatus(req, res){
-		return res.status(200).json(
-			this.turnoService.UpdateTurnoStatus(
-				idSchema("turno", req.params.id),
-				req.body
-		))
+		const turnoDTO = await this.service.UpdateStatus(req.params.id, req.body);
+		return res.status(200).json(turnoDTO);
 	}
 
 

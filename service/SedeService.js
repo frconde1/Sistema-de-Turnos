@@ -2,7 +2,7 @@ import Sede from "../domain/Sede.js";
 import { InputError } from "../errors/Errors.js";
 import { SedeRepository } from "../repository/SedeRepository.js";
 
-export class SedeService {
+export default class SedeService {
     constructor(sedeRepository = new SedeRepository) {
         this.sedeRepository = sedeRepository;
     }
@@ -22,7 +22,7 @@ export class SedeService {
         return await this.sedeRepository.findAll();
     }
 
-    async findById(id) {
+    async FindById(id) {
         return await this.sedeRepository.findById(id)
     }
 

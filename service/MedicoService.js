@@ -20,7 +20,7 @@ const disponibilidadSchema = z.object({
     horaHasta: z.string()
 });
 
-export class MedicoService {
+export default class MedicoService {
     constructor(
         medicosRepository = new MedicosRepository,
         sedeRepository = new SedeRepository

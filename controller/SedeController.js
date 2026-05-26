@@ -1,4 +1,4 @@
-import { SedeService } from "../service/SedeService.js";
+import SedeService from "../service/SedeService.js";
 
 
 /*
