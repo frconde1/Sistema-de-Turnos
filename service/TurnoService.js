@@ -84,7 +84,15 @@ export default class TurnoService {
 		ValidarZodSchema(filtrosTurnoSchema, filtros);
 		ValidarZodSchema(paginacionSchema,   filtros);
 
-		return (await this.repository.FindAll(filtros)).map(t => new TurnoDTO(t));
+		const {turnos, totalTurnos} = await this.repository.FindAll(filtros);
+		return {
+			turnos: turnos.map(t => new TurnoDTO(t)),
+			totalTurnos: totalTurnos
+		}
+	}
+
+	async FindByIdDTO(id){
+		return new TurnoDTO(await this.FindById(id));
 	}
 
 	async FindById(id){
@@ -103,7 +111,7 @@ export default class TurnoService {
 		const turno = new Turno(
 			medico, 
 			paciente, 
-			req.fechaHora, 
+			new Date(req.fechaHora), 
 			sede, 
 			practica, 
 			EstadoTurno.CONFIRMADO, 
@@ -113,6 +121,7 @@ export default class TurnoService {
 		
 		this.ValidarTurno(turno);
 
+		await this.repository.Save(turno);
 		turno.CambiarEstado(EstadoTurno.CONFIRMADO, paciente.usuario, "creacion del turno");
 		await this.repository.Save(turno);
 		return new TurnoDTO(turno);

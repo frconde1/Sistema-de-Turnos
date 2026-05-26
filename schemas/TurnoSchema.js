@@ -12,11 +12,6 @@ const CambioEstadoSchema = new mongoose.Schema({
         enum: Object.values(EstadoTurno),
         required: true
     },
-    turno: {
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Turno', 
-        required: true 
-    },
     usuario: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Usuario', 
@@ -59,9 +54,7 @@ const TurnoSchema = new mongoose.Schema({
         enum: Object.values(EstadoTurno),
         required: true
     },
-    historialEstados: [
-        CambioEstadoSchema
-    ],
+    historialEstados: [CambioEstadoSchema],
     costo: {
         type: Number, 
         required: true 

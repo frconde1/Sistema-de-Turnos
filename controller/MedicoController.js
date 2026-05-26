@@ -105,4 +105,8 @@ export class MedicoController {
         }
     }
     
+
+    async AgregarPractica(req, res){
+        return res.json(this.medicoService.AgregarPractica(req.params.id, req.body));
+    }
 }

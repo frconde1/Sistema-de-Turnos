@@ -22,7 +22,7 @@ export default class TurnoController {
 	}
 
 	async FindById(req, res) {
-		const turnoDTO = await this.service.FindById(req.params.id);
+		const turnoDTO = await this.service.FindByIdDTO(req.params.id);
 		return res.status(200).json(turnoDTO);
 	}
 

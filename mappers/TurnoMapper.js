@@ -10,15 +10,14 @@ class CambioEstadoMapper {
 	
 	/**@returns {CambioEstadoTurno} */
 	static toEntity({fechaHora, estado, usuario, motivo}){
-		return new CambioEstadoTurno(fechaHora, estado, null, UsuarioMapper.ToEntity(usuario), motivo)
+		return new CambioEstadoTurno(fechaHora, estado, null, UsuarioMapper.toEntity(usuario), motivo)
 	}
 
 	/**@param {CambioEstadoTurno} estado */
-	static toSchema({fechaHoraIngreso, estado, turno, usuario, motivo}){
+	static toSchema({fechaHoraIngreso, estado, usuario, motivo}){
 		return {
-			fechaHora: fechaHoraIngreso,
+			fechaHora: new Date(fechaHoraIngreso),
 			estado: estado,
-			turno: turno.id,
 			usuario: usuario.id,
 			motivo: motivo
 		}
@@ -27,14 +26,14 @@ class CambioEstadoMapper {
 
 export default class TurnoMapper {
 	
-	static populate = [{path: "medico"}, {path: "paciente"}, {path: "sede"},{path: "practica"}]
+	static populate = [{path: "medico"}, {path: "paciente"}, {path: "sede"}, {path: "practica"}]
 
 	/**@returns {Turno} */
 	static toEntity({medico, paciente, fechaHora, sede, practica, estado, historialEstados, costo, _id}){
 		const turno = new Turno(
 			MedicoMapper.toEntity(medico),
 			PacienteMapper.toEntity(paciente),
-			fechaHora,
+			new Date(fechaHora),
 			SedeMapper.toEntity(sede),
 			PracticaMapper.toEntity(practica),
 			estado,

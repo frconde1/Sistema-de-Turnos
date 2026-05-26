@@ -1,10 +1,30 @@
 import mongoose from "mongoose";
 import Medico from "../domain/Medico.js"
-import DisponibilidadSchema from "./DisponibilidadSchema.js";
+import { DiaSemana } from "../domain/Enums.js";
+
+
+const DisponibilidadSchema = new mongoose.Schema({
+    diaSemana: {
+        type: String,
+        enum: Object.values(DiaSemana),
+        required: true
+    },
+    horaDesde: {
+        type: String,
+        required: true
+    },
+    horaHasta: {
+        type: String,
+        required: true
+    }
+}, { _id: false });
+
+
 
 const MedicoSchema = new mongoose.Schema({
     usuario: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Usuario',
         required: true
     },
     matricula: {
@@ -27,12 +47,10 @@ const MedicoSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Sede'
     }],
-    disponibilidades: [{
-        type: DisponibilidadSchema,
-        required: false
-    }],
+    disponibilidades: [DisponibilidadSchema],
 })
 
-MedicoSchema.loadClass(Medico);
 
-export const MedicoModel = mongoose.model('Medico', MedicoSchema)
+
+const MedicoModel = mongoose.model('Medico', MedicoSchema);
+export default MedicoModel;

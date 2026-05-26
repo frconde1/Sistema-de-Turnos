@@ -39,7 +39,7 @@ export default class TurnoRepository {
 
 
         return {
-            turnos: 	 turnos,
+			turnos: turnos.map(TurnoMapper.toEntity),
             totalTurnos: await TurnoModel.countDocuments()
         }
 	}
@@ -53,8 +53,10 @@ export default class TurnoRepository {
 	 * @returns {Turno}
 	*/
 	async Save(turno) {
-		if (turno.id) 
+		if (turno.id){
+			// turno.id = new mongoose.Types.ObjectId().toString();
 			await TurnoModel.findByIdAndUpdate(turno.id, TurnoMapper.toSchema(turno), { upsert: true });
+		}
 		else {
 			const created = await TurnoModel.create(TurnoMapper.toSchema(turno));
 			turno.id = created._id.toString();
@@ -78,7 +80,7 @@ export default class TurnoRepository {
 		if(!mongoose.Types.ObjectId.isValid(id))
 			return null;
 
-		const turno = await TurnoModel.findById(id);
+		const turno = await TurnoModel.findById(id).populate(TurnoMapper.populate);
 		return turno != null ? TurnoMapper.toEntity(turno) : null
     }
 	

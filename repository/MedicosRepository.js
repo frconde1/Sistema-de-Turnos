@@ -4,94 +4,47 @@ import Medico from "../domain/Medico.js";
 import Practica from "../domain/Practica.js";
 import Sede from "../domain/Sede.js";
 import { InputError } from "../errors/Errors.js";
-import { MedicoModel } from "../schemas/MedicoSchema.js";
+import MedicoMapper from "../mappers/MedicoMapper.js";
+import MedicoModel from "../schemas/MedicoSchema.js";
 
 export class MedicosRepository {
-    medicos;
+    
+    constructor() {}
 
-    constructor() {
-        // se hace singleton por el momento
-		if(MedicosRepository.instance)
-			return MedicosRepository.instance;
+    async obtenerPaginados(numeroPagina, limitePorPagina, filtros = {}) {
 
-		this.medicos = []
-		this.nextId = 10;
+        const filtrosMDB = {};
 
-        var medico1 = new Medico(
-            "favaloro_capo",
-            "123-123",
-            "Favaloro",
-            [new Especialidad(1, "Cardio", 60, 500)],
-            [new Practica(1, "Cardio", 60, 500)],
-            [new Sede(1, "Sede1", "Calle Falsa 123")],
-            [new DisponibilidadHoraria(1, "08:00", "23:00")]
-        )
-        medico1.id = 1;
-
-        this.medicos.push(medico1)
-
-		MedicosRepository.instance = this;
-    }
-
-    obtenerPaginados(numeroPagina, limitePorPagina, filtros = {}) {
-
-        let medicos = this.findAll();
-
-        if (filtros.nombre !== undefined) {
-            medicos = medicos
-                .filter(m => m.nombre.toLowerCase().includes(filtros.nombre.toLowerCase()))
-        }
-
-        if (filtros.especialidad !== undefined) {
-            medicos = medicos
-                .filter(m => m.especialidades.
-                    some(e => e.nombre.toLowerCase().includes(filtros.especialidad.toLowerCase())))
-        }
-
-        if (filtros.practica !== undefined) {
-            medicos = medicos
-                .filter(m => m.practicas.
-                    some(p => p.nombre.toLowerCase().includes(filtros.practica.toLowerCase())))
-        }
-
-        if (filtros.sede !== undefined) {
-            medicos = medicos
-                .filter(m => m.sedes.
-                    some(s => s.nombre.toLowerCase().includes(filtros.sede.toLowerCase())))
-        }
+        if (filtros.nombre !== undefined)       filtrosMDB.nombre       = filtros.nombre;
+        if (filtros.especialidad !== undefined) filtrosMDB.especialidad = filtros.especialidad
+        if (filtros.practica !== undefined)     filtrosMDB.practica     = filtros.practica
+        if (filtros.sede !== undefined)         filtrosMDB.sede         = filtros.sede
 
         const inicio = (numeroPagina - 1) * limitePorPagina;
-        const fin = inicio + limitePorPagina;
+
+        const medicos = await MedicoModel
+                        .find(filtrosMDB)
+                        .skip(inicio)
+                        .limit(limitePorPagina)
+                        .populate(MedicoMapper.populate)
 
         return {
-            medicos: medicos.slice(inicio, fin),
-            totalMedicos: medicos.length
+            medicos: medicos,
+            totalMedicos: await MedicoModel.countDocuments()
         }
     }
 
     async findAll() {
-        return this.medicos;
+        return (await MedicoModel.find().populate(MedicoMapper.populate)).map(MedicoMapper.toEntity);
     }
 
     async Save(medico) {
-        const doc = {
-            usuario: medico.usuario,
-            matricula: medico.matricula,
-            nombre: medico.nombre,
-            especialidades: medico.especialidades,
-            practicas: medico.practicas,
-            sedes: medico.sedes,
-            disponibilidades: medico.disponibilidades
-        };
-
-        // Si medico.id existe, lo usamos como _id para actualizar; si no, creamos uno nuevo
         if (medico.id) {
-            await MedicoModel.findByIdAndUpdate(medico.id, doc, { new: true, upsert: true });
+            await MedicoModel.findByIdAndUpdate(medico.id, MedicoMapper.toSchema(medico), {upsert: true });
         } else {
-            const created = await MedicoModel.create(doc);
+            const created = await MedicoModel.create(MedicoMapper.toSchema(medico));
             medico.id = created._id.toString();
         }
-
         return medico;
     }
 
@@ -101,7 +54,7 @@ export class MedicosRepository {
 		if (!medico) 
 			throw new InputError("El medico no existe")
 
-		return medico 
+		return MedicoMapper.toEntity(medico) 
     }
 
     async agregarDisponibilidad(medicoId, disponibilidad) {

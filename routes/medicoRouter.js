@@ -17,4 +17,9 @@ router.route('/:id/disponibilidades')
 router.route('/:id/sedes')
     .post((req, res, next) => medicoController.agregarSede(req, res, next))
 
+
+router.route('/:id/practicas')
+    .post((req, res) => medicoController.AgregarPractica(req, res))
+
+
 export default router
