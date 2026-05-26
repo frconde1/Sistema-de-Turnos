@@ -13,9 +13,9 @@ import CambioEstadoTurno from "../domain/CambioEstadoTurno.js";
 import Usuario from "../domain/Usuario.js";
 import { TurnoModel } from "../schemas/TurnoSchema.js";
 import z from "zod/v3";
+import { fechaSchema, idSchema, numberSchema, stringSchema } from "./zodSchemas.js";
 
 
-/*
 const crearTurnoSchema =
 	z.object({
 		medico: 	idSchema("medico"),
@@ -23,26 +23,24 @@ const crearTurnoSchema =
 		paciente:	idSchema("paciente"),
 		practica: 	idSchema("práctica"),
 		fechaHora: 	fechaSchema()
-	})
-
+	});
 
 const actualizarTurnoSchema =
 	z.object({
-		medico:    idSchema("medico").optional(),
-		paciente:  idSchema("paciente").optional(),
-		sede: 	   idSchema("medico").optional(),
-		fechaHora: fechaSchema().optional(),
-		costo:	   z.number().nonnegative().optional()
-	})
-
+		medico:    idSchema("medico"),
+		paciente:  idSchema("paciente"),
+		sede: 	   idSchema("medico"),
+		practica:  idSchema("práctica"),
+		fechaHora: fechaSchema(),
+		costo:	   numberSchema("costo").nonnegative()
+	});
 
 const actualizarEstadoTurnoSchema =
 	z.object({
-		estado: z.enum(EstadoTurno, "el dato estado debe ser un estado de turno válidSchemao"),
+		estado:  z.enum(EstadoTurno, "el dato estado debe ser un estado de turno válido"),
 		usuario: idSchema("usuario"),
-		motivo: stringSchema("motivo")
-	})
-
+		motivo:  stringSchema("motivo")
+	});
 
 const filtrosTurnoSchema =
 	z.object({
@@ -53,29 +51,11 @@ const filtrosTurnoSchema =
 		estado:		 z.enum(EstadoTurno, "el dato estado debe ser un estado de turno válido").optional(),
 		ordenCosto:	 z.boolean("el dato ordenCosto debe ser un boolean indicando si es de orden ascendente o descendente").optional(),
 		ordenFecha:	 z.boolean("el dato ordenFecha debe ser un boolean indicando si es de orden ascendente o descendente").optional(),
-		fechaInicio: fechaSchema(),
-		fechaFin:	 fechaSchema()
+		fechaInicio: fechaSchema().optional(),
+		fechaFin:	 fechaSchema().optional()
 	})
 
 
-*/
-
-
-
-//refine agrega una validacion personalizada
-//lo del !Number.isNaN(Date.parse(v)) es porque, por ejemplo Date.parse("2026-05-04T12:40:00") devuelve un numero
-//caso contrario devuelve NaN, por eso me fijo que sea !NaN
-const turnoSchema = z.object({
-    medico: z.coerce.number().int().nonnegative({ message: "Error al enviar el ID de medico" }),
-    paciente: z.coerce.number().int().nonnegative({ message: "Error al enviar el ID de paciente" }),
-    sede: z.coerce.number().int().nonnegative({ message: "Error al enviar el ID de sede" }),
-    practica: z.coerce.number().int().nonnegative({ message: "Error al enviar el ID de practica" }),
-    fechaHora: z.string()
-        .refine((v) => !Number.isNaN(Date.parse(v)), { message: "la fecha es invalida" })
-        .refine((v) => new Date(v + "-03:00") >= new Date(), { message: "la fecha no puede ser anterior a hoy" }),
-    estado: z.nativeEnum(EstadoTurno, { errorMap: () => ({ message: "el estado es invalido" }) }),
-    costo: z.number().nonnegative({ message: "el costo es invalido" })
-});
 
 export default class TurnoService {
 	constructor(
@@ -136,11 +116,10 @@ export default class TurnoService {
 	}
 
 	CreateTurno(reqBody){
-		let sede  	  = this.sedeService.findById(reqBody.sede);
-		console.log(sede);
-
-		if (!sede) throw new InputError("La sede ingresada no existe");
+		const res = crearTurnoSchema.safeParse(reqBody)
+		if(!res.success) throw new InputError(result.error.issues.map(i => i.message).join(", "));
 		
+		let sede  	  = this.sedeService	.findById(reqBody.sede		);
 		let medico    = this.medicoService	.FindById(reqBody.medico	);
 		let paciente  = this.pacienteService.FindById(reqBody.paciente	);
 		let practica  = this.practicaService.FindById(reqBody.practica	);

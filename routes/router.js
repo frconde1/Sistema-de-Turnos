@@ -6,6 +6,7 @@ import practicaRouter	from "./practicaRouter.js"
 import healthRouter from "./healthRouter.js"
 import pacienteRouter from "./pacienteRouter.js"
 import especialidadRouter from "./especialidadRouter.js"
+import planRouter from "./planRouter.js"
 
 const router = express.Router();
 
@@ -19,5 +20,6 @@ router.use('/turnos',			turnoRouter);
 router.use('/practicas',		practicaRouter);
 router.use('/pacientes',		pacienteRouter);
 router.use("/especialidades",	especialidadRouter)
+router.use("/planes",			planRouter)
 
 export default router;

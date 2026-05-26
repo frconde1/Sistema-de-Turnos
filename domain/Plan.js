@@ -6,28 +6,26 @@ import Especialidad 			from "./Especialidad.js";
 import Practica 				from "./Practica.js";
 
 export default class Plan {
+	/**@type {String} */
 	id; 
 	nombre;
 	coberturasEspecialidad;
 	coberturasPracticas;
 
 	/**
-	 * @param {String} id 
 	 * @param {String} nombre 
 	 * @param {CoberturaEspecialidad[]} coberturasEspecialidad 
 	 * @param {CoberturaPractica[]} coberturasPracticas 
 	 */
-	constructor(id, nombre, coberturasEspecialidad, coberturasPracticas) {
-		this.id = id; 
+	constructor(nombre, coberturasEspecialidad, coberturasPracticas) {
 		this.nombre = nombre;
 		this.coberturasEspecialidad = coberturasEspecialidad;
 		this.coberturasPracticas = coberturasPracticas;
 	}
 
 	/**
-	 * 
 	 * @param	{Especialidad | Practica} elementoCobertura 
-	 * @returns	{NivelCobertura}
+	 * @returns	{NivelCobertura | null}
 	 */
 	ObtenerCobertura(situacion) {
 		if (situacion instanceof Especialidad)
@@ -40,8 +38,7 @@ export default class Plan {
 				if (Practica.EsIgual(situacion, cobertura.practica))
 					return cobertura.nivel;
 
-		// no se encontro
-		throw new InputError("No se ingreso una practica o una especialidad");
+		return null;
 	}
 
 	}

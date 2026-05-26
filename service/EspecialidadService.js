@@ -2,19 +2,19 @@ import z from "zod";
 import Especialidad from "../domain/Especialidad.js";
 import { InputError, ResurceNotFoundError } from "../errors/Errors.js";
 import EspecialidadRepository from "../repository/EspecialidadRepository.js";
-import { numberSchema, stringSchema } from "./zodSchemas.js";
+import { intergerSchema, numberSchema, stringSchema, ValidarZodSchema } from "./zodSchemas.js";
 
 
 const crearEspecialidadSchema = z.object({
 	nombre: stringSchema("nombre"),
-	costo:  numberSchema("costo"),
-	duracionMins:  numberSchema("duraciónMins")
+	costo: 	numberSchema("costo").nonnegative("el costo debe ser mayor a 0"),
+	duracionMins: intergerSchema("duracionMins").nonnegative("la duracionMins debe ser mayor a 0")
 });
 
 const actualizarEspecialidadSchema = z.object({
 	nombre: stringSchema("nombre"),
-	costo:  numberSchema("costo"),
-	duracionMins:  numberSchema("duraciónMins")
+	costo:  numberSchema("costo").nonnegative("el costo debe ser mayor a 0"),
+	duracionMins: intergerSchema("duracionMins").nonnegative("la duracionMins debe ser mayor a 0")
 });
 
 export default class EspecialidadService {
@@ -25,15 +25,14 @@ export default class EspecialidadService {
 	}
 
 	async Create(request){
-		crearEspecialidadSchema.safeParse(request)
-		this.validarRequest(request);
+		ValidarZodSchema(crearEspecialidadSchema, request);
 
-		const {duracionMins, nombre, costoConsulta} = request;
+		const {duracionMins, nombre, costo} = request;
 
 		let especialidad = new Especialidad(
 			nombre,
 			duracionMins,
-			costoConsulta
+			costo
 		);
 		await this.repository.Save(especialidad);
 		return especialidad;
@@ -51,8 +50,8 @@ export default class EspecialidadService {
 	}
 
 	async Update(id, request){
-		actualizarEspecialidadSchema.safeParse(request);
-		this.validarRequest(request);
+		ValidarZodSchema(actualizarEspecialidadSchema, request);
+		
 		let especialidad = await this.FindById(id);
 
 		const {duracionMins, nombre, costoConsulta} = request;
@@ -63,14 +62,5 @@ export default class EspecialidadService {
 
 		await this.repository.Save(especialidad);
 		return especialidad;
-	}
-
-	validarRequest(request) {
-		const {duracionMins, costoConsulta} = request;
-
-		if(!Number.isInteger(duracionMins) || duracionMins <= 0)
-			throw new InputError("la duracionEnMins en minutos debe ser un entero positivo");
-		if(costoConsulta <= 0)
-			throw new InputError("el costoConsulta debe ser un numero mayor a 0");
 	}
 }

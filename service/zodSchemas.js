@@ -28,10 +28,17 @@ export const stringSchema = (name = "") =>
 
 export const numberSchema = (name = "") => z.number(`el dato ${name} debe ser un número`);
 
-
+export const intergerSchema = (name = "") => z.int(`el dato ${name} debe ser un número entero`);
 
 export const paginacionSchema = 
 	z.object({
 		page:  z.number("el dato pagina debe ser un número").optional().default( 1),
 		limit: z.number("el dato límite debe ser un número").optional().default(10)
 	});
+
+
+export const ValidarZodSchema = (zodSchema, request) => {
+		const res = zodSchema.safeParse(request)
+		if (!res.success) 
+			throw new InputError(res.error.issues.map(i => i.message).join(", "))
+	};

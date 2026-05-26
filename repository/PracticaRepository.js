@@ -29,7 +29,7 @@ export default class PracticaRepository {
 	*/
 	async Save(practica) {
 		if (practica.id) 
-			await PracticaModel.findByIdAndUpdate(practica.id, this.toSchema(practica), { new: true, upsert: true });
+			await PracticaModel.findByIdAndUpdate(practica.id, this.toSchema(practica), { upsert: true });
 		else {
 			const created = await PracticaModel.create(this.toSchema(practica));
 			practica.id = created._id.toString();

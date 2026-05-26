@@ -24,7 +24,7 @@ export default class EspecialidadRepository {
 	 */
 	async Save(especialidad){
 		if (especialidad.id) 
-			await EspecialidadModel.findByIdAndUpdate(especialidad.id, this.toSchema(especialidad), { new: true, upsert: true });
+			await EspecialidadModel.findByIdAndUpdate(especialidad.id, this.toSchema(especialidad), { upsert: true });
 		else {
 			const created = await EspecialidadModel.create(this.toSchema(especialidad));
 			especialidad.id = created._id.toString();
@@ -35,15 +35,15 @@ export default class EspecialidadRepository {
 	/**@param {Especialidad} especialidad  */
 	toSchema(especialidad){
 		return {
-			nombre: 		especialidad.nombre,
-			duracionEnMins: especialidad.duracionEnMins,
-			costoConsulta: 	especialidad.costoConsulta
+			nombre: especialidad.nombre,
+			costo: 	especialidad.costo,
+			duracionEnMins: especialidad.duracionEnMins
 		}
 	}
 
 	/**@return {Especialidad}*/
-	toEntity({nombre, duracionEnMins, costoConsulta, _id}){
-		const especialdiad = new Especialidad(nombre, duracionEnMins, costoConsulta);
+	toEntity({nombre, duracionEnMins, costo, _id}){
+		const especialdiad = new Especialidad(nombre, duracionEnMins, costo);
 		especialdiad.id = _id.toString();
 		return especialdiad;
 	}

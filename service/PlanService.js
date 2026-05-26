@@ -1,0 +1,132 @@
+import z from "zod";
+import CoberturaEspecialidad from "../domain/CoberturaEspecialidad.js";
+import CoberturaPractica from "../domain/CoberturaPractica.js";
+import ObraSocial from "../domain/ObraSocial.js";
+import ObraSocialRepository from "../repository/PlanRepository.js";
+import { idSchema, stringSchema, ValidarZodSchema } from "./zodSchemas.js";
+import Plan from "../domain/Plan.js";
+import { ResurceNotFoundError } from "../errors/Errors.js";
+import EspecialidadService from "./EspecialidadService.js";
+import PracticaService from "./PracticaService.js";
+import { NivelCobertura } from "../domain/Enums.js";
+
+
+
+const crearPlanSchema = z.object({
+	nombre: stringSchema("nombre")
+});
+
+const actualizarPlanSchema = z.object({
+	nombre: stringSchema("nombre")
+});
+
+const agregarEspecialidadSchema = z.object({
+	especialidad: idSchema("especialidad"),
+	cobertura: z.enum(Object.values(NivelCobertura))
+})
+
+const agregarPracticaSchema = z.object({
+	practica: idSchema("practica"),
+	cobertura: z.enum(Object.values(NivelCobertura))
+})
+
+export default class PlanService{
+	constructor(
+		obraSocialRepository = new ObraSocialRepository(),
+		especialidadService = new EspecialidadService(),
+		practicaService = new PracticaService()
+	) {
+		this.repository = obraSocialRepository;
+		this.especialidadService = especialidadService;
+		this.practicaService = practicaService;
+	}
+
+	async FindAll() {
+		return await this.repository.FindAll();
+	}
+	
+	async Create(req) {
+		ValidarZodSchema(crearPlanSchema, req);
+		
+		const { nombre } = req;
+		const plan = new Plan(nombre, [], []);
+
+		await this.repository.Save(plan);
+		return plan;
+	}
+	
+	async FindById(id) {
+		const plan = await this.repository.FindById(id)
+		if(plan == null)
+			throw new ResurceNotFoundError("el plan buscado no existe");
+		return plan;
+	}
+	
+	async Update(id, req) {
+		ValidarZodSchema(actualizarPlanSchema, req);
+
+		const { nombre } = req;
+		const plan = await this.FindById(id);
+		plan.nombre = nombre;
+		
+		await this.repository.Save(plan)
+		return plan
+	}
+	
+	async FindAllEspecialidades(id) {
+		const plan = await this.FindById(id);
+		return plan.coberturasEspecialidad;
+	}
+	
+	async AddEspecialidad(id, req) {
+		ValidarZodSchema(agregarEspecialidadSchema, req);
+		const plan 			= await this.FindById(id);
+		const especialdiad 	= await this.especialidadService.FindById(req.especialidad);
+
+		plan.coberturasEspecialidad.push(
+			new CoberturaEspecialidad(
+				especialdiad,
+				req.cobertura
+			)
+		);
+
+		await this.repository.Save(plan);
+		return plan;
+	}
+	
+	async RemoveEspecialidad(id, idEsp) {
+		const plan = await this.FindById(id);
+		plan.coberturasEspecialidad.filter(c => c.especialidad.id != idEsp);
+		await this.repository.Save(plan);
+		return plan;
+	}
+	
+	async FindAllPracticas(id) {
+		const plan = await this.FindById(id);
+		return plan.coberturasPracticas;
+	}
+	
+	async AddPractica(id, req) {
+		ValidarZodSchema(agregarPracticaSchema, req);
+		const plan 		= await this.FindById(id);
+		const practica 	= await this.practicaService.FindById(req.practica);
+
+		plan.coberturasPracticas.push(
+			new CoberturaPractica(
+				practica,
+				req.cobertura
+			)
+		);
+
+		await this.repository.Save(plan);
+		return plan;
+	}
+	
+	async RemovePractica(id, idPra) {
+		const plan = await this.FindById(id);
+		plan.coberturasPracticas.filter(c => c.practica.id != idPra);
+		await this.repository.Save(plan);
+		return plan;
+	}
+	
+}
