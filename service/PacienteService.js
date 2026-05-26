@@ -1,46 +1,61 @@
+import z from "zod";
+import { InputError, ResurceNotFoundError } from "../errors/Errors.js";
+import { idSchema, stringSchema, ValidarZodSchema } from "./zodSchemas.js";
+import PacienteRepository from "../repository/PacienteRepository.js";
 import Paciente from "../domain/Paciente.js";
-import { InputError } from "../errors/Errors.js";
-import { PacienteRepository } from "../repository/PacienteRepository.js";
-import z from "zod/v3";
+import UsuarioService from "./UsuarioService.js";
 
-const pacienteSchema = z.object({
-    usuario: z.string({required_error: "El usuario es obligatorio", invalid_type_error: "El usuario debe ser un string" }).min(1, "El usuario no puede estar vacío"),
-    dni: z.string({ required_error: "El dni es obligatorio", invalid_type_error: "El dni debe ser un string" }).min(1, "El dni no puede estar vacío"),
-    nombre: z.string({ required_error: "El nombre es obligatorio", invalid_type_error: "El nombre debe ser un string" }).min(1, "El nombre no puede estar vacío")
+const crearPacienteSchema = z.object({
+    usuario: idSchema("usuario"),
+    dni:     stringSchema("dni").regex(/^\d+$/, "El dni solo contiene digitos"),
+    nombre:  stringSchema("nombre")
+})
+
+const actualizarPacienteSchema = z.object({
+    dni:    stringSchema("dni").regex(/^\d+$/, "El dni solo contiene digitos"),
+    nombre: stringSchema("nombre")
 })
 
 export default class PacienteService {
 
     constructor(
-        pacienteRepository = new PacienteRepository()
+        pacienteRepository = new PacienteRepository(),
+        usuarioService     = new UsuarioService()
     ) {
-        this.pacienteRepository = pacienteRepository;
-    }
-
-
-    async Create(reqBody) {
-        const resultado = pacienteSchema.safeParse(reqBody);
-        const paciente = new Paciente(
-                    null, 
-                    reqBody.usuario,
-                    reqBody.dni,
-                    reqBody.nombre,
-                    reqBody.obraSocial,
-                    reqBody.plan 
-
-                    
-                )
-        
-                return await this.pacienteRepository.Save(paciente)
-
+        this.repository     = pacienteRepository;
+        this.usuarioService = usuarioService;
     }
     
-    FindById(id){
-		return this.pacienteRepository.FindById(id);
+    async FindById(id){
+        const paciente = await this.repository.FindById(id);
+        if(paciente == null)
+            throw new ResurceNotFoundError("el paciente buscado no existe");
+        return paciente;
 	}
 
-    FindAll() {
-        return this.pacienteRepository.FindAll();
+    async FindAll() {
+        return await this.repository.FindAll();
+    }
+
+    async Create(reqBody) {
+        ValidarZodSchema(crearPacienteSchema, reqBody);
+
+        const usuario = await this.usuarioService.FindById(reqBody.usuario);
+        const paciente = new Paciente(usuario, reqBody.dni, reqBody.nombre, null, null)
+        
+        await this.repository.Save(paciente)
+        return paciente;
+    }
+
+    async Update(id, reqBody){
+        ValidarZodSchema(actualizarPacienteSchema, reqBody);
+        const paciente = await this.FindById(id);
+
+        paciente.nombre = reqBody.nombre;
+        paciente.dni    = reqBody.dni;
+        
+        this.repository.Save(paciente);
+        return paciente;
     }
 }
     

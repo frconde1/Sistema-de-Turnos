@@ -3,8 +3,9 @@ import Paciente from "../domain/Paciente.js";
 
 const PacienteSchema = new mongoose.Schema({
     usuario: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Usuario', 
+        required: true 
     },
     dni: {
         type: String,
@@ -15,15 +16,15 @@ const PacienteSchema = new mongoose.Schema({
         required: true
     }, 
     obraSocial: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'ObraSocial', 
     },
     plan: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Plan', 
     }
 });
 
-PacienteSchema.loadClass(Paciente);
 
-export const PacienteModel = mongoose.model('Paciente', PacienteSchema)
+const PacienteModel = mongoose.model('Paciente', PacienteSchema)
+export default PacienteModel;

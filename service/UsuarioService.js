@@ -1,6 +1,6 @@
 import z from "zod";
 import { stringSchema, ValidarZodSchema } from "./zodSchemas.js";
-import { InputError, BadRequestError } 		from "../errors/Errors.js";
+import { InputError, BadRequestError, ResurceNotFoundError } 		from "../errors/Errors.js";
 
 import UsuarioRepository from "../repository/UsuarioRepository.js"
 import Usuario           from "../domain/Usuario.js";
