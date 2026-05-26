@@ -7,13 +7,13 @@ import { intergerSchema, numberSchema, stringSchema, ValidarZodSchema } from "./
 
 const crearEspecialidadSchema = z.object({
 	nombre: stringSchema("nombre"),
-	costo: 	numberSchema("costo").nonnegative("el costo debe ser mayor a 0"),
+	costoConsulta: 	numberSchema("costoConsulta").nonnegative("el costo debe ser mayor a 0"),
 	duracionMins: intergerSchema("duracionMins").nonnegative("la duracionMins debe ser mayor a 0")
 });
 
 const actualizarEspecialidadSchema = z.object({
 	nombre: stringSchema("nombre"),
-	costo:  numberSchema("costo").nonnegative("el costo debe ser mayor a 0"),
+	costoConsulta:  numberSchema("costoConsulta").nonnegative("el costo debe ser mayor a 0"),
 	duracionMins: intergerSchema("duracionMins").nonnegative("la duracionMins debe ser mayor a 0")
 });
 
@@ -27,12 +27,12 @@ export default class EspecialidadService {
 	async Create(request){
 		ValidarZodSchema(crearEspecialidadSchema, request);
 
-		const {duracionMins, nombre, costo} = request;
+		const {duracionMins, nombre, costoConsulta} = request;
 
 		let especialidad = new Especialidad(
 			nombre,
 			duracionMins,
-			costo
+			costoConsulta
 		);
 		await this.repository.Save(especialidad);
 		return especialidad;

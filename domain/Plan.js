@@ -30,7 +30,12 @@ export default class Plan {
 	ObtenerCobertura(elemento) {
 		const lista = elemento instanceof Especialidad ? this.coberturasEspecialidad : this.coberturasPractica;
 		
-		const cobertura = lista.find(c => (c instanceof Especialidad ? c.especialidad.id : c.practica.id) == elemento.id);
+		const cobertura = lista.find(
+			c => (
+        		elemento instanceof Especialidad
+            		? c.especialidad.id
+            		: c.practica.id
+    	) == elemento.id);
 		
 		if(cobertura)
 			return cobertura.nivel;

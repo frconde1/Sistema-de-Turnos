@@ -15,7 +15,7 @@ import PracticaService	from "./PracticaService.js"
 import Turno from "../domain/Turno.js";
 import CambioEstadoTurno from "../domain/CambioEstadoTurno.js";
 import Medico from "../domain/Medico.js";
-import { BadRequestError, InputError } from "../errors/Errors.js";
+import { BadRequestError, InputError, ResurceNotFoundError } from "../errors/Errors.js";
 import UsuarioService from "./UsuarioService.js";
 import PacienteRepository from "../repository/PacienteRepository.js";
 

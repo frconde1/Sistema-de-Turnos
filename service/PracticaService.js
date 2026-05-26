@@ -1,19 +1,19 @@
 import z from "zod";
 import Practica 			from "../domain/Practica.js";
-import { InputError } 		from "../errors/Errors.js";
+import { InputError, ResurceNotFoundError } 		from "../errors/Errors.js";
 import PracticaRepository 	from "../repository/PracticaRepository.js";
 import { intergerSchema, numberSchema, stringSchema, ValidarZodSchema } from "./zodSchemas.js";
 
 
 const crearPracticaSchema = z.object({
 	nombre: stringSchema("nombre"),
-	costo: 	numberSchema("costo").nonnegative("el costo debe ser mayor a 0"),
+	costoConsulta: 	numberSchema("costoConsulta").nonnegative("el costo debe ser mayor a 0"),
 	duracionMins: intergerSchema("duracionMins").nonnegative("la duracionMins debe ser mayor a 0")
 });
 
 const actualizarPracticaSchema = z.object({
 	nombre: stringSchema("nombre"),
-	costo:  numberSchema("costo").nonnegative("el costo debe ser mayor a 0"),
+	costoConsulta: 	numberSchema("costoConsulta").nonnegative("el costo debe ser mayor a 0"),
 	duracionMins: intergerSchema("duracionMins").nonnegative("la duracionMins debe ser mayor a 0")
 });
 
@@ -56,7 +56,7 @@ export default class PracticaService {
 
 		practica.codigo	= codigo
 		practica.nombre = nombre;
-		practica.costo  = costoConsulta;
+		practica.costoConsulta  = costoConsulta;
 		practica.duracionTurnoEnMins = duracionMins;
 
 		await this.repository.Save(practica);
@@ -66,7 +66,7 @@ export default class PracticaService {
 
 	/** @returns {Practica} */
 	CreatePractica(reqBody){
-		const {codigo, nombre, duracionMins, costo} = reqBody;
-		return new Practica(codigo, nombre, duracionMins, costo);
+		const {codigo, nombre, duracionMins, costoConsulta} = reqBody;
+		return new Practica(codigo, nombre, duracionMins, costoConsulta);
 	}
 }

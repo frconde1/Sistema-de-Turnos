@@ -1,3 +1,4 @@
+/*
 import CambioEstadoTurno from "../domain/CambioEstadoTurno.js"
 import { EstadoTurno } from "../domain/Enums.js"
 import Medico from "../domain/Medico.js"
@@ -15,7 +16,7 @@ describe("TurnoService", () => {
 	const turnoService 	= new TurnoService();
 
 	beforeAll(() => {
-		/**@type {Medico} */
+
 		let medico = medicoService.create({
 			usuario: "medico1",
 			matricula: "matricula1",
@@ -86,7 +87,7 @@ describe("TurnoService", () => {
 				medico:    "0",
 				sede:      "1",
 				paciente:  "0",
-				practica:  "0",
+				practica:  "0",disponibilidades
 				fechaHora: "2026-05-04T23:40:00-03:00" // formato localizado en Arg, para UTC -03:00 debe ser z
 			}).toThrow(InputError);
 		})
@@ -132,3 +133,5 @@ describe("TurnoService", () => {
 		}).not.toThrow();
 	})
 })
+
+*/

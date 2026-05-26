@@ -2,7 +2,7 @@ import Medico from "../domain/Medico.js";
 import { MedicosRepository } from "../repository/MedicosRepository.js";
 import { InputError, BadRequestError } 		from "../errors/Errors.js";
 import DisponibilidadHoraria from "../domain/DisponibilidadHoraria.js";
-import { z } from "zod/v3";
+import { z } from "zod";
 import { DiaSemana } from "../domain/Enums.js";
 import { SedeRepository } from "../repository/SedeRepository.js";
 import UsuarioService from "./UsuarioService.js";

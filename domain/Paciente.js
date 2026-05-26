@@ -38,8 +38,8 @@ export default class Paciente {
 		switch(cobertura){
 			case NivelCobertura.TOTAL: return NivelCobertura.TOTAL;
 			case NivelCobertura.NO_CUBIERTA: return coberturaSocial;
-			case NivelCobertura.PARCIAL: return 
-				coberturaSocial == NivelCobertura.NO_CUBIERTA ? 
+			case NivelCobertura.PARCIAL: 
+				return coberturaSocial == NivelCobertura.NO_CUBIERTA ? 
 					NivelCobertura.PARCIAL : 
 					coberturaSocial;
 		}
