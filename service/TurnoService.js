@@ -243,7 +243,7 @@ export default class TurnoService {
 	//////////////////////
 
 	CreateTurno(reqBody){
-		const sede  	= this.sedeService	  .FindById(reqBody.sede	);
+		const sede  	= this.sedeService	  .findById(reqBody.sede	);
 		const medico    = this.medicoService  .FindById(reqBody.medico	);
 		const paciente  = this.pacienteService.FindById(reqBody.paciente);
 		const practica  = this.practicaService.FindById(reqBody.practica);

@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
-import Usuario from "../domain/Usuario"
+import Usuario from "../domain/Usuario.js"
 
-const UsuarioSchema = new mongoose.Scheme({
+const UsuarioSchema = new mongoose.Schema({
     username: {
         type: String, 
         unique: true, 

@@ -1,4 +1,4 @@
-import { UsuarioModel } from "../schemas/UsuarioSchema";
+import { UsuarioModel } from "../schemas/UsuarioSchema.js";
 
 
 export default class UsuarioRepository {
@@ -19,7 +19,7 @@ export default class UsuarioRepository {
 
     /** @returns {Usuario[]}*/
 	async FindAll() {
-		return this.usuarios;
+		return UsuarioModel.find();
 	}
 
     async Save(usuario) {
