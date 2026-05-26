@@ -1,15 +1,14 @@
 export default class Usuario {
+	/**@type {String} */
 	id; 
 	username;
 	password; 
 
 	/**
-	 * @param {String} id 
 	 * @param {String} username 
 	 * @param {String} password 
 	 */
-	constructor(id, username, password) {
-		this.id = id; 
+	constructor(username, password) {
 		this.username = username;
 		this.password = password; 
 	}
