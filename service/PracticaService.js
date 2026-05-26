@@ -2,7 +2,7 @@ import z from "zod";
 import Practica 			from "../domain/Practica.js";
 import { InputError } 		from "../errors/Errors.js";
 import PracticaRepository 	from "../repository/PracticaRepository.js";
-import { intergerSchema, numberSchema, stringSchema } from "./zodSchemas.js";
+import { intergerSchema, numberSchema, stringSchema, ValidarZodSchema } from "./zodSchemas.js";
 
 
 const crearPracticaSchema = z.object({
@@ -38,17 +38,17 @@ export default class PracticaService {
 	}
 
 	/** @returns {Practica} */
-	async Create(reqBody) {
-		ValidarZodSchema(crearPracticaSchema, reqBody);
+	async Create(request) {
+		ValidarZodSchema(crearPracticaSchema, request);
 
-		const practica = this.CreatePractica(reqBody);
+		const practica = this.CreatePractica(request);
 		
 		await this.repository.Save(practica);
 		return practica;
 	}
 
 	async Update(id, request){
-		ValidarZodSchema(actualizarPracticaSchema, reqBody);
+		ValidarZodSchema(actualizarPracticaSchema, request);
 		
 		const practica = await this.FindById(id);
 

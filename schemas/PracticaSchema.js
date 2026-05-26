@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import Practica from "../domain/Practica.js";
 
 const PracticaSchema = new mongoose.Schema({
     codigo: {
@@ -20,6 +19,6 @@ const PracticaSchema = new mongoose.Schema({
     }
 });
 
-PracticaSchema.loadClass(Practica);
+const PracticaModel = mongoose.model('Practica', PracticaSchema);
 
-export const PracticaModel = mongoose.model('Practica', PracticaSchema)
+export default PracticaModel;

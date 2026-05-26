@@ -5,7 +5,7 @@ import ObraSocial from "../domain/ObraSocial.js";
 import ObraSocialRepository from "../repository/PlanRepository.js";
 import { idSchema, stringSchema, ValidarZodSchema } from "./zodSchemas.js";
 import Plan from "../domain/Plan.js";
-import { ResurceNotFoundError } from "../errors/Errors.js";
+import { BadRequestError, ResurceNotFoundError } from "../errors/Errors.js";
 import EspecialidadService from "./EspecialidadService.js";
 import PracticaService from "./PracticaService.js";
 import { NivelCobertura } from "../domain/Enums.js";
@@ -81,7 +81,10 @@ export default class PlanService{
 	async AddEspecialidad(id, req) {
 		ValidarZodSchema(agregarEspecialidadSchema, req);
 		const plan 			= await this.FindById(id);
-		const especialdiad 	= await this.especialidadService.FindById(req.especialidad);
+		const especialidad 	= await this.especialidadService.FindById(req.especialidad);
+
+		if(plan.coberturasEspecialidad.some(c => c.especialidad.id == especialidad.id))
+			throw new BadRequestError("la especialidad ya se encuentra asignada");
 
 		plan.coberturasEspecialidad.push(
 			new CoberturaEspecialidad(
@@ -96,14 +99,14 @@ export default class PlanService{
 	
 	async RemoveEspecialidad(id, idEsp) {
 		const plan = await this.FindById(id);
-		plan.coberturasEspecialidad.filter(c => c.especialidad.id != idEsp);
+		plan.coberturasEspecialidad = plan.coberturasEspecialidad.filter(c => c.especialidad.id != idEsp);
 		await this.repository.Save(plan);
 		return plan;
 	}
 	
 	async FindAllPracticas(id) {
 		const plan = await this.FindById(id);
-		return plan.coberturasPracticas;
+		return plan.coberturasPractica;
 	}
 	
 	async AddPractica(id, req) {
@@ -111,7 +114,10 @@ export default class PlanService{
 		const plan 		= await this.FindById(id);
 		const practica 	= await this.practicaService.FindById(req.practica);
 
-		plan.coberturasPracticas.push(
+		if(plan.coberturasPractica.some(c => c.practica.id == practica.id))
+			throw new BadRequestError("la practica ya se encuentra asignada");
+
+		plan.coberturasPractica.push(
 			new CoberturaPractica(
 				practica,
 				req.cobertura
@@ -124,7 +130,7 @@ export default class PlanService{
 	
 	async RemovePractica(id, idPra) {
 		const plan = await this.FindById(id);
-		plan.coberturasPracticas.filter(c => c.practica.id != idPra);
+		plan.coberturasPracticas = plan.coberturasPracticas.filter(c => c.practica.id != idPra);
 		await this.repository.Save(plan);
 		return plan;
 	}

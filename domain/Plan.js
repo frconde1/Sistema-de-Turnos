@@ -10,17 +10,17 @@ export default class Plan {
 	id; 
 	nombre;
 	coberturasEspecialidad;
-	coberturasPracticas;
+	coberturasPractica;
 
 	/**
 	 * @param {String} nombre 
 	 * @param {CoberturaEspecialidad[]} coberturasEspecialidad 
-	 * @param {CoberturaPractica[]} coberturasPracticas 
+	 * @param {CoberturaPractica[]} coberturasPractica
 	 */
-	constructor(nombre, coberturasEspecialidad, coberturasPracticas) {
+	constructor(nombre, coberturasEspecialidad, coberturasPractica) {
 		this.nombre = nombre;
 		this.coberturasEspecialidad = coberturasEspecialidad;
-		this.coberturasPracticas = coberturasPracticas;
+		this.coberturasPractica = coberturasPractica;
 	}
 
 	/**
@@ -34,7 +34,7 @@ export default class Plan {
 					return cobertura.nivel;
 
 		if (situacion instanceof Practica)
-			for (const cobertura of this.coberturasPracticas)
+			for (const cobertura of this.coberturasPractica)
 				if (Practica.EsIgual(situacion, cobertura.practica))
 					return cobertura.nivel;
 

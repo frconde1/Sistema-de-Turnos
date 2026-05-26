@@ -1,14 +1,15 @@
-import mongoose from "mongoose";
-import Practica 		from "../domain/Practica.js";
-import { InputError } 	from "../errors/Errors.js";
-import { PracticaModel } from "../schemas/PracticaSchema.js";
+import mongoose 	  from "mongoose";
+import Practica 	  from "../domain/Practica.js";
+import { InputError } from "../errors/Errors.js";
+import PracticaModel  from "../schemas/PracticaSchema.js";
+import PracticaMapper from "../mappers/PracticaMapper.js";
 
 export default class PracticaRepository {
 	constructor() {}
 
 	/** @returns {Practica[]}*/
 	async FindAll() {
-		return (await PracticaModel.find()).map(this.toEntity);
+		return (await PracticaModel.find()).map(PracticaMapper.toEntity);
 	}
 
 	/**
@@ -19,8 +20,8 @@ export default class PracticaRepository {
 		if(!mongoose.Types.ObjectId.isValid(id))
 			return null;
 
-		let practica = await PracticaModel.findById(id);
-		return this.toEntity(practica) 
+		const practica = await PracticaModel.findById(id);
+		return practica != null ? PracticaMapper.toEntity(practica) : null
 	}
 	
 	/** 
@@ -29,29 +30,11 @@ export default class PracticaRepository {
 	*/
 	async Save(practica) {
 		if (practica.id) 
-			await PracticaModel.findByIdAndUpdate(practica.id, this.toSchema(practica), { upsert: true });
+			await PracticaModel.findByIdAndUpdate(practica.id, PracticaMapper.toSchema(practica), { upsert: true });
 		else {
-			const created = await PracticaModel.create(this.toSchema(practica));
+			const created = await PracticaModel.create(PracticaMapper.toSchema(practica));
 			practica.id = created._id.toString();
 		}
-		return practica;
-	}
-
-
-	/**@param {Practica} practica  */
-	toSchema(practica){
-		return {
-			codigo: practica.codigo,
-			nombre: practica.nombre,
-			costo:  practica.costo,
-			duracionEnMins: practica.duracionEnMins
-		}
-	}
-
-	/**@return {Practica}*/
-	toEntity({codigo, nombre, duracionEnMins, costo, _id}){
-		const practica = new Practica(codigo, nombre, duracionEnMins, costo);
-		practica.id = _id.toString();
 		return practica;
 	}
 }

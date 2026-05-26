@@ -1,18 +1,18 @@
 import Plan from "./Plan.js";
 
 export default class ObraSocial { 
-	id; 
+	/**@type {String} */
+	id;
+
 	nombre; 
 	planes; 
 
 	/**
-	 * @param {String} id 
 	 * @param {String} nombre 
 	 * @param {Plan[]} planes
 	 */
-	constructor(id, nombre, planes) {
-		this.id = id; 
+	constructor(nombre, planes) {
 		this.nombre = nombre ;
-		this.planes = [];
+		this.planes = planes;
 	}
 }
