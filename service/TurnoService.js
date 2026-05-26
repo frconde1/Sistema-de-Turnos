@@ -147,7 +147,7 @@ export default class TurnoService {
 	async Update(id, req){
 		ValidarZodSchema(actualizarTurnoSchema, req);
 		
-		if(new Date(req.fechaHora) < new Date())
+		if(new Date(req.fechaHora).getTime() < new Date().getTime())
 			throw new BadRequestError("no se puede cambaiar la fecha del turno para el pasado");
 
 		const {medico, paciente, sede, practica, costo, fechaHora} = req;
@@ -188,9 +188,6 @@ export default class TurnoService {
 
 	async ChangeFecha(id, req){
 		ValidarZodSchema(actualizarFechaSchema, req);
-
-		if(new Date(req.fechaHora) < new Date())
-			throw new BadRequestError("no se puede cambaiar la fecha del turno para el pasado");
 		
 		const turno = await this.FindById(id);
 
@@ -208,6 +205,9 @@ export default class TurnoService {
 	/** @param {Turno} turno */
 	async ValidarTurno(turno){
 		const {medico, practica, fechaHora} = turno;
+
+		if(turno.fechaHora < new Date())
+			throw new BadRequestError("no se puede cambaiar la fecha del turno para el pasado");
 
 		const medicoDisponible = medico.validarDisponibilidad(fechaHora, practica.duracionEnMins)
 		
