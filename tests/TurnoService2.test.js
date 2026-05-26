@@ -9,6 +9,7 @@ import {
 } from "../errors/Errors.js";
 
 import { EstadoTurno } from "../domain/Enums.js";
+import CambioEstadoTurno from "../domain/CambioEstadoTurno.js";
 
 describe("TurnoService", () => {
 
@@ -57,12 +58,17 @@ describe("TurnoService", () => {
             FindById: jest.fn()
         };
 
+        notificacionServiceMock = {
+            Crear: jest.fn()
+        };
+
         service = new TurnoService(
             repositoryMock,
             medicoServiceMock,
             sedeServiceMock,
             practicaServiceMock,
-            usuarioServiceMock
+            usuarioServiceMock,
+            notificacionServiceMock
         );
 
         service.pacienteService = pacienteServiceMock;
@@ -83,9 +89,16 @@ describe("TurnoService", () => {
             id: "pr1",
             duracionEnMins: 30
         },
-
+        medico: {
+            usuario: {
+                id: "u2"
+            }
+        },
         paciente: {
             id: "p1",
+            usuario: {
+                id: "u1"
+            },
             Cobertura: jest.fn()
                 .mockReturnValue("TOTAL")
         },
@@ -167,6 +180,9 @@ describe("TurnoService", () => {
 
             const medico = {
                 id: "m1",
+                usuario: {
+                    id: "u2"
+                },
                 validarDisponibilidad: jest.fn()
                     .mockReturnValue(true)
             };
@@ -208,6 +224,9 @@ describe("TurnoService", () => {
 
             repositoryMock.FindReservadoByMedico
                 .mockResolvedValue([]);
+
+            notificacionServiceMock.Crear
+                .mockResolvedValue()
 
             const result =
                 await service.Create({
@@ -271,15 +290,21 @@ describe("TurnoService", () => {
             const turno =
                 crearTurnoMock();
 
+                
             const usuario = {
                 id: "u1"
             };
-
+                
+            turno.historialEstados.push(new CambioEstadoTurno(new Date(), EstadoTurno.RESERVADO, turno, usuario));
+            
             jest.spyOn(service, "FindById")
                 .mockResolvedValue(turno);
 
             usuarioServiceMock.FindById
                 .mockResolvedValue(usuario);
+
+            notificacionServiceMock.Crear
+                .mockResolvedValue()
 
             const result =
                 await service.UpdateStatus(
