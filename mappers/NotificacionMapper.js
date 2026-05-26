@@ -4,7 +4,7 @@ import UsuarioMapper from "./UsuarioMapper.js"
 
 export default class NotificacionMapper {
 
-	static populate = [{path: "destinatario"}, {path: remitente}];
+	static populate = [{path: "destinatario"}, {path: "remitente"}];
 
 	/**@param {Notificacion} notificacion*/
 	static toSchema({destinatario, remitente, mensaje, fechaHoraCreacion, fechaHoraLeida, leida}){

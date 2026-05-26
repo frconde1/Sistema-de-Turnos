@@ -31,7 +31,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"usuario\": \"6a1551cb6119df241e9dcaae\",\r\n    \"matricula\": \"mat\",\r\n    \"nombre\": \"AASDASDASFAGF\"\r\n}",
+              "raw": "{\r\n    \"usuario\": \"6a158e92420ba2354337aee0\",\r\n    \"matricula\": \"mat\",\r\n    \"nombre\": \"medico 2\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -54,7 +54,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"disponibilidad\": {\r\n        \"diaSemana\" : \"DOMINGO\",\r\n        \"horaDesde\" : \"12:00\",\r\n        \"horaHasta\" : \"13:00\"\r\n    }\r\n}",
+              "raw": "{\r\n    \"disponibilidad\": {\r\n        \"diaSemana\" : \"MIERCOLES\",\r\n        \"horaDesde\" : \"14:00\",\r\n        \"horaHasta\" : \"15:00\"\r\n    }\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -62,12 +62,12 @@
               }
             },
             "url": {
-              "raw": "{{medicos}}/6a1566ab3a7e5831e776fdff/disponibilidades",
+              "raw": "{{medicos}}/6a159d3cceb9a7ac263e0ac7/disponibilidades",
               "host": [
                 "{{medicos}}"
               ],
               "path": [
-                "6a1566ab3a7e5831e776fdff",
+                "6a159d3cceb9a7ac263e0ac7",
                 "disponibilidades"
               ]
             }
@@ -99,7 +99,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"sede\":\r\n        {\r\n            \"id\": \"6a1555bc2149806f372c1dbe\"\r\n        }\r\n}",
+              "raw": "{\r\n    \"sede\":\r\n        {\r\n            \"id\": \"6a159da4ceb9a7ac263e0ac9\"\r\n        }\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -107,12 +107,12 @@
               }
             },
             "url": {
-              "raw": "{{medicos}}/6a1566ab3a7e5831e776fdff/sedes",
+              "raw": "{{medicos}}/6a159d3cceb9a7ac263e0ac7/sedes",
               "host": [
                 "{{medicos}}"
               ],
               "path": [
-                "6a1566ab3a7e5831e776fdff",
+                "6a159d3cceb9a7ac263e0ac7",
                 "sedes"
               ]
             }
@@ -172,7 +172,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"usuario\": \"6a1551cb6119df241e9dcaae\",\r\n    \"dni\": \"123456789\",\r\n    \"nombre\": \"Juan\"\r\n}",
+              "raw": "{\r\n    \"usuario\": \"6a158e87420ba2354337aede\",\r\n    \"dni\": \"321654987\",\r\n    \"nombre\": \"Rodrigo\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -230,6 +230,60 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Asignar Obra Social Paciente",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"obraSocial\": \"6a1591298a55b888aeb6b243\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{pacientes}}/6a1593504882052ba74d8b06/obraSocial",
+              "host": [
+                "{{pacientes}}"
+              ],
+              "path": [
+                "6a1593504882052ba74d8b06",
+                "obraSocial"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Asignar Plan Paciente",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"plan\": \"6a15906b8a55b888aeb6b242\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{pacientes}}/6a1593504882052ba74d8b06/plan",
+              "host": [
+                "{{pacientes}}"
+              ],
+              "path": [
+                "6a1593504882052ba74d8b06",
+                "plan"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },
@@ -274,7 +328,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"nombre\": \"sede\",\r\n    \"direccion\": \"asdasd\"\r\n}",
+              "raw": "{\r\n    \"nombre\": \"sede 2\",\r\n    \"direccion\": \"direccion 2\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -427,7 +481,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"codigo\": \"AJZ\",\r\n    \"nombre\": \"practica 1\",\r\n    \"duracionMins\": 25,\r\n    \"costo\": 970.85\r\n}",
+              "raw": "{\r\n    \"codigo\": \"CDW\",\r\n    \"nombre\": \"practica 5\",\r\n    \"duracionMins\": 15,\r\n    \"costo\": 500\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -529,7 +583,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"nombre\": \"dental\"\r\n}",
+              "raw": "{\r\n    \"nombre\": \"plan\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -596,7 +650,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"especialidad\": \"6a1508703fc9b666386c1795\",\r\n    \"cobertura\": \"TOTAL\"\r\n}",
+              "raw": "{\r\n    \"especialidad\": \"6a15900b8a55b888aeb6b23c\",\r\n    \"cobertura\": \"TOTAL\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -604,12 +658,12 @@
               }
             },
             "url": {
-              "raw": "{{planes}}/6a150d96621206ee268db336/especialidades",
+              "raw": "{{planes}}/6a1590598a55b888aeb6b241/especialidades",
               "host": [
                 "{{planes}}"
               ],
               "path": [
-                "6a150d96621206ee268db336",
+                "6a1590598a55b888aeb6b241",
                 "especialidades"
               ]
             }
@@ -660,7 +714,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"practica\": \"6a1508b81bdd14f0e852dbcf\",\r\n    \"cobertura\": \"PARCIAL\"\r\n}",
+              "raw": "{\r\n    \"practica\": \"6a1590218a55b888aeb6b23e\",\r\n    \"cobertura\": \"TOTAL\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -668,12 +722,12 @@
               }
             },
             "url": {
-              "raw": "{{planes}}/6a1513920ed06d050579abf2/practicas",
+              "raw": "{{planes}}/6a15906b8a55b888aeb6b242/practicas",
               "host": [
                 "{{planes}}"
               ],
               "path": [
-                "6a1513920ed06d050579abf2",
+                "6a15906b8a55b888aeb6b242",
                 "practicas"
               ]
             }
@@ -791,7 +845,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"plan\": \"6a1513920ed06d050579abf2\"\r\n}",
+              "raw": "{\r\n    \"plan\": \"6a1590598a55b888aeb6b241\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -799,12 +853,12 @@
               }
             },
             "url": {
-              "raw": "{{obras sociales}}/6a151cf63f348ff626360678/planes",
+              "raw": "{{obras sociales}}/6a1591298a55b888aeb6b243/planes",
               "host": [
                 "{{obras sociales}}"
               ],
               "path": [
-                "6a151cf63f348ff626360678",
+                "6a1591298a55b888aeb6b243",
                 "planes"
               ]
             }
@@ -923,7 +977,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"medico\":       \"6a1566ab3a7e5831e776fdff\",\r\n    \"sede\":         \"6a1555bc2149806f372c1dbe\",\r\n    \"paciente\":     \"6a155e7fdae2544104d00534\",\r\n    \"practica\":     \"6a1508b81bdd14f0e852dbcf\",\r\n    \"fechaHora\":    \"2026-05-31T12:00:00-03:00\"\r\n}",
+              "raw": "{\r\n    \"medico\":       \"6a159d319a13a28187663ebe\",\r\n    \"sede\":         \"6a159d9dceb9a7ac263e0ac8\",\r\n    \"paciente\":     \"6a1593854882052ba74d8b07\",\r\n    \"practica\":     \"6a15900b8a55b888aeb6b23c\",\r\n    \"fechaHora\":    \"2026-05-31T12:40:00-03:00\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1025,7 +1079,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"username\": \"usuario 1\",\r\n    \"password\": \"contraseña\"\r\n}",
+              "raw": "{\r\n    \"username\": \"usuario 6\",\r\n    \"password\": \"contraseña\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1062,6 +1116,97 @@
               ],
               "path": [
                 "6a1551cb6119df241e9dcaae"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Notificaciones",
+      "item": [
+        {
+          "name": "Find All notificiones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{notificaciones}}",
+              "host": [
+                "{{notificaciones}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Notificaciones By Remitente Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{notificaciones}}/6a158e87420ba2354337aede",
+              "host": [
+                "{{notificaciones}}"
+              ],
+              "path": [
+                "6a158e87420ba2354337aede"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Notificacion Leida By Destinatario Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{notificaciones}}/6a158e8c420ba2354337aedf/leidas",
+              "host": [
+                "{{notificaciones}}"
+              ],
+              "path": [
+                "6a158e8c420ba2354337aedf",
+                "leidas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Notificacion No Leida By Destinatario Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{notificaciones}}/6a158e8c420ba2354337aedf/noLeidas",
+              "host": [
+                "{{notificaciones}}"
+              ],
+              "path": [
+                "6a158e8c420ba2354337aedf",
+                "noLeidas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Leer Notificacion",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{notificaciones}}/6a158e8c420ba2354337aedf/noLeidas/6a15d1040a574410645937a0",
+              "host": [
+                "{{notificaciones}}"
+              ],
+              "path": [
+                "6a158e8c420ba2354337aedf",
+                "noLeidas",
+                "6a15d1040a574410645937a0"
               ]
             }
           },
@@ -1156,6 +1301,10 @@
     },
     {
       "key": "usuarios",
+      "value": ""
+    },
+    {
+      "key": "notificaciones",
       "value": ""
     }
   ]

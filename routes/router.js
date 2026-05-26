@@ -10,6 +10,7 @@ import especialidadRouter 	from "./especialidadRouter.js"
 import planRouter 			from "./planRouter.js"
 import obrasocialRouter 	from "./obrasocialRouter.js"
 import usuarioRouter 		from "./usuarioRouter.js"
+import notificacionRouter 	from "./notificacionRouter.js"
 
 
 const router = express.Router();
@@ -27,6 +28,6 @@ router.use("/especialidades",	especialidadRouter)
 router.use("/planes",			planRouter)
 router.use("/obrasSociales",	obrasocialRouter)
 router.use('/usuarios', 		usuarioRouter);
-
+router.use('/notificaciones',	notificacionRouter)
 
 export default router;

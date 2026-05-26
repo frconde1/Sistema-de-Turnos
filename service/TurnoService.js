@@ -131,9 +131,11 @@ export default class TurnoService {
 		);
 		
 		await this.ValidarTurno(turno);
-
 		await this.repository.Save(turno);
+
 		turno.CambiarEstado(EstadoTurno.CONFIRMADO, paciente.usuario, "creacion del turno");
+		await this.notificadorService.Crear(FactoryNotificacion.crearSegunEstadoTurno(turno))
+
 		await this.repository.Save(turno);
 		return new TurnoDTO(turno);
 	}
@@ -179,8 +181,7 @@ export default class TurnoService {
 		const usuario = await this.usuarioService.FindById(req.usuario);
 
 		turno.CambiarEstado(req.estado, usuario, req.motivo);
-
-
+		await this.notificadorService.Crear(FactoryNotificacion.crearSegunEstadoTurno(turno))
 		await this.repository.Save(turno);
 		return new TurnoDTO(turno)
 	}
@@ -194,7 +195,12 @@ export default class TurnoService {
 		const turno = await this.FindById(id);
 
 		turno.fechaHora = new Date(req.fechaHora);
+		
 		await this.ValidarTurno(turno);
+		
+		turno.CambiarEstado(EstadoTurno.RESERVADO, turno.paciente.usuario, "modificacion de la fecha del turno");
+		await this.notificadorService.Crear(FactoryNotificacion.crearSegunEstadoTurno(turno))
+		
 		await this.repository.Save(turno);
 		return turno
 	}
@@ -235,7 +241,7 @@ export default class TurnoService {
 			cantidadPags = Math.ceil(turnos.totalTurnos / 20)
 
 			turnos.turnos.forEach(t => 
-				await this.notificadorService.Crear(
+				this.notificadorService.Crear(
 					FactoryNotificacion.crearSegunEstadoTurno(t)
 				)
 			);

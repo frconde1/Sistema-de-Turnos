@@ -33,6 +33,8 @@ export default class FactoryNotificacion{
 			case EstadoTurno.RESERVADO:  return JSON.stringify({paciente: turno.paciente, servicio: turno.practica});
 			case EstadoTurno.CONFIRMADO: return "Se confirmo la reserva del turno:\n" + JSON.stringify(new TurnoDTO(Turno));
 			case EstadoTurno.CANCELADO:  return "Se cancelo la reserva del turno:\n" + JSON.stringify(new TurnoDTO(Turno));
+			case EstadoTurno.REALIZADO:  return "Se realizó exitosamente el turno";
+			default: 					 return turno.historialEstados.at(-1).motivo
 		}
 	}
 } 

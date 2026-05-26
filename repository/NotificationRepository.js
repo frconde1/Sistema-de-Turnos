@@ -34,16 +34,28 @@ export default class NotificationRepository {
 		return notifiacion;
     }
 
-	async FindAllById(id){
-		return (await NotificacionModel
-			.find({remitente: id})
+	async FindAllByRemitenteId(id, {leida = undefined} = {}){
+		if(leida == undefined)
+			return (await NotificacionModel
+				.find({remitente: id})
+				.populate(NotificacionMapper.populate))
+				.map(NotificacionMapper.toEntity);
+
+		return  (await NotificacionModel
+			.find({remitente: id, leida: leida})
 			.populate(NotificacionMapper.populate))
 			.map(NotificacionMapper.toEntity);
 	}
 
-	async FindAllById(id, {leida}){
-		return (await NotificacionModel
-			.find({remitente: id, leida: leida})
+	async FindAllByDestinatarioId(id, {leida = undefined} = {}){
+		if(leida == undefined)
+			return (await NotificacionModel
+				.find({destinatario: id})
+				.populate(NotificacionMapper.populate))
+				.map(NotificacionMapper.toEntity);
+
+		return  (await NotificacionModel
+			.find({destinatario: id, leida: leida})
 			.populate(NotificacionMapper.populate))
 			.map(NotificacionMapper.toEntity);
 	}
