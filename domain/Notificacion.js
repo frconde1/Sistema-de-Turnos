@@ -1,16 +1,17 @@
-import Usuario from "./Usuario";
+import Usuario from "./Usuario.js";
 
 export default class Notificacion {
+	/**@type {String} */
 	id; 
 	destinatario; 
 	remitente; 
 	mensaje; 
-	fechaHoraCreacion; 
+	fechaHoraCreacion;
+	/**@type {Date | null} */
 	fechaHoraLeida; 
 	leida; 
 
 	/**
-	 * @param {String} id 
 	 * @param {Usuario} destinatario 
 	 * @param {Usuario} remitente 
 	 * @param {String} mensaje 
@@ -18,14 +19,13 @@ export default class Notificacion {
 	 * @param {Date} fechaHoraLeida 
 	 * @param {Boolean} leida
 	 */
-	constructor(id, destinatario, remitente, mensaje, fechaHoraCreacion, fechaHoraLeida, leida) {
-		this.id = id; 
+	constructor(destinatario, remitente, mensaje, fechaHoraCreacion) {
 		this.destinatario = destinatario; 
 		this.remitente = remitente;
 		this.mensaje = mensaje;
 		this.fechaHoraCreacion = fechaHoraCreacion;
-		this.fechaHoraLeida = fechaHoraLeida; 
-		this.leida = leida;
+		this.fechaHoraLeida = null;
+		this.leida = false;
 	}
 
 	marcarComoLeida() {

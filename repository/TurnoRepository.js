@@ -7,7 +7,6 @@ import { EstadoTurno } from "../domain/Enums.js";
 export default class TurnoRepository {
 	constructor() {}
 
-	/** @returns {Turno[]}*/
 	async FindAll(filtros) {
 		
 		const {pagina = 1, tamano = 10, medico, paciente, sede, practica, estado, ordenCosto, ordenFecha, fechaInicio, fechaFin} = filtros;
