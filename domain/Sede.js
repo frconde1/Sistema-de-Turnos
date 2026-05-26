@@ -1,15 +1,14 @@
 export default class Sede {
+	/**@type {String} */
 	id; 
 	nombre;
 	direccion;
 
 	/**
-	 * @param {String} id 
 	 * @param {String} nombre 
 	 * @param {String} direccion 
 	 */
-	constructor(id, nombre, direccion) {
-		this.id = id; 
+	constructor(nombre, direccion) {
 		this.nombre = nombre;
 		this.direccion = direccion;
 	}

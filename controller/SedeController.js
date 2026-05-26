@@ -1,28 +1,24 @@
 import SedeService from "../service/SedeService.js";
 
-
-/*
-const crearSedeSchema = (entity) => validar(
-	z.object({
-    	nombre:    string("nombre"),
-    	direccion: string("direccion")
-	}),
-	entity
-)
-*/
-
 export class SedeController {
 
     constructor(sedeService = new SedeService()){
-        this.sedeService = sedeService;
+        this.service = sedeService;
     }
 
-    create = async (req, res) => {
-        var respuesta = await this.sedeService.create(req.body)
-        return res.status(201).json({ status: "success", data: respuesta})
+    async FindAll(req, res) {
+        return res.json(await this.service.FindAll());
     }
-    
-    findAll = async (req, res) => {
-        res.json(await this.sedeService.findAll())
+
+    async FindById(req, res) {
+        return res.json(await this.service.FindById(req.params.id));
+    }
+
+    async Create(req, res) {
+        return res.status(201).json(await this.service.Create(req.body));
+    }
+
+    async Update(req, res) {
+        return res.status(201).json(await this.service.Update(req.params.id, req.body));
     }
 }

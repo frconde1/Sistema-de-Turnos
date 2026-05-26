@@ -12,6 +12,6 @@ const SedeSchema = new mongoose.Schema({
     }
 });
 
-SedeSchema.loadClass(Sede);
 
-export const SedeModel = mongoose.model('Sede', SedeSchema);
+const SedeModel = mongoose.model('Sede', SedeSchema);
+export default SedeModel;

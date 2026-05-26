@@ -1,35 +1,30 @@
+import mongoose from "mongoose";
 import Sede from "../domain/Sede.js";
-import { SedeModel } from "../schemas/SedeSchema.js";
+import SedeMapper from "../mappers/SedeMapper.js";
+import SedeModel from "../schemas/SedeSchema.js";
 
 export class SedeRepository {
-    sedes;
+    constructor() {}
 
-    constructor() {
-		if(SedeRepository.instance)
-			return SedeRepository.instance;
-
-        this.sedes = []
-
-		SedeRepository.instance = this;
+    async Save(sede) {
+		if (sede.id) 
+			await SedeModel.findByIdAndUpdate(sede.id, SedeMapper.toSchema(sede), { upsert: true });
+		else {
+			const created = await SedeModel.create(SedeMapper.toSchema(sede));
+			sede.id = created._id.toString();
+		}
+		return sede;
     }
 
-    async create(sede) {
-        // const sedeModel = new SedeModel(sede);
-        await SedeModel.create({
-            nombre: sede.nombre,
-            direccion: sede.direccion
-        });
-        // this.sedes.push(sede)
-        return sede;
+    async FindAll() {
+        return (await SedeModel.find()).map(SedeMapper.toEntity);
     }
 
-    async findAll() {
-        // return this.sedes;
-        return await SedeModel.find();
-    }
+    async FindById(id) {
+        if(!mongoose.Types.ObjectId.isValid(id))
+			return null;
 
-    async findById(id) {
-        // return this.sedes.find(e => e.id == id)
-        return await SedeModel.findById(id);
+		const sede = await SedeModel.findById(id);
+		return sede != null ? SedeMapper.toEntity(sede) : null
     }
 }
