@@ -58,7 +58,7 @@ export default class EspecialidadService {
 
 		especialidad.nombre   		= nombre;
 		especialidad.duracionEnMins = duracionMins;
-		especialidad.costoConsulta  = costoConsulta;
+		especialidad.costo  = costoConsulta;
 
 		await this.repository.Save(especialidad);
 		return especialidad;

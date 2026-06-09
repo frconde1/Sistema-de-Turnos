@@ -80,7 +80,7 @@ export default class PacienteService {
         paciente.nombre = reqBody.nombre;
         paciente.dni    = reqBody.dni;
         
-        this.repository.Save(paciente);
+        await this.repository.Save(paciente);
         return paciente;
     }
 
@@ -97,6 +97,7 @@ export default class PacienteService {
         paciente.obraSocial = req.obraSocial ? await this.obraSocialService.FindById(req.obraSocial) : null
 
         await this.repository.Save(paciente);
+        return paciente;
     }
     async UpdatePlan(id, req){
         ValidarZodSchema(actualizarPlanSchema, req);

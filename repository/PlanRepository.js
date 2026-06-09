@@ -1,12 +1,8 @@
 import mongoose from "mongoose";
-import CoberturaEspecialidad from "../domain/CoberturaEspecialidad.js";
-import Especialidad from "../domain/Especialidad.js";
-import Plan from "../domain/Plan.js";
-import Practica from "../domain/Practica.js";
 import PlanModel from "../schemas/PlanSchema.js";
 import PlanMapper from "../mappers/PlanMapper.js";
 
-export default class PLanRepository {
+export default class PlanRepository {
 	constructor(){}
 
 	async FindAll(){

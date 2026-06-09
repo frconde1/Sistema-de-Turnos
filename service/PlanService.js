@@ -1,8 +1,7 @@
 import z from "zod";
 import CoberturaEspecialidad from "../domain/CoberturaEspecialidad.js";
 import CoberturaPractica from "../domain/CoberturaPractica.js";
-import ObraSocial from "../domain/ObraSocial.js";
-import ObraSocialRepository from "../repository/PlanRepository.js";
+import PlanRepository from "../repository/PlanRepository.js";
 import { idSchema, stringSchema, ValidarZodSchema } from "./zodSchemas.js";
 import Plan from "../domain/Plan.js";
 import { BadRequestError, ResurceNotFoundError } from "../errors/Errors.js";
@@ -32,11 +31,11 @@ const agregarPracticaSchema = z.object({
 
 export default class PlanService{
 	constructor(
-		obraSocialRepository = new ObraSocialRepository(),
+		planRepository = new PlanRepository(),
 		especialidadService = new EspecialidadService(),
 		practicaService = new PracticaService()
 	) {
-		this.repository = obraSocialRepository;
+		this.repository = planRepository;
 		this.especialidadService = especialidadService;
 		this.practicaService = practicaService;
 	}
@@ -88,7 +87,7 @@ export default class PlanService{
 
 		plan.coberturasEspecialidad.push(
 			new CoberturaEspecialidad(
-				especialdiad,
+				especialidad,
 				req.cobertura
 			)
 		);
@@ -130,7 +129,7 @@ export default class PlanService{
 	
 	async RemovePractica(id, idPra) {
 		const plan = await this.FindById(id);
-		plan.coberturasPracticas = plan.coberturasPracticas.filter(c => c.practica.id != idPra);
+		plan.coberturasPractica = plan.coberturasPractica.filter(c => c.practica.id != idPra);
 		await this.repository.Save(plan);
 		return plan;
 	}

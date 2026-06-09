@@ -1,6 +1,6 @@
 import NotificationService from "../service/NotificacionService.js";
 
-export default class ObraSocialController {
+export default class NotificacionController {
 	constructor(obraSocialService = new NotificationService()){
 		this.service = obraSocialService;
 	}

@@ -56,8 +56,8 @@ export default class PracticaService {
 
 		practica.codigo	= codigo
 		practica.nombre = nombre;
-		practica.costoConsulta  = costoConsulta;
-		practica.duracionTurnoEnMins = duracionMins;
+		practica.costo  = costoConsulta;
+		practica.duracionEnMins = duracionMins;
 
 		await this.repository.Save(practica);
 		return practica;

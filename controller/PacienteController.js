@@ -24,23 +24,23 @@ export default class PacienteController {
 
     async Update(req, res) {
         const paciente = await this.pacienteService.Update(req.params.id, req.body)
-        return res.status(201).json(paciente)
+        return res.status(200).json(paciente)
     }
 
     async FindTurnosById(req, res){
         const turnos = await this.pacienteService.FindTurnosById(req.params.id)
-        return res.status(201).json(turnos)
+        return res.status(200).json(turnos)
     }
 
 
     async UpdateObraSocial(req, res){
         const paciente = await this.pacienteService.UpdateObraSocial(req.params.id, req.body)
-        return res.status(201).json(paciente)
+        return res.status(200).json(paciente)
     }
 
     async UpdateObraPlan(req, res){
         const paciente = await this.pacienteService.UpdatePlan(req.params.id, req.body)
-        return res.status(201).json(paciente)
+        return res.status(200).json(paciente)
     }
 
 }

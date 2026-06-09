@@ -41,7 +41,7 @@ export default class SedeService {
         sede.nombre    = req.nombre;
         sede.direccion = req.direccion;
 
-        this.repository.Save(sede)
+        await  this.repository.Save(sede)
         return sede;
     }
 
