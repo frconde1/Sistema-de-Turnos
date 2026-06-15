@@ -15,6 +15,7 @@ export const idSchema = (name = "") =>
 			`el dato ${name} debe ser un ID de tipo string`
 		})
 	.nonempty({message: `el dato ${name} no puede ser un ID vacío`})
+	.regex(/^[0-9a-fA-F]{24}$/, {message: `el dato ${name} debe ser un ID valido`})
 
 
 export const stringSchema = (name = "") => 
