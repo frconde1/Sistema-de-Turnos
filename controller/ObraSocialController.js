@@ -11,8 +11,13 @@ export default class ObraSocialController {
 	 * @param {import('express').Response} res 
 	 * @returns {import('express').Response}
 	 */
-	async FindAll(req, res) {
-		return res.json(await this.service.FindAll());
+	async FindAll(req, res, next) {
+		try {
+			let obrasSociales = await this.service.FindAll();
+			return res.status(200).json(obrasSociales)
+		} catch (error) {
+			next(error)
+		}
 	}
 
 	/**
@@ -20,8 +25,13 @@ export default class ObraSocialController {
 	 * @param {import('express').Response} res 
 	 * @returns {import('express').Response}
 	 */
-	async FindById(req, res) {
-		return res.json(await this.service.FindById(req.params.id));
+	async FindById(req, res, next) {
+		try {
+			let obraSocial = await this.service.FindById(req.params.id);
+			return res.status(200).json(obraSocial)
+		} catch (error) {
+			next(error)
+		}
 	}
 
 	/**
@@ -29,8 +39,13 @@ export default class ObraSocialController {
 	 * @param {import('express').Response} res 
 	 * @returns {import('express').Response}
 	 */
-	async Create(req, res) {
-		return res.json(await this.service.Create(req.body));
+	async Create(req, res, next) {
+		try {
+			let obraSocial = await this.service.Create(req.body);
+			return res.status(201).json(obraSocial)
+		} catch (error) {
+			next(error)
+		}
 	}
 
 	/**
@@ -38,8 +53,13 @@ export default class ObraSocialController {
 	 * @param {import('express').Response} res 
 	 * @returns {import('express').Response}
 	 */
-	async Update(req, res) {
-		return res.json(await this.service.Update(req.params.id, req.body));
+	async Update(req, res, next) {
+		try {
+			let obraSocial = await this.service.Update(req.params.id, req.body);
+			return res.status(200).json(obraSocial)
+		} catch (error) {
+			next(error)
+		}
 	}
 
 	/**
@@ -47,8 +67,12 @@ export default class ObraSocialController {
 	 * @param {import('express').Response} res 
 	 * @returns {import('express').Response}
 	 */
-	async AgregarPlan(req, res) {
-		return res.json(await this.service.AgregarPlan(req.params.id, req.body));
+	async AgregarPlan(req, res, next) {
+		try {
+			return res.json(await this.service.AgregarPlan(req.params.id, req.body));
+		} catch (error) {
+			next(error)
+		}
 	}
 
 	/**
@@ -56,8 +80,12 @@ export default class ObraSocialController {
 	 * @param {import('express').Response} res 
 	 * @returns {import('express').Response}
 	 */
-	async EliminarPlan(req, res) {
-		return res.json(await this.service.EliminarPlan(req.params.id, req.params.idPlan));
+	async EliminarPlan(req, res, next) {
+		try {
+			return res.json(await this.service.EliminarPlan(req.params.id, req.params.idPlan));
+		} catch (error) {
+			next(error)
+		}
 	}
 
 	/**
@@ -65,8 +93,12 @@ export default class ObraSocialController {
 	 * @param {import('express').Response} res 
 	 * @returns {import('express').Response}
 	 */
-	async FindAllPlanes(req, res) {
-		return res.json(await this.service.FindAllPlanes(req.params.id));
+	async FindAllPlanes(req, res, next) {
+		try {
+			return res.json(await this.service.FindAllPlanes(req.params.id));
+		} catch (error) {
+			next(error)
+		}
 	}
 
 }

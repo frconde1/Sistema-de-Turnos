@@ -7,40 +7,68 @@ export default class PacienteController {
     }
 
 
-    async FindAll(req, res) {
-        const resultado = await this.pacienteService.FindAll();
-        return res.status(200).json(resultado);
+    async FindAll(req, res, next) {
+        try {
+            const resultado = await this.pacienteService.FindAll();
+            return res.status(200).json(resultado);
+        } catch (error) {
+            next(error);
+        }
     }
 
-    async FindById(req, res) {
-        const resultado = await this.pacienteService.FindById(req.params.id);
-        return res.status(200).json(resultado);
+    async FindById(req, res, next) {
+        try {
+            const resultado = await this.pacienteService.FindById(req.params.id);
+            return res.status(200).json(resultado);
+        } catch (error) {
+            next(error);
+        }
     }
 
-    async Create(req, res) {
-        const paciente = await this.pacienteService.Create(req.body)
-        return res.status(201).json(paciente)
+    async Create(req, res, next) {
+        try {
+            const paciente = await this.pacienteService.Create(req.body);
+            return res.status(201).json(paciente);
+        } catch (error) {
+            next(error);
+        }
     }
 
-    async Update(req, res) {
-        const paciente = await this.pacienteService.Update(req.params.id, req.body)
-        return res.status(200).json(paciente)
+    async Update(req, res, next) {
+        try {
+            const paciente = await this.pacienteService.Update(req.params.id, req.body);
+            return res.status(200).json(paciente);
+        } catch (error) {
+            next(error);
+        }
     }
 
-    async FindTurnosById(req, res){
-        const turnos = await this.pacienteService.FindTurnosById(req.params.id)
-        return res.status(200).json(turnos)
+    async FindTurnosById(req, res, next){
+        try {
+            const turnos = await this.pacienteService.FindTurnosById(req.params.id);
+            return res.status(200).json(turnos);
+        } catch (error) {
+            next(error);
+        }
     }
 
 
-    async UpdateObraSocial(req, res){
-        const paciente = await this.pacienteService.UpdateObraSocial(req.params.id, req.body)
-        return res.status(200).json(paciente)
+    async UpdateObraSocial(req, res, next){
+        try {
+            const paciente = await this.pacienteService.UpdateObraSocial(req.params.id, req.body);
+            return res.status(200).json(paciente);
+        } catch (error) {
+            next(error);
+        }
     }
 
-    async UpdateObraPlan(req, res){
-        const paciente = await this.pacienteService.UpdatePlan(req.params.id, req.body)
-        return res.status(200).json(paciente)
+    async UpdateObraPlan(req, res, next){
+        try {
+            const paciente = await this.pacienteService.UpdatePlan(req.params.id, req.body);
+            return res.status(200).json(paciente);
+        } catch (error) {
+            next(error);
+        }
     }
 
 }

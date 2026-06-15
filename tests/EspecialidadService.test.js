@@ -4,7 +4,7 @@ import EspecialidadService from "../service/EspecialidadService.js";
 
 import {
     InputError,
-    ResurceNotFoundError
+    ResourceNotFoundError
 } from "../errors/Errors.js";
 
 describe("EspecialidadService", () => {
@@ -60,14 +60,14 @@ describe("EspecialidadService", () => {
                 .toEqual(especialidad);
         });
 
-        it("deberia lanzar ResurceNotFoundError", async () => {
+        it("deberia lanzar ResourceNotFoundError", async () => {
 
             repositoryMock.FindById
                 .mockResolvedValue(null);
 
             await expect(
                 service.FindById("404")
-            ).rejects.toThrow(ResurceNotFoundError);
+            ).rejects.toThrow(ResourceNotFoundError);
         });
     });
 
@@ -80,8 +80,8 @@ describe("EspecialidadService", () => {
 
             const result = await service.Create({
                 nombre: "Cardiologia",
-                costoConsulta: 1000,
-                duracionMins: 30
+                costo: 1000,
+                duracionEnMins: 30
             });
 
             expect(repositoryMock.Save)
@@ -107,7 +107,7 @@ describe("EspecialidadService", () => {
                 id: "1",
                 nombre: "Vieja",
                 duracionEnMins: 20,
-                costoConsulta: 500
+                costo: 500
             };
 
             jest.spyOn(service, "FindById")
@@ -117,8 +117,8 @@ describe("EspecialidadService", () => {
                 "1",
                 {
                     nombre: "Nueva",
-                    duracionMins: 40,
-                    costoConsulta: 2000
+                    duracionEnMins: 40,
+                    costo: 2000
                 }
             );
 
@@ -128,7 +128,7 @@ describe("EspecialidadService", () => {
             expect(especialidad.duracionEnMins)
                 .toBe(40);
 
-            expect(especialidad.costoConsulta)
+            expect(especialidad.costo)
                 .toBe(2000);
 
             expect(repositoryMock.Save)

@@ -65,7 +65,12 @@ export default class MedicoService {
      * @returns {Medico}
      */
     async FindById(id){
-        return await this.medicosRepository.findMedicoById(id)
+        const medico = await this.medicosRepository.findMedicoById(id)
+        if (!medico) {
+            throw new InputError("El médico no existe")
+        }
+        return medico
+
     }
 
     async findAll({ numeroPagina = 1, limitePorPagina = 10, filtros = {} } = {}) {

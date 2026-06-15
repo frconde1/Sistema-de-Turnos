@@ -1,6 +1,6 @@
 import z from "zod";
 import Sede from "../domain/Sede.js";
-import { InputError, ResurceNotFoundError } from "../errors/Errors.js";
+import { InputError, ResourceNotFoundError } from "../errors/Errors.js";
 import { SedeRepository } from "../repository/SedeRepository.js";
 import { stringSchema, ValidarZodSchema } from "./zodSchemas.js";
 
@@ -22,7 +22,7 @@ export default class SedeService {
     async FindById(id) {
         const sede = await this.repository.FindById(id); 
 		if(sede == null)
-			throw new ResurceNotFoundError("La sede buscada no existe");
+			throw new ResourceNotFoundError("La sede buscada no existe");
 		return sede;
     }
 

@@ -4,7 +4,7 @@ import PacienteService from "../service/PacienteService.js";
 
 import {
     InputError,
-    ResurceNotFoundError
+    ResourceNotFoundError
 } from "../errors/Errors.js";
 
 describe("PacienteService", () => {
@@ -88,14 +88,14 @@ describe("PacienteService", () => {
                 .toEqual(paciente);
         });
 
-        it("deberia lanzar ResurceNotFoundError", async () => {
+        it("deberia lanzar ResourceNotFoundError", async () => {
 
             repositoryMock.FindById
                 .mockResolvedValue(null);
 
             await expect(
                 service.FindById("404")
-            ).rejects.toThrow(ResurceNotFoundError);
+            ).rejects.toThrow(ResourceNotFoundError);
         });
     });
 

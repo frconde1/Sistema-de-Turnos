@@ -1,20 +1,20 @@
 import z from "zod";
 import Practica 			from "../domain/Practica.js";
-import { InputError, ResurceNotFoundError } 		from "../errors/Errors.js";
+import { InputError, ResourceNotFoundError } 		from "../errors/Errors.js";
 import PracticaRepository 	from "../repository/PracticaRepository.js";
 import { intergerSchema, numberSchema, stringSchema, ValidarZodSchema } from "./zodSchemas.js";
 
 
 const crearPracticaSchema = z.object({
 	nombre: stringSchema("nombre"),
-	costoConsulta: 	numberSchema("costoConsulta").nonnegative("el costo debe ser mayor a 0"),
-	duracionMins: intergerSchema("duracionMins").nonnegative("la duracionMins debe ser mayor a 0")
+	costo: 	numberSchema("costo").nonnegative("el costo debe ser mayor a 0"),
+	duracionEnMins: intergerSchema("duracionEnMins").nonnegative("la duracionEnMins debe ser mayor a 0")
 });
 
 const actualizarPracticaSchema = z.object({
 	nombre: stringSchema("nombre"),
-	costoConsulta: 	numberSchema("costoConsulta").nonnegative("el costo debe ser mayor a 0"),
-	duracionMins: intergerSchema("duracionMins").nonnegative("la duracionMins debe ser mayor a 0")
+	costo: 	numberSchema("costo").nonnegative("el costo debe ser mayor a 0"),
+	duracionEnMins: intergerSchema("duracionEnMins").nonnegative("la duracionEnMins debe ser mayor a 0")
 });
 
 
@@ -33,7 +33,7 @@ export default class PracticaService {
 	async FindById(id) {
 		const practica = await this.repository.FindById(id); 
 		if(practica == null)
-			throw new ResurceNotFoundError("La practica buscada no existe");
+			throw new ResourceNotFoundError("La practica buscada no existe");
 		return practica;
 	}
 
@@ -52,12 +52,12 @@ export default class PracticaService {
 		
 		const practica = await this.FindById(id);
 
-		const {codigo, duracionMins, nombre, costoConsulta} = request;
+		const {codigo, duracionEnMins, nombre, costo} = request;
 
 		practica.codigo	= codigo
 		practica.nombre = nombre;
-		practica.costo  = costoConsulta;
-		practica.duracionEnMins = duracionMins;
+		practica.costo  = costo;
+		practica.duracionEnMins = duracionEnMins;
 
 		await this.repository.Save(practica);
 		return practica;
@@ -66,7 +66,7 @@ export default class PracticaService {
 
 	/** @returns {Practica} */
 	CreatePractica(reqBody){
-		const {codigo, nombre, duracionMins, costoConsulta} = reqBody;
-		return new Practica(codigo, nombre, duracionMins, costoConsulta);
+		const {codigo, nombre, duracionEnMins, costo} = reqBody;
+		return new Practica(codigo, nombre, duracionEnMins, costo);
 	}
 }

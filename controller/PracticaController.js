@@ -11,9 +11,13 @@ export default class PracticaController {
 	 * @param {import('express').Response} res 
 	 * @returns {import('express').Response}
 	 */
-	async Create(req, res) {
-		let practica = await this.service.Create(req.body);
-		return res.status(200).json(practica)
+	async Create(req, res, next) {
+		try {
+			let practica = await this.service.Create(req.body);
+			return res.status(200).json(practica)
+		} catch (error) {
+			next(error);
+		}
 	}
 
 	/**
@@ -21,9 +25,13 @@ export default class PracticaController {
 	 * @param {import('express').Response} res 
 	 * @returns {import('express').Response}
 	 */
-	async FindAll(req, res) {
-		let practicas = await this.service.FindAll();
-		return res.status(200).json(practicas)
+	async FindAll(req, res, next) {
+		try {
+			let practicas = await this.service.FindAll();
+			return res.status(200).json(practicas)
+		} catch (error) {
+			next(error);
+		}
 	}
 
 	/**
@@ -31,9 +39,13 @@ export default class PracticaController {
 	 * @param {import('express').Response} res 
 	 * @returns {import('express').Response}
 	 */
-	async FindById(req, res) {
-		let practica = await this.service.FindById(req.params.id);
-		return res.status(200).json(practica)
+	async FindById(req, res, next) {
+		try {
+			let practica = await this.service.FindById(req.params.id);
+			return res.status(200).json(practica)
+		} catch (error) {
+			next(error);
+		}
 	}
 
 	/**
@@ -41,9 +53,13 @@ export default class PracticaController {
 	 * @param {import('express').Response} res 
 	 * @returns {import('express').Response}
 	 */
-	async Update(req, res) {
-		let practica = await this.service.Update(req.params.id, req.body);
-		return res.status(200).json(practica)
+	async Update(req, res, next) {
+		try {
+			let practica = await this.service.Update(req.params.id, req.body);
+			return res.status(200).json(practica)
+		} catch (error) {
+			next(error);
+		}
 	}
 
 	/**
@@ -51,7 +67,12 @@ export default class PracticaController {
 	 * @param {import('express').Response} res 
 	 * @returns {import('express').Response}
 	 */
-	async Delete(req, res) {
-		await this.service.Delete(req.params.id);
+	async Delete(req, res, next) {
+		try {
+			await this.service.Delete(req.params.id);
+			return res.status(200).json({ message: "Practica eliminada" });
+		} catch (error) {
+			next(error);
+		}
 	}
 }

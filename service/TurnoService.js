@@ -15,7 +15,7 @@ import PracticaService	from "./PracticaService.js"
 import Turno from "../domain/Turno.js";
 import CambioEstadoTurno from "../domain/CambioEstadoTurno.js";
 import Medico from "../domain/Medico.js";
-import { BadRequestError, InputError, ResurceNotFoundError } from "../errors/Errors.js";
+import { BadRequestError, InputError, ResourceNotFoundError } from "../errors/Errors.js";
 import UsuarioService from "./UsuarioService.js";
 import PacienteRepository from "../repository/PacienteRepository.js";
 import NotificationService from "./NotificacionService.js";
@@ -109,7 +109,7 @@ export default class TurnoService {
 	async FindById(id){
 		const turno = await this.repository.FindById(id);
 		if(turno == null)
-			throw new ResurceNotFoundError("EL turno buscado no existe");
+			throw new ResourceNotFoundError("EL turno buscado no existe");
 		return turno;
 	}
 
@@ -154,14 +154,13 @@ export default class TurnoService {
 		
 		const turno = await this.FindById(id)
 
-		turno.medico 	= this.medicoService(medico);
-		turno.paciente 	= this.pacienteService(paciente);
-		turno.sede 		= this.sedeService(sede);
-		turno.practica 	= this.practicaService(practica);
+		turno.medico 	= await this.medicoService.FindById(medico);
+		turno.paciente 	= await this.pacienteService.FindById(paciente);
+		turno.sede 		= await this.sedeService.FindById(sede);
+		turno.practica 	= await this.practicaService.FindById(practica);
 		turno.costo		= costo;
-		turno.fechaHora	= fechaHora;
+		turno.fechaHora	= new Date(fechaHora);
 
-		
 
 		await this.repository.Save(turno);
 		return new TurnoDTO(turno);

@@ -1,20 +1,20 @@
 import z from "zod";
 import Especialidad from "../domain/Especialidad.js";
-import { InputError, ResurceNotFoundError } from "../errors/Errors.js";
+import { InputError, ResourceNotFoundError } from "../errors/Errors.js";
 import EspecialidadRepository from "../repository/EspecialidadRepository.js";
 import { intergerSchema, numberSchema, stringSchema, ValidarZodSchema } from "./zodSchemas.js";
 
 
 const crearEspecialidadSchema = z.object({
 	nombre: stringSchema("nombre"),
-	costoConsulta: 	numberSchema("costoConsulta").nonnegative("el costo debe ser mayor a 0"),
-	duracionMins: intergerSchema("duracionMins").nonnegative("la duracionMins debe ser mayor a 0")
+	costo: 	numberSchema("costo").nonnegative("el costo debe ser mayor a 0"),
+	duracionEnMins: intergerSchema("duracionEnMins").nonnegative("la duracionEnMins debe ser mayor a 0")
 });
 
 const actualizarEspecialidadSchema = z.object({
 	nombre: stringSchema("nombre"),
-	costoConsulta:  numberSchema("costoConsulta").nonnegative("el costo debe ser mayor a 0"),
-	duracionMins: intergerSchema("duracionMins").nonnegative("la duracionMins debe ser mayor a 0")
+	costo:  numberSchema("costo").nonnegative("el costo debe ser mayor a 0"),
+	duracionEnMins: intergerSchema("duracionEnMins").nonnegative("la duracionEnMins debe ser mayor a 0")
 });
 
 export default class EspecialidadService {
@@ -27,12 +27,12 @@ export default class EspecialidadService {
 	async Create(request){
 		ValidarZodSchema(crearEspecialidadSchema, request);
 
-		const {duracionMins, nombre, costoConsulta} = request;
+		const {duracionEnMins, nombre, costo} = request;
 
 		let especialidad = new Especialidad(
 			nombre,
-			duracionMins,
-			costoConsulta
+			duracionEnMins,
+			costo
 		);
 		await this.repository.Save(especialidad);
 		return especialidad;
@@ -45,7 +45,7 @@ export default class EspecialidadService {
 	async FindById(id){
 		const especialidad = await this.repository.FindById(id);
 		if(especialidad == null)
-			throw new ResurceNotFoundError("La especialidad buscada no existe");
+			throw new ResourceNotFoundError("La especialidad buscada no existe");
 		return especialidad;
 	}
 
@@ -54,11 +54,11 @@ export default class EspecialidadService {
 		
 		let especialidad = await this.FindById(id);
 
-		const {duracionMins, nombre, costoConsulta} = request;
+		const {duracionEnMins, nombre, costo} = request;
 
 		especialidad.nombre   		= nombre;
-		especialidad.duracionEnMins = duracionMins;
-		especialidad.costo  = costoConsulta;
+		especialidad.duracionEnMins = duracionEnMins;
+		especialidad.costo  = costo;
 
 		await this.repository.Save(especialidad);
 		return especialidad;

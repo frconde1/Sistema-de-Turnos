@@ -1,6 +1,6 @@
 import z from "zod";
 import { stringSchema, ValidarZodSchema } from "./zodSchemas.js";
-import { InputError, BadRequestError, ResurceNotFoundError } 		from "../errors/Errors.js";
+import { InputError, BadRequestError, ResourceNotFoundError } 		from "../errors/Errors.js";
 
 import UsuarioRepository from "../repository/UsuarioRepository.js"
 import Usuario           from "../domain/Usuario.js";
@@ -23,7 +23,7 @@ export default class UsuarioService {
     async FindById(id) {
 		const usuario = await this.repository.FindById(id);
 		if(usuario == null)
-			throw new ResurceNotFoundError("El usuario buscado no existe");
+			throw new ResourceNotFoundError("El usuario buscado no existe");
 		return usuario;
     }
 

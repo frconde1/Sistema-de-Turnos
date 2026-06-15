@@ -1,7 +1,7 @@
 import z from "zod";
 import ObraSocialRepository from "../repository/ObraSocialRepository.js";
 import { idSchema, stringSchema, ValidarZodSchema } from "./zodSchemas.js";
-import { BadRequestError, ResurceNotFoundError } from "../errors/Errors.js";
+import { BadRequestError, ResourceNotFoundError } from "../errors/Errors.js";
 import ObraSocial from "../domain/ObraSocial.js";
 import PlanService from "./PlanService.js";
 
@@ -33,14 +33,14 @@ export default class ObraSocialService {
 	async FindById(id){
 		const obra = await this.repository.FindById(id);
 		if(obra == null)
-			throw new ResurceNotFoundError("la obra social buscada no existe");
+			throw new ResourceNotFoundError("la obra social buscada no existe");
 		return obra;
 	}
 
 	async FindAllPlanes(id){
 		const obra = await this.repository.FindById(id);
 		if(obra == null)
-			throw new ResurceNotFoundError("la obra social buscada no existe");
+			throw new ResourceNotFoundError("la obra social buscada no existe");
 		return obra.planes;
 	}
 

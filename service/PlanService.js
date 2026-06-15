@@ -4,7 +4,7 @@ import CoberturaPractica from "../domain/CoberturaPractica.js";
 import PlanRepository from "../repository/PlanRepository.js";
 import { idSchema, stringSchema, ValidarZodSchema } from "./zodSchemas.js";
 import Plan from "../domain/Plan.js";
-import { BadRequestError, ResurceNotFoundError } from "../errors/Errors.js";
+import { BadRequestError, ResourceNotFoundError } from "../errors/Errors.js";
 import EspecialidadService from "./EspecialidadService.js";
 import PracticaService from "./PracticaService.js";
 import { NivelCobertura } from "../domain/Enums.js";
@@ -57,7 +57,7 @@ export default class PlanService{
 	async FindById(id) {
 		const plan = await this.repository.FindById(id)
 		if(plan == null)
-			throw new ResurceNotFoundError("el plan buscado no existe");
+			throw new ResourceNotFoundError("el plan buscado no existe");
 		return plan;
 	}
 	

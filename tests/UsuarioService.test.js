@@ -4,7 +4,7 @@ import UsuarioService from "../service/UsuarioService.js";
 
 import {
     InputError,
-    ResurceNotFoundError
+    ResourceNotFoundError
 } from "../errors/Errors.js";
 
 describe("UsuarioService", () => {
@@ -60,14 +60,14 @@ describe("UsuarioService", () => {
                 .toEqual(usuario);
         });
 
-        it("deberia lanzar ResurceNotFoundError", async () => {
+        it("deberia lanzar ResourceNotFoundError", async () => {
 
             repositoryMock.FindById
                 .mockResolvedValue(null);
 
             await expect(
                 service.FindById("404")
-            ).rejects.toThrow(ResurceNotFoundError);
+            ).rejects.toThrow(ResourceNotFoundError);
         });
     });
 

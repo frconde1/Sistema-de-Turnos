@@ -5,7 +5,7 @@ import PlanService from "../service/PlanService.js";
 import {
     BadRequestError,
     InputError,
-    ResurceNotFoundError
+    ResourceNotFoundError
 } from "../errors/Errors.js";
 
 describe("PlanService", () => {
@@ -102,14 +102,14 @@ describe("PlanService", () => {
                 .toEqual(plan);
         });
 
-        it("deberia lanzar ResurceNotFoundError", async () => {
+        it("deberia lanzar ResourceNotFoundError", async () => {
 
             repositoryMock.FindById
                 .mockResolvedValue(null);
 
             await expect(
                 service.FindById("404")
-            ).rejects.toThrow(ResurceNotFoundError);
+            ).rejects.toThrow(ResourceNotFoundError);
         });
     });
 
@@ -197,8 +197,13 @@ describe("PlanService", () => {
                         cobertura: "TOTAL"
                     }
                 )
-            ).rejects.toThrow();
+            ).resolves.toBe(plan);
 
+            expect(plan.coberturasEspecialidad)
+                .toHaveLength(1);
+
+            expect(repositoryMock.Save)
+                .toHaveBeenCalled();
         });
 
         it("deberia lanzar BadRequestError en especialidad duplicada", async () => {
@@ -365,9 +370,8 @@ describe("PlanService", () => {
     describe("RemovePractica", () => {
 
         it("deberia eliminar practica", async () => {
-
             const plan = {
-                coberturasPracticas: [
+                coberturasPractica: [
                     {
                         practica: {
                             id: "p1"
@@ -390,7 +394,7 @@ describe("PlanService", () => {
                     "p1"
                 );
 
-            expect(plan.coberturasPracticas)
+            expect(plan.coberturasPractica)
                 .toHaveLength(1);
 
             expect(repositoryMock.Save)
@@ -399,5 +403,6 @@ describe("PlanService", () => {
             expect(result)
                 .toBe(plan);
         });
-    });
+
+    });           
 });

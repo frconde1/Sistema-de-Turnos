@@ -4,7 +4,7 @@ import PracticaService from "../service/PracticaService.js";
 
 import {
     InputError,
-    ResurceNotFoundError
+    ResourceNotFoundError
 } from "../errors/Errors.js";
 
 describe("PracticaService", () => {
@@ -60,14 +60,14 @@ describe("PracticaService", () => {
                 .toEqual(practica);
         });
 
-        it("deberia lanzar ResurceNotFoundError", async () => {
+        it("deberia lanzar ResourceNotFoundError", async () => {
 
             repositoryMock.FindById
                 .mockResolvedValue(null);
 
             await expect(
                 service.FindById("404")
-            ).rejects.toThrow(ResurceNotFoundError);
+            ).rejects.toThrow(ResourceNotFoundError);
         });
     });
 
@@ -81,8 +81,8 @@ describe("PracticaService", () => {
             const result = await service.Create({
                 codigo: "RX01",
                 nombre: "Radiografia",
-                duracionMins: 30,
-                costoConsulta: 1500
+                duracionEnMins: 30,
+                costo: 1500
             });
 
             expect(repositoryMock.Save)
@@ -108,8 +108,8 @@ describe("PracticaService", () => {
                 id: "1",
                 codigo: "OLD",
                 nombre: "Vieja",
-                costoConsulta: 100,
-                duracionTurnoEnMins: 20
+                costo: 100,
+                duracionEnMins: 20
             };
 
             jest.spyOn(service, "FindById")
@@ -120,8 +120,8 @@ describe("PracticaService", () => {
                 {
                     codigo: "NEW",
                     nombre: "Nueva",
-                    costoConsulta: 500,
-                    duracionMins: 40
+                    costo: 500,
+                    duracionEnMins: 40
                 }
             );
 
@@ -131,10 +131,10 @@ describe("PracticaService", () => {
             expect(practica.nombre)
                 .toBe("Nueva");
 
-            expect(practica.costoConsulta)
+            expect(practica.costo)
                 .toBe(500);
 
-            expect(practica.duracionTurnoEnMins)
+            expect(practica.duracionEnMins)
                 .toBe(40);
 
             expect(repositoryMock.Save)
@@ -159,8 +159,8 @@ describe("PracticaService", () => {
             const practica = service.CreatePractica({
                 codigo: "ABC",
                 nombre: "Ecografia",
-                duracionMins: 25,
-                costoConsulta: 2500
+                duracionEnMins: 25,
+                costo: 2500
             });
 
             expect(practica.codigo)

@@ -106,7 +106,12 @@ export class MedicoController {
     }
     
 
-    async AgregarPractica(req, res){
-        return res.json(this.medicoService.AgregarPractica(req.params.id, req.body));
+    async AgregarPractica(req, res, next){
+        try {
+            await this.medicoService.AgregarPractica(req.params.id, req.body)
+            return res.status(201).json({ status: "success" })
+        } catch (error) {
+            next(error)
+        }
     }
 }

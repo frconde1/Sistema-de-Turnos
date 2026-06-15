@@ -1,5 +1,5 @@
 import z from "zod";
-import { InputError, ResurceNotFoundError } from "../errors/Errors.js";
+import { InputError, ResourceNotFoundError } from "../errors/Errors.js";
 import { idSchema, stringSchema, ValidarZodSchema } from "./zodSchemas.js";
 
 import PacienteRepository from "../repository/PacienteRepository.js";
@@ -48,7 +48,7 @@ export default class PacienteService {
     async FindById(id){
         const paciente = await this.repository.FindById(id);
         if(paciente == null)
-            throw new ResurceNotFoundError("el paciente buscado no existe");
+            throw new ResourceNotFoundError("el paciente buscado no existe");
         return paciente;
 	}
 

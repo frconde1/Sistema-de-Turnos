@@ -3,6 +3,7 @@ import TurnoModel  		from "../schemas/TurnoSchema.js";
 import TurnoMapper 		from "../mappers/TurnoMapper.js";
 import mongoose 		from "mongoose";
 import { EstadoTurno } from "../domain/Enums.js";
+import { InputError, ResourceNotFoundError } from "../errors/Errors.js";
 
 export default class TurnoRepository {
 	constructor() {}
@@ -74,7 +75,14 @@ export default class TurnoRepository {
 	 * @returns {Turno}
 	*/
 	async Delete(id) {
-		await TurnoModel.findByIdAndDelete(id);
+		if(!mongoose.Types.ObjectId.isValid(id)){
+			throw new InputError("id no valido");
+		}
+		
+		const turno = await TurnoModel.findByIdAndDelete(id);
+		if (!turno) {
+			throw new ResourceNotFoundError("Turno no encontrado");
+		}
 	}
 
 	/**

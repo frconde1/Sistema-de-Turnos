@@ -21,34 +21,58 @@ export default class TurnoController {
 		})
 	}
 
-	async FindById(req, res) {
-		const turnoDTO = await this.service.FindByIdDTO(req.params.id);
-		return res.status(200).json(turnoDTO);
+	async FindById(req, res, next) {
+		try {
+			const turnoDTO = await this.service.FindByIdDTO(req.params.id);
+			return res.status(200).json(turnoDTO);
+		} catch (error) {
+			next(error);
+		}
 	}
 
-	async Create (req, res) {
-		const turnoDTO = await this.service.Create(req.body);
-		return res.status(201).json(turnoDTO);
+	async Create (req, res, next) {
+		try {
+			const turnoDTO = await this.service.Create(req.body);
+			return res.status(201).json(turnoDTO);
+		} catch (error) {
+			next(error);
+		}
 	}
 
-	async Delete(req, res) {
-		await this.service.Delete(req.params.id);
-		return res.status(200);
+	async Delete(req, res, next) {
+		try {
+			await this.service.Delete(req.params.id);
+			return res.status(200).json({ message: "Turno eliminado" });
+		} catch (error) {
+			next(error);
+		}
 	}
 
-	async Update(req, res) {
-		const turnoDTO = await this.service.Update(req.params.id, req.body);
-		return res.status(200).json(turnoDTO);
+	async Update(req, res, next) {
+		try {
+			const turnoDTO = await this.service.Update(req.params.id, req.body);
+			return res.status(200).json(turnoDTO);
+		} catch (error) {
+			next(error);
+		}
 	}
 
-	async UpdateStatus(req, res){
-		const turnoDTO = await this.service.UpdateStatus(req.params.id, req.body);
-		return res.status(200).json(turnoDTO);
+	async UpdateStatus(req, res, next){
+		try {
+			const turnoDTO = await this.service.UpdateStatus(req.params.id, req.body);
+			return res.status(200).json(turnoDTO);
+		} catch (error) {
+			next(error);
+		}
 	}
 
-	async updateFecha(req, res){
-		const turnoDTO = await this.service.ChangeFecha(req.params.id, req.body);
-		return res.status(200).json(turnoDTO);
+	async updateFecha(req, res, next){
+		try {
+			const turnoDTO = await this.service.ChangeFecha(req.params.id, req.body);
+			return res.status(200).json(turnoDTO);
+		} catch (error) {
+			next(error);
+		}
 	}
 
 
