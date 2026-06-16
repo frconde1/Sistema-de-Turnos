@@ -6,14 +6,6 @@ import { idSchema, stringSchema, ValidarZodSchema, paginacionSchema } from "./zo
 import Notificacion from "../domain/Notificacion.js";
 
 
-const crearNotificacionSchema = 
-	z.object({
-		destinatario: idSchema("usuario destinatario"),
-		remitente: idSchema("usuario remitente"),
-		mensaje: stringSchema("mensaje")
-	})
-
-
 const filtrosNotificacionesSchema =
 	z.object({
     remitente:    idSchema("remitente")   .optional(),
@@ -37,19 +29,6 @@ export default class NotificationService{
 		ValidarZodSchema(paginacionSchema,   filtros);
 		return await this.repository.FindAll(filtros);
 	}
-
-	async FindAllById(id) {
-		return await this.repository.FindAllByRemitenteId(id);
-	}
-
-	async FindLeidasById(id) {
-		return await this.repository.FindAllByDestinatarioId(id, {leida: true});
-	}
-
-	async FindNoLeidasById(id) {
-		return await this.repository.FindAllByDestinatarioId(id, {leida: false});
-	}
-
 	async Leer(id, idNot) {
 		const usuario = await this.usuarioService.FindById(id);
 		const notificacion = await this.repository.FindById(idNot);
@@ -62,7 +41,7 @@ export default class NotificationService{
 		return notificacion;
 	}
 
-	async Crear(notifiacion){
-		await this.repository.Save(notifiacion);
+	async Crear(notificacion){
+		await this.repository.Save(notificacion);
 	}
 }

@@ -12,27 +12,7 @@ export default class NotificacionController {
 		} catch (error) {
 			next(error);
 		}
-	}
-	async FindAllById(req, res, next) {
-		try {
-			return res.json(await this.service.FindAllById(req.params.id))
-		} catch (error) {
-			next(error);
-		}
-	}
-	async FindLeidasById(req, res, next) {
-		try {
-			return res.json(await this.service.FindLeidasById(req.params.id))
-		} catch (error) {
-			next(error);
-		}
-	}
-	async FindNoLeidasById(req, res, next) {
-		try {
-			return res.json(await this.service.FindNoLeidasById(req.params.id))
-		} catch (error) {
-			next(error);
-		}
+
 	}
 	async Leer(req, res, next) {
 		try {
