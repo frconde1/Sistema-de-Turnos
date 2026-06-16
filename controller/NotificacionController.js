@@ -16,7 +16,7 @@ export default class NotificacionController {
 	}
 	async Leer(req, res, next) {
 		try {
-			return res.json(await this.service.Leer(req.params.id, req.params.idNot))
+			return res.json(await this.service.Leer(req.body.idUsuario, req.params.idNot))
 		} catch (error) {
 			next(error);
 		}

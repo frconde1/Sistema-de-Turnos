@@ -29,14 +29,23 @@ export default class NotificationRepository {
         }
 	}
 
-    async Save(notifiacion) {
-		if (notifiacion.id) 
-			await NotificacionModel.findByIdAndUpdate(notifiacion.id, NotificacionMapper.toSchema(notifiacion), { upsert: true });
+    async Save(notificacion) {
+		if (notificacion.id) 
+			await NotificacionModel.findByIdAndUpdate(notificacion.id, NotificacionMapper.toSchema(notificacion), { upsert: true });
 		else {
-			const created = await NotificacionModel.create(NotificacionMapper.toSchema(notifiacion));
-			notifiacion.id = created._id.toString();
+			const created = await NotificacionModel.create(NotificacionMapper.toSchema(notificacion));
+			notificacion.id = created._id.toString();
 		}
-		return notifiacion;
+		return notificacion;
     }
+
+  async FindById(id) {
+   	if(!mongoose.Types.ObjectId.isValid(id))
+			return null;
+
+		const notificacion = await NotificacionModel.findById(id).populate(NotificacionMapper.populate);
+		return notificacion != null ? NotificacionMapper.toEntity(notificacion) : null
+ 
+  }
 
 }
