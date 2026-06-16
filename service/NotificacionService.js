@@ -2,7 +2,7 @@ import z from "zod";
 import { BadRequestError, InputError } from "../errors/Errors.js";
 import NotificationRepository from "../repository/NotificationRepository.js";
 import UsuarioService from "./UsuarioService.js";
-import { idSchema, stringSchema, ValidarZodSchema } from "./zodSchemas.js";
+import { idSchema, stringSchema, ValidarZodSchema, paginacionSchema } from "./zodSchemas.js";
 import Notificacion from "../domain/Notificacion.js";
 
 
@@ -13,6 +13,15 @@ const crearNotificacionSchema =
 		mensaje: stringSchema("mensaje")
 	})
 
+
+const filtrosNotificacionesSchema =
+	z.object({
+    remitente:    idSchema("remitente")   .optional(),
+    destinatario: idSchema("destinatario").optional(),
+    leida:  z.coerce.boolean("leida debe ser un booleano (leida o no leida)").optional()
+	})
+
+
 export default class NotificationService{
 	constructor(
 		repository = new NotificationRepository(), 
@@ -22,8 +31,11 @@ export default class NotificationService{
 		this.usuarioService = usuarioService
 	}
 
-	async FindAll(filter) {
-		return await this.repository.FindAll(filter);
+	async FindAll(filtros) {
+    
+		ValidarZodSchema(filtrosNotificacionesSchema, filtros);
+		ValidarZodSchema(paginacionSchema,   filtros);
+		return await this.repository.FindAll(filtros);
 	}
 
 	async FindAllById(id) {

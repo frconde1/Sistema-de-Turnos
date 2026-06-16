@@ -8,7 +8,7 @@ export default class NotificacionController {
 
 	async FindAll(req, res, next) {
 		try {
-			return res.json(await this.service.FindAll())
+			return res.json(await this.service.FindAll(req.query))
 		} catch (error) {
 			next(error);
 		}

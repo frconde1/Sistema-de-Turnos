@@ -6,7 +6,29 @@ export default class NotificationRepository {
 	constructor(){}
 
 	/**@param {Boolean | null} leida  */
-	async FindAll(leida = null) {
+  	async FindAll(filtros) {
+		
+		const {pagina = 1, tamano = 10, remitente, destinatario, leida} = filtros;
+		
+		const filtrosMDB = {};
+		
+		if(remitente) 	 filtrosMDB.remitente = remitente;
+		if(destinatario) 	 filtrosMDB.destinatario = destinatario;
+    if(leida !== undefined) filtrosMDB.leida = leida
+    
+    const notificaciones = await NotificacionModel
+				.find(filtrosMDB)
+				.skip((pagina - 1) * tamano)
+				.limit(tamano)
+				.populate(NotificacionMapper.populate)
+
+
+        return {
+			notificaciones: notificaciones.map(NotificacionMapper.toEntity),
+            totalNotificaciones: await NotificacionModel.countDocuments()
+        }
+	}
+/*	async FindAll(leida = null) {
 		let notificaciones = [];
 		
 		if(leida != null)
@@ -15,7 +37,7 @@ export default class NotificationRepository {
 			notificaciones = await NotificacionModel.find().populate(NotificacionMapper.populate);
 		
 		return notificaciones.map(NotificacionMapper.toEntity);
-	}
+	} */
 
 	async FindById(id) {
 		if(!mongoose.Types.ObjectId.isValid(id))
