@@ -1,56 +1,72 @@
 import Turno 			from "../domain/Turno.js";
-import { InputError }	from "../errors/Errors.js";
+import TurnoModel  		from "../schemas/TurnoSchema.js";
+import TurnoMapper 		from "../mappers/TurnoMapper.js";
+import mongoose 		from "mongoose";
+import { EstadoTurno } from "../domain/Enums.js";
+import { InputError, ResourceNotFoundError } from "../errors/Errors.js";
 
 export default class TurnoRepository {
-	
-	/**@type {Turno[]} */
-	turnos;
-	/**@type {Number} */
-	nextID;
+	constructor() {}
 
-	constructor() {
-		if(TurnoRepository.instance)
-			return TurnoRepository.instance;
-
-		this.turnos = []
-		this.nextId = 0;
-
-		TurnoRepository.instance = this;
-	}
-
-	/** @returns {Turno[]}*/
-	FindAll() {
-		return this.turnos;
-	}
-
-	/** @returns {Turno[]}*/
-	FindPaginado(numeroPagina, limitePorPagina, filtros) {
-		const {medico, paciente, sede, practica, estado} = filtros;
+	async FindAll(filtros) {
 		
-		let turnos = this.FindAll();
+		const {pagina = 1, tamano = 10, medico, paciente, sede, practica, estado, ordenCosto, ordenFecha, fechaInicio, fechaFin} = filtros;
+		
+		const filtrosMDB = {};
+		
+		if(medico) 	 filtrosMDB.medico		= medico;
+		if(paciente) filtrosMDB.paciente	= paciente;
+		if(sede) 	 filtrosMDB.sede		= sede;
+		if(practica) filtrosMDB.practica	= practica;
+		if(estado)	 filtrosMDB.estado		= estado;
+		
+		if(fechaInicio || fechaFin) filtrosMongo.fecha = {};
+		if(fechaInicio) filtrosMDB.fecha.$gte = fechaInicio;
+		if(fechaFin) 	filtrosMDB.fecha.$lte = fechaFin;
 
-		if(medico)	 turnos = turnos.filter((t => t.medico.id 	== medico	));
-		if(paciente) turnos = turnos.filter((t => t.paciente.id == paciente	));
-		if(sede)	 turnos = turnos.filter((t => t.sede.id 	== sede		));
-		if(practica) turnos = turnos.filter((t => t.practica.id == practica ));
-		if(estado)	 turnos = turnos.filter((t => t.estado 		== estado	));
 
-        const inicio = (numeroPagina - 1) * limitePorPagina;
-        const fin 	 = inicio + limitePorPagina;
+		const sort = {};
+		if (ordenFecha != null) sort.fechaHora 	= ordenFecha ? 1 : -1;
+		if (ordenCosto != null) sort.costo 		= ordenCosto ? 1 : -1;
+
+
+		const turnos = await TurnoModel
+				.find(filtrosMDB)
+				.sort(sort)
+				.skip((pagina - 1) * tamano)
+				.limit(tamano)
+				.populate(TurnoMapper.populate)
+
 
         return {
-            turnos: 	 turnos.slice(inicio, fin),
-            totalTurnos: turnos.length
+			turnos: turnos.map(TurnoMapper.toEntity),
+            totalTurnos: await TurnoModel.countDocuments()
         }
+	}
+
+	async FindReservadoByMedico(id){
+		return (await TurnoModel
+			.find({
+				medico: id, 
+				estado: EstadoTurno.CONFIRMADO
+			})
+			.populate(TurnoMapper.populate))
+			.map(TurnoMapper.toEntity);
 	}
 
 	/** 
 	 * @param {Turno} turno 
 	 * @returns {Turno}
 	*/
-	Save(turno) {
-		turno.id = turno.id ?? (this.nextId++).toString();
-        this.turnos[turno.id] = turno;
+	async Save(turno) {
+		if (turno.id){
+			// turno.id = new mongoose.Types.ObjectId().toString();
+			await TurnoModel.findByIdAndUpdate(turno.id, TurnoMapper.toSchema(turno), { upsert: true });
+		}
+		else {
+			const created = await TurnoModel.create(TurnoMapper.toSchema(turno));
+			turno.id = created._id.toString();
+		}
 		return turno;
 	}
 
@@ -58,25 +74,28 @@ export default class TurnoRepository {
 	 * @param {String} id 
 	 * @returns {Turno}
 	*/
-	Delete(id) {
-		if(this.turnos[id])
-			this.turnos[id] = undefined;
-		else
-			throw new InputError("El turno no existe")
+	async Delete(id) {
+		if(!mongoose.Types.ObjectId.isValid(id)){
+			throw new InputError("id no valido");
+		}
+		
+		const turno = await TurnoModel.findByIdAndDelete(id);
+		if (!turno) {
+			throw new ResourceNotFoundError("Turno no encontrado");
+		}
 	}
 
 	/**
-	 * @param {String} turnoId 
-	 * @returns {Turno}
+	 * @param {String} id 
+	 * @returns {Turno | undefined}
 	 */
-	FindTurnoById(turnoId) {
-		let turno = this.turnos.find(t => t ? t.id == turnoId : false);
-		
-		if (!turno) 
-			throw new InputError("El turno buscado no existe")
+	async FindById(id) {
+		if(!mongoose.Types.ObjectId.isValid(id))
+			return null;
 
-		return turno 
-	}
+		const turno = await TurnoModel.findById(id).populate(TurnoMapper.populate);
+		return turno != null ? TurnoMapper.toEntity(turno) : null
+    }
 	
 
 }

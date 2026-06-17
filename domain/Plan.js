@@ -6,42 +6,41 @@ import Especialidad 			from "./Especialidad.js";
 import Practica 				from "./Practica.js";
 
 export default class Plan {
+	/**@type {String} */
 	id; 
 	nombre;
 	coberturasEspecialidad;
-	coberturasPracticas;
+	coberturasPractica;
 
 	/**
-	 * @param {String} id 
 	 * @param {String} nombre 
 	 * @param {CoberturaEspecialidad[]} coberturasEspecialidad 
-	 * @param {CoberturaPractica[]} coberturasPracticas 
+	 * @param {CoberturaPractica[]} coberturasPractica
 	 */
-	constructor(id, nombre, coberturasEspecialidad, coberturasPracticas) {
-		this.id = id; 
+	constructor(nombre, coberturasEspecialidad, coberturasPractica) {
 		this.nombre = nombre;
 		this.coberturasEspecialidad = coberturasEspecialidad;
-		this.coberturasPracticas = coberturasPracticas;
+		this.coberturasPractica = coberturasPractica;
 	}
 
 	/**
-	 * 
-	 * @param	{Especialidad | Practica} elementoCobertura 
+	 * @param	{Especialidad | Practica} elemento 
 	 * @returns	{NivelCobertura}
 	 */
-	ObtenerCobertura(situacion) {
-		if (situacion instanceof Especialidad)
-			for (const cobertura of this.coberturasEspecialidad)
-				if (Especialidad.EsIgual(situacion, cobertura.especialidad))
-					return cobertura.nivel;
+	ObtenerCobertura(elemento) {
+		const lista = elemento instanceof Especialidad ? this.coberturasEspecialidad : this.coberturasPractica;
+		
+		const cobertura = lista.find(
+			c => (
+        		elemento instanceof Especialidad
+            		? c.especialidad.id
+            		: c.practica.id
+    	) == elemento.id);
+		
+		if(cobertura)
+			return cobertura.nivel;
 
-		if (situacion instanceof Practica)
-			for (const cobertura of this.coberturasPracticas)
-				if (Practica.EsIgual(situacion, cobertura.practica))
-					return cobertura.nivel;
-
-		// no se encontro
-		throw new InputError("No se ingreso una practica o una especialidad");
+		return NivelCobertura.NO_CUBIERTA;
 	}
 
 	}

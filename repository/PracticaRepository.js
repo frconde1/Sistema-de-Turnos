@@ -1,52 +1,41 @@
-import Practica 		from "../domain/Practica.js";
-import { InputError } 	from "../errors/Errors.js";
+import mongoose 	  from "mongoose";
+import Practica 	  from "../domain/Practica.js";
+import { InputError } from "../errors/Errors.js";
+import PracticaModel  from "../schemas/PracticaSchema.js";
+import PracticaMapper from "../mappers/PracticaMapper.js";
 
 export default class PracticaRepository {
-	
-	/**@type {Practica[]} */
-	practicas;
-	/**@type {Number} */
-	nextID;
-
-	constructor() {
-		// se hace singleton por el momento
-		if(PracticaRepository.instance)
-			return PracticaRepository.instance;
-
-		this.practicas = []
-		this.nextId = 0;
-
-		PracticaRepository.instance = this;
-	}
+	constructor() {}
 
 	/** @returns {Practica[]}*/
-	FindAll() {
-		return this.practicas;
+	async FindAll() {
+		return (await PracticaModel.find()).map(PracticaMapper.toEntity);
 	}
 
+	/**
+	 * @param {String} id 
+	 * @returns {Practica}
+	 */
+	async FindById(id) {
+		if(!mongoose.Types.ObjectId.isValid(id))
+			return null;
+
+		const practica = await PracticaModel.findById(id);
+		return practica != null ? PracticaMapper.toEntity(practica) : null
+	}
+	
 	/** 
 	 * @param {Practica} practica 
 	 * @returns {Practica}
 	*/
-	Save(practica) {
-		practica.id = practica.id ?? (this.nextId++).toString();
-        this.practicas[practica.id] = practica;
+	async Save(practica) {
+		if (practica.id) 
+			await PracticaModel.findByIdAndUpdate(practica.id, PracticaMapper.toSchema(practica), { upsert: true });
+		else {
+			const created = await PracticaModel.create(PracticaMapper.toSchema(practica));
+			practica.id = created._id.toString();
+		}
 		return practica;
 	}
-
-	/**
-	 * @param {String} practicaId 
-	 * @returns {Practica}
-	 */
-	FindPracticaById(practicaId) {
-		let practica = this.practicas.find(p => p ? p.id == practicaId : false);
-		
-		if (!practica) 
-			throw new InputError("La practica buscada no existe")
-
-		return practica 
-	}
-	
-
 }
 

@@ -8,8 +8,22 @@
   },
   "item": [
     {
-      "name": "Operaciones Medico",
+      "name": "Medico",
       "item": [
+        {
+          "name": "Find All Medicos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{medicos}}",
+              "host": [
+                "{{medicos}}"
+              ]
+            }
+          },
+          "response": []
+        },
         {
           "name": "Crear medico",
           "request": {
@@ -17,7 +31,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"usuario\": \"medico1\",\r\n    \"matricula\": \"matricula1\",\r\n    \"nombre\": \"Juan\"\r\n}",
+              "raw": "{\r\n    \"usuario\": \"6a158e92420ba2354337aee0\",\r\n    \"matricula\": \"mat\",\r\n    \"nombre\": \"medico 2\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -25,27 +39,22 @@
               }
             },
             "url": {
-              "raw": "http://{{servidor}}:{{puerto}}/medicos",
-              "protocol": "http",
+              "raw": "{{medicos}}",
               "host": [
-                "{{servidor}}"
-              ],
-              "port": "{{puerto}}",
-              "path": [
-                "medicos"
+                "{{medicos}}"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "Asignar Sede a Medico",
+          "name": "Crear Disponibilidad Medico",
           "request": {
             "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"sede\":\r\n        {\r\n            \"id\": \"1\"\r\n        }\r\n}",
+              "raw": "{\r\n    \"disponibilidad\": {\r\n        \"diaSemana\" : \"MIERCOLES\",\r\n        \"horaDesde\" : \"14:00\",\r\n        \"horaHasta\" : \"15:00\"\r\n    }\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -53,44 +62,29 @@
               }
             },
             "url": {
-              "raw": "http://{{servidor}}:{{puerto}}/medicos/0/sedes",
-              "protocol": "http",
+              "raw": "{{medicos}}/6a159d3cceb9a7ac263e0ac7/disponibilidades",
               "host": [
-                "{{servidor}}"
+                "{{medicos}}"
               ],
-              "port": "{{puerto}}",
               "path": [
-                "medicos",
-                "0",
-                "sedes"
+                "6a159d3cceb9a7ac263e0ac7",
+                "disponibilidades"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "Asignar Disponibilidad a Medico",
+          "name": "Eliminar Disponibilidad Medico",
           "request": {
-            "method": "POST",
+            "method": "DELETE",
             "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"disponibilidad\": {\r\n        \"diaSemana\" : 1,\r\n        \"horaDesde\" : \"12:00\",\r\n        \"horaHasta\" : \"13:00\"\r\n    }\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
             "url": {
-              "raw": "http://{{servidor}}:{{puerto}}/medicos/0/disponibilidades",
-              "protocol": "http",
+              "raw": "{{medicos}}/0/disponibilidades",
               "host": [
-                "{{servidor}}"
+                "{{medicos}}"
               ],
-              "port": "{{puerto}}",
               "path": [
-                "medicos",
                 "0",
                 "disponibilidades"
               ]
@@ -99,26 +93,54 @@
           "response": []
         },
         {
-          "name": "Conseguir medicos",
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
+          "name": "Asignar Sede Medico",
           "request": {
-            "method": "GET",
+            "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"usuario\": \"user2\",\r\n    \"matricula\": \"matricula2\",\r\n    \"nombre\": \"Pedro\"\r\n}"
+              "raw": "{\r\n    \"sede\":\r\n        {\r\n            \"id\": \"6a159da4ceb9a7ac263e0ac9\"\r\n        }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
             },
             "url": {
-              "raw": "http://{{servidor}}:{{puerto}}/medicos",
-              "protocol": "http",
+              "raw": "{{medicos}}/6a159d3cceb9a7ac263e0ac7/sedes",
               "host": [
-                "{{servidor}}"
+                "{{medicos}}"
               ],
-              "port": "{{puerto}}",
               "path": [
-                "medicos"
+                "6a159d3cceb9a7ac263e0ac7",
+                "sedes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Practica Medico",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"practica\": \"6a1508b81bdd14f0e852dbcf\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{medicos}}/6a1566ab3a7e5831e776fdff/practicas",
+              "host": [
+                "{{medicos}}"
+              ],
+              "path": [
+                "6a1566ab3a7e5831e776fdff",
+                "practicas"
               ]
             }
           },
@@ -127,16 +149,30 @@
       ]
     },
     {
-      "name": "Operaciones Turno",
+      "name": "Paciente",
       "item": [
         {
-          "name": "Crear Turno",
+          "name": "Find All Pacientes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{pacientes}}",
+              "host": [
+                "{{pacientes}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Paciente",
           "request": {
             "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"medico\":    \"0\",\r\n    \"sede\":      \"1\",\r\n    \"practica\":  \"0\",\r\n    \"fechaHora\": \"2026-05-04T12:40:00\", // formato localizado en Arg, para UTC sumar 3 horas\r\n    \"estado\":     0,\r\n    \"costo\":      50\r\n}",
+              "raw": "{\r\n    \"usuario\": \"6a158e87420ba2354337aede\",\r\n    \"dni\": \"321654987\",\r\n    \"nombre\": \"Rodrigo\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -144,71 +180,39 @@
               }
             },
             "url": {
-              "raw": "http://{{servidor}}:{{puerto}}/turnos",
-              "protocol": "http",
+              "raw": "{{pacientes}}",
               "host": [
-                "{{servidor}}"
-              ],
-              "port": "{{puerto}}",
-              "path": [
-                "turnos"
+                "{{pacientes}}"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "Eliminar Turno",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": ""
-            },
-            "url": {
-              "raw": "http://{{servidor}}:{{puerto}}/turnos/0",
-              "protocol": "http",
-              "host": [
-                "{{servidor}}"
-              ],
-              "port": "{{puerto}}",
-              "path": [
-                "turnos",
-                "0"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Conseguir Turno",
+          "name": "Find Paciente By Id",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://{{servidor}}:{{puerto}}/turnos/1",
-              "protocol": "http",
+              "raw": "{{pacientes}}/id",
               "host": [
-                "{{servidor}}"
+                "{{pacientes}}"
               ],
-              "port": "{{puerto}}",
               "path": [
-                "turnos",
-                "1"
+                "id"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "Actualizar Turno",
+          "name": "Actualizar Paciente",
           "request": {
             "method": "PUT",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"medico\": \"0\",\r\n    \"sede\": \"0\",\r\n    \"practica\": \"0\",\r\n    \"fechaHora\": \"2023-04-10T10:10:00Z\",\r\n    \"estado\": 0,\r\n    \"costo\": 287549.47\r\n}",
+              "raw": "{\r\n    \"nombre\": \"wrnuwi\",\r\n    \"dni\": \"5489324\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -216,28 +220,25 @@
               }
             },
             "url": {
-              "raw": "http://{{servidor}}:{{puerto}}/turnos/0",
-              "protocol": "http",
+              "raw": "{{pacientes}}/6a155e7fdae2544104d00534",
               "host": [
-                "{{servidor}}"
+                "{{pacientes}}"
               ],
-              "port": "{{puerto}}",
               "path": [
-                "turnos",
-                "0"
+                "6a155e7fdae2544104d00534"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "Actualizar Estado de Turno",
+          "name": "Asignar Obra Social Paciente",
           "request": {
-            "method": "POST",
+            "method": "PUT",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{ \r\n    \"estado\": 3, \r\n    \"usuario\": \"0\", \r\n    \"motivo\": \"porque si\"\r\n}",
+              "raw": "{\r\n    \"obraSocial\": \"6a1591298a55b888aeb6b243\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -245,100 +246,89 @@
               }
             },
             "url": {
-              "raw": "http://{{servidor}}:{{puerto}}/turnos/1/estado",
-              "protocol": "http",
+              "raw": "{{pacientes}}/6a1593504882052ba74d8b06/obraSocial",
               "host": [
-                "{{servidor}}"
+                "{{pacientes}}"
               ],
-              "port": "{{puerto}}",
               "path": [
-                "turnos",
-                "1",
-                "estado"
+                "6a1593504882052ba74d8b06",
+                "obraSocial"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "Conseguir Paginado Turnos",
+          "name": "Asignar Plan Paciente",
           "request": {
-            "method": "GET",
-            "header": []
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"plan\": \"6a15906b8a55b888aeb6b242\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{pacientes}}/6a1593504882052ba74d8b06/plan",
+              "host": [
+                "{{pacientes}}"
+              ],
+              "path": [
+                "6a1593504882052ba74d8b06",
+                "plan"
+              ]
+            }
           },
           "response": []
         }
       ]
     },
     {
-      "name": "Flujo Creacion Turno",
+      "name": "Sede",
       "item": [
         {
-          "name": "Crear medico",
+          "name": "Find All Sedes",
           "request": {
-            "method": "POST",
+            "method": "GET",
             "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"usuario\": \"medico1\",\r\n    \"matricula\": \"matricula1\",\r\n    \"nombre\": \"Juan\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
             "url": {
-              "raw": "http://{{servidor}}:{{puerto}}/medicos",
-              "protocol": "http",
+              "raw": "{{sedes}}",
               "host": [
-                "{{servidor}}"
-              ],
-              "port": "{{puerto}}",
-              "path": [
-                "medicos"
+                "{{sedes}}"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "Asignar Sede a Medico",
+          "name": "Find Sede By Id",
           "request": {
-            "method": "POST",
+            "method": "GET",
             "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"sede\":\r\n        {\r\n            \"id\": \"1\"\r\n        }\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
             "url": {
-              "raw": "http://{{servidor}}:{{puerto}}/medicos/0/sedes",
-              "protocol": "http",
+              "raw": "{{sedes}}/6a1555bc2149806f372c1dbe",
               "host": [
-                "{{servidor}}"
+                "{{sedes}}"
               ],
-              "port": "{{puerto}}",
               "path": [
-                "medicos",
-                "0",
-                "sedes"
+                "6a1555bc2149806f372c1dbe"
               ]
             }
           },
           "response": []
         },
         {
-          "name": "Asignar Disponibilidad a Medico",
+          "name": "Crear Sede",
           "request": {
             "method": "POST",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"disponibilidad\": {\r\n        \"diaSemana\" : 1,\r\n        \"horaDesde\" : \"12:00\",\r\n        \"horaHasta\" : \"13:00\"\r\n    }\r\n}",
+              "raw": "{\r\n    \"nombre\": \"sede 2\",\r\n    \"direccion\": \"direccion 2\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -346,16 +336,139 @@
               }
             },
             "url": {
-              "raw": "http://{{servidor}}:{{puerto}}/medicos/0/disponibilidades",
-              "protocol": "http",
+              "raw": "{{sedes}}",
               "host": [
-                "{{servidor}}"
+                "{{sedes}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Sede",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"nuevo Nombre\",\r\n    \"direccion\": \"nueva direccion\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{sedes}}/6a1555bc2149806f372c1dbe",
+              "host": [
+                "{{sedes}}"
               ],
-              "port": "{{puerto}}",
               "path": [
-                "medicos",
-                "0",
-                "disponibilidades"
+                "6a1555bc2149806f372c1dbe"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Especialidad",
+      "item": [
+        {
+          "name": "Find All Especialidades",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{especialidades}}",
+              "host": [
+                "{{especialidades}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find By Id Especialidad",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{especialidades}}/6a1508703fc9b666386c1795",
+              "host": [
+                "{{especialidades}}"
+              ],
+              "path": [
+                "6a1508703fc9b666386c1795"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Especialidad",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"especialidad 1\",\r\n    \"duracionEnMins\": 20,\r\n    \"costo\": 4500.68\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{especialidades}}",
+              "host": [
+                "{{especialidades}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Especialidad",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"especialidad 2.0\",\r\n    \"duracionEnMins\": 40,\r\n    \"costo\": 4500.68\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{especialidades}}/6a1508703fc9b666386c1795",
+              "host": [
+                "{{especialidades}}"
+              ],
+              "path": [
+                "6a1508703fc9b666386c1795"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Practica",
+      "item": [
+        {
+          "name": "Find All Practicas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{practicas}}",
+              "host": [
+                "{{practicas}}"
               ]
             }
           },
@@ -368,7 +481,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"codigo\": \"ByKASJGY\",\r\n    \"nombre\": \"practica 1\",\r\n    \"duracion\": 20,\r\n    \"costo\": 100\r\n}",
+              "raw": "{\r\n    \"codigo\": \"CDW\",\r\n    \"nombre\": \"practica 5\",\r\n    \"duracionEnMins\": 15,\r\n    \"costo\": 500\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -376,14 +489,482 @@
               }
             },
             "url": {
-              "raw": "http://{{servidor}}:{{puerto}}/practicas",
-              "protocol": "http",
+              "raw": "{{practicas}}",
               "host": [
-                "{{servidor}}"
+                "{{practicas}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Parctica By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{practicas}}/6a1508b81bdd14f0e852dbcf",
+              "host": [
+                "{{practicas}}"
               ],
-              "port": "{{puerto}}",
               "path": [
+                "6a1508b81bdd14f0e852dbcf"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Practica By Id",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"codigo\": \"AAA\",\r\n    \"nombre\": \"practica AAAAA\",\r\n    \"duracionEnMins\": 40,\r\n    \"costo\": 5\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{practicas}}/6a1508b81bdd14f0e852dbcf",
+              "host": [
+                "{{practicas}}"
+              ],
+              "path": [
+                "6a1508b81bdd14f0e852dbcf"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Plan",
+      "item": [
+        {
+          "name": "Find All Planes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{planes}}",
+              "host": [
+                "{{planes}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Plan By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{planes}}/6a15098b40da4a7011d0093d",
+              "host": [
+                "{{planes}}"
+              ],
+              "path": [
+                "6a15098b40da4a7011d0093d"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Plan",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"plan\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{planes}}",
+              "host": [
+                "{{planes}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Plan",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"super plan\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{planes}}/6a150bbeaac84a7ce48b2d16",
+              "host": [
+                "{{planes}}"
+              ],
+              "path": [
+                "6a150bbeaac84a7ce48b2d16"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find All Especialidades Plan",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{planes}}/6a1513920ed06d050579abf2/especialidades",
+              "host": [
+                "{{planes}}"
+              ],
+              "path": [
+                "6a1513920ed06d050579abf2",
+                "especialidades"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Agregar Especialidad Plan",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"especialidad\": \"6a15900b8a55b888aeb6b23c\",\r\n    \"cobertura\": \"TOTAL\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{planes}}/6a1590598a55b888aeb6b241/especialidades",
+              "host": [
+                "{{planes}}"
+              ],
+              "path": [
+                "6a1590598a55b888aeb6b241",
+                "especialidades"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Especialidad Plan",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{planes}}/6a150d96621206ee268db336/especialidades/6a1508703fc9b666386c1795",
+              "host": [
+                "{{planes}}"
+              ],
+              "path": [
+                "6a150d96621206ee268db336",
+                "especialidades",
+                "6a1508703fc9b666386c1795"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find All Practicas Plan",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{planes}}/6a1513920ed06d050579abf2/practicas",
+              "host": [
+                "{{planes}}"
+              ],
+              "path": [
+                "6a1513920ed06d050579abf2",
                 "practicas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Agregar Practica Plan",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"practica\": \"6a1590218a55b888aeb6b23e\",\r\n    \"cobertura\": \"TOTAL\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{planes}}/6a15906b8a55b888aeb6b242/practicas",
+              "host": [
+                "{{planes}}"
+              ],
+              "path": [
+                "6a15906b8a55b888aeb6b242",
+                "practicas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Practica Plan",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{planes}}/id/practicas/id2",
+              "host": [
+                "{{planes}}"
+              ],
+              "path": [
+                "id",
+                "practicas",
+                "id2"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Obra Social",
+      "item": [
+        {
+          "name": "Find All Obras Sociales",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{obras sociales}}",
+              "host": [
+                "{{obras sociales}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Obra Social By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{obras sociales}}/6a151cf63f348ff626360678",
+              "host": [
+                "{{obras sociales}}"
+              ],
+              "path": [
+                "6a151cf63f348ff626360678"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Obra Social",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"sweet medical\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{obras sociales}}",
+              "host": [
+                "{{obras sociales}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Obra Social",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"sweet medical 2\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{obras sociales}}/6a151cf63f348ff626360678",
+              "host": [
+                "{{obras sociales}}"
+              ],
+              "path": [
+                "6a151cf63f348ff626360678"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Agregar Plan Obra Social",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"plan\": \"6a1590598a55b888aeb6b241\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{obras sociales}}/6a1591298a55b888aeb6b243/planes",
+              "host": [
+                "{{obras sociales}}"
+              ],
+              "path": [
+                "6a1591298a55b888aeb6b243",
+                "planes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Plan Obra Social",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{obras sociales}}/6a151cf63f348ff626360678/planes/6a1513920ed06d050579abf2",
+              "host": [
+                "{{obras sociales}}"
+              ],
+              "path": [
+                "6a151cf63f348ff626360678",
+                "planes",
+                "6a1513920ed06d050579abf2"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Turno",
+      "item": [
+        {
+          "name": "Find All Turnos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{turnos}}",
+              "host": [
+                "{{turnos}}"
+              ],
+              "query": [
+                {
+                  "key": "paciente",
+                  "value": null,
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "sede",
+                  "value": null,
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "practica",
+                  "value": null,
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "estado",
+                  "value": null,
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "ordenCosto",
+                  "value": null,
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "ordenFecha",
+                  "value": null,
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "fechaInicio",
+                  "value": null,
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "fechaFin",
+                  "value": null,
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Turno By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{turnos}}/6a1571dbd0a25db0e13d8304",
+              "host": [
+                "{{turnos}}"
+              ],
+              "path": [
+                "6a1571dbd0a25db0e13d8304"
               ]
             }
           },
@@ -396,7 +977,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"medico\":    \"0\",\r\n    \"sede\":      \"1\",\r\n    \"practica\":  \"0\",\r\n    \"fechaHora\": \"2026-05-04T12:40:00\", // formato localizado en Arg, para UTC sumar 3 horas\r\n    \"estado\":     0,\r\n    \"costo\":      50\r\n}",
+              "raw": "{\r\n    \"medico\":       \"6a159d319a13a28187663ebe\",\r\n    \"sede\":         \"6a159d9dceb9a7ac263e0ac8\",\r\n    \"paciente\":     \"6a1593854882052ba74d8b07\",\r\n    \"practica\":     \"6a15900b8a55b888aeb6b23c\",\r\n    \"fechaHora\":    \"2026-05-31T12:40:00-03:00\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -404,49 +985,327 @@
               }
             },
             "url": {
-              "raw": "http://{{servidor}}:{{puerto}}/turnos",
-              "protocol": "http",
+              "raw": "{{turnos}}",
               "host": [
-                "{{servidor}}"
+                "{{turnos}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Turno",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{turnos}}/id",
+              "host": [
+                "{{turnos}}"
               ],
-              "port": "{{puerto}}",
               "path": [
-                "turnos"
+                "id"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Datos Turno",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"medico\":       \"\",\r\n    \"sede\":         \"\",\r\n    \"paciente\":     \"\",\r\n    \"practica\":     \"\",\r\n    \"fechaHora\":    \"\",\r\n    \"costo\":        456.18\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{turnos}}/id",
+              "host": [
+                "{{turnos}}"
+              ],
+              "path": [
+                "id"
               ]
             }
           },
           "response": []
         }
-      ],
-      "description": "Aca se pueden ver las operaciones necesarias que se deben realizar para poder crear un Turno, desde la creacion del medico hasta la del turno"
+      ]
     },
     {
-      "name": "Crear Practica",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"codigo\": \"ByKASJGY\",\r\n    \"nombre\": \"practica 1\",\r\n    \"duracion\": 20,\r\n    \"costo\": 100\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
+      "name": "Usuario",
+      "item": [
+        {
+          "name": "Find All Usuarios",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{usuarios}}",
+              "host": [
+                "{{usuarios}}"
+              ]
             }
-          }
+          },
+          "response": []
         },
+        {
+          "name": "Find Usuario By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{usuarios}}/6a1551cb6119df241e9dcaae",
+              "host": [
+                "{{usuarios}}"
+              ],
+              "path": [
+                "6a1551cb6119df241e9dcaae"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Usuario",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"usuario 6\",\r\n    \"password\": \"contraseña\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{usuarios}}",
+              "host": [
+                "{{usuarios}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ActualizarUsuario",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"aaaaa\",\r\n    \"password\": \"bbbbb\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{usuarios}}/6a1551cb6119df241e9dcaae",
+              "host": [
+                "{{usuarios}}"
+              ],
+              "path": [
+                "6a1551cb6119df241e9dcaae"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Notificaciones",
+      "item": [
+        {
+          "name": "Find All notificiones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{notificaciones}}",
+              "host": [
+                "{{notificaciones}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Notificaciones By Remitente Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{notificaciones}}/6a158e87420ba2354337aede",
+              "host": [
+                "{{notificaciones}}"
+              ],
+              "path": [
+                "6a158e87420ba2354337aede"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Notificacion Leida By Destinatario Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{notificaciones}}/6a158e8c420ba2354337aedf/leidas",
+              "host": [
+                "{{notificaciones}}"
+              ],
+              "path": [
+                "6a158e8c420ba2354337aedf",
+                "leidas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find Notificacion No Leida By Destinatario Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{notificaciones}}/6a158e8c420ba2354337aedf/noLeidas",
+              "host": [
+                "{{notificaciones}}"
+              ],
+              "path": [
+                "6a158e8c420ba2354337aedf",
+                "noLeidas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Leer Notificacion",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{notificaciones}}/6a158e8c420ba2354337aedf/noLeidas/6a15d1040a574410645937a0",
+              "host": [
+                "{{notificaciones}}"
+              ],
+              "path": [
+                "6a158e8c420ba2354337aedf",
+                "noLeidas",
+                "6a15d1040a574410645937a0"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
         "url": {
-          "raw": "http://{{servidor}}:{{puerto}}/practicas",
+          "raw": "http://{{servidor}}:{{puerto}}/health",
           "protocol": "http",
           "host": [
             "{{servidor}}"
           ],
           "port": "{{puerto}}",
           "path": [
-            "practicas"
+            "health"
           ]
         }
       },
       "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "servidor",
+      "value": ""
+    },
+    {
+      "key": "puerto",
+      "value": ""
+    },
+    {
+      "key": "medicos",
+      "value": ""
+    },
+    {
+      "key": "sedes",
+      "value": ""
+    },
+    {
+      "key": "turnos",
+      "value": ""
+    },
+    {
+      "key": "practicas",
+      "value": ""
+    },
+    {
+      "key": "pacientes",
+      "value": ""
+    },
+    {
+      "key": "especialidades",
+      "value": ""
+    },
+    {
+      "key": "planes",
+      "value": ""
+    },
+    {
+      "key": "obras sociales",
+      "value": ""
+    },
+    {
+      "key": "usuarios",
+      "value": ""
+    },
+    {
+      "key": "notificaciones",
+      "value": ""
     }
   ]
 }

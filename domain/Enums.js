@@ -14,22 +14,22 @@ export const DiaSemana = Object.freeze({
 
 /**
  * @readonly
- * @enum {Number}
+ * @enum {String}
 */
 export const EstadoTurno = Object.freeze({ 
-	DISPONIBLE:	'DISPONIBLE',
-	RESERVADO:	'RESERVADO',
-	CONFIRMADO:	'CONFIRMADO',
-	CANCELADO: 	'CANCELADO',
-	REALIZADO: 	'REALIZADO'
+	DISPONIBLE:	"DISPONIBLE",
+	RESERVADO:	"RESERVADO",
+	CONFIRMADO:	"CONFIRMADO",
+	CANCELADO: 	"CANCELADO",
+	REALIZADO: 	"REALIZADO"
 });
 
 /**
  * @readonly
- * @enum {NivelCobertura}
+ * @enum {String}
 */
 export const NivelCobertura = Object.freeze({
-	TOTAL:		0,
-	PARCIAL:	1,
-	NO_CUBIERTA:2
+	TOTAL:		 "TOTAL",
+	PARCIAL:	 "PARCIAL",
+	NO_CUBIERTA: "NO_CUBIERTA"
 });

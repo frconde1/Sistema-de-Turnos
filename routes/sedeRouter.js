@@ -6,7 +6,12 @@ const sedeController = new SedeController();
 const router = express.Router()
 
 router.route('')
-    .get((req, res) => sedeController.findAll(req, res))
-    .post((req, res) => sedeController.create(req, res))
+    .get(async (req, res, next) => await sedeController.FindAll(req, res, next))
+    .post(async (req, res, next) => await sedeController.Create(req, res, next))
+
+router.route('/:id')
+    .get(async (req, res, next) => await sedeController.FindById(req, res, next))
+    .put(async (req, res, next) => await sedeController.Update(req, res, next))
+
 
 export default router

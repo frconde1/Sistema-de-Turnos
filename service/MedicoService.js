@@ -2,8 +2,12 @@ import Medico from "../domain/Medico.js";
 import { MedicosRepository } from "../repository/MedicosRepository.js";
 import { InputError, BadRequestError } 		from "../errors/Errors.js";
 import DisponibilidadHoraria from "../domain/DisponibilidadHoraria.js";
-import { z } from "zod/v3";
+import { z } from "zod";
 import { DiaSemana } from "../domain/Enums.js";
+import { SedeRepository } from "../repository/SedeRepository.js";
+import UsuarioService from "./UsuarioService.js";
+import SedeService from "./SedeService.js";
+import PracticaService from "./PracticaService.js";
 
 const medicoSchema = z.object({
     usuario: z.string({required_error: "El usuario es obligatorio", invalid_type_error: "El usuario debe ser un string" }).min(1, "El usuario no puede estar vacío"),
@@ -19,39 +23,61 @@ const disponibilidadSchema = z.object({
     horaHasta: z.string()
 });
 
-export class MedicoService {
-    constructor(medicosRepository = new MedicosRepository) {
+export default class MedicoService {
+    constructor(
+        medicosRepository = new MedicosRepository(),
+        sedeService = new SedeService(),
+        usuarioService = new UsuarioService(),
+        practicaService = new PracticaService()
+    ) {
         this.medicosRepository = medicosRepository;
+        this.sedeService = sedeService;
+        this.usuarioService = usuarioService;
+        this.practicaService = practicaService;
     }
 
-    create(medicoReq) {
+    async create(medicoReq) {
         const result = medicoSchema.safeParse(medicoReq);
         if (!result.success) {
             throw new InputError(result.error.issues.map(err => err.message).join(", "));
         }
 
+
+        const usuario = await this.usuarioService.FindById(medicoReq.usuario);
+
+        if(usuario.registrado)
+            throw new InputError("El usuario ya se encuentra registrado");
+        else 
+            usuario.registrado = true;
+        await this.usuarioService.actualizar(usuario);
+
         const medico = new Medico(
-            medicoReq.usuario,
+            usuario,
             medicoReq.matricula,
             medicoReq.nombre
         )
 
-        return this.medicosRepository.Save(medico)
+        return await this.medicosRepository.Save(medico)
     }
 
     /**
      * @param {String} id 
      * @returns {Medico}
      */
-    FindById(id){
-        return this.medicosRepository.findMedicoById(id)
+    async FindById(id){
+        const medico = await this.medicosRepository.findMedicoById(id)
+        if (!medico) {
+            throw new InputError("El médico no existe")
+        }
+        return medico
+
     }
 
-    findAll({ numeroPagina = 1, limitePorPagina = 10, filtros = {} } = {}) {
+    async findAll({ numeroPagina = 1, limitePorPagina = 10, filtros = {} } = {}) {
         this.validarPaginacion(numeroPagina, limitePorPagina)
         this.validarFiltros(filtros)
 
-        const { medicos, totalMedicos } = this.medicosRepository.obtenerPaginados(
+        const { medicos, totalMedicos } = await this.medicosRepository.obtenerPaginados(
             numeroPagina,
             limitePorPagina,
             filtros
@@ -68,19 +94,23 @@ export class MedicoService {
         }
     }
 
-    agregarDisponibilidad(medicoId, body) {
+    async agregarDisponibilidad(medicoId, body) {
         const disponibilidad = disponibilidadSchema.parse(body.disponibilidad);
         const disponibilidadHoraria = new DisponibilidadHoraria(disponibilidad.diaSemana, disponibilidad.horaDesde, disponibilidad.horaHasta);
-        this.medicosRepository.agregarDisponibilidad(medicoId, disponibilidadHoraria)
+        await this.medicosRepository.agregarDisponibilidad(medicoId, disponibilidadHoraria)
     }
 
-    agregarSede(medicoId, body) {
-        this.medicosRepository.agregarSede(medicoId, body.sede)
+    async agregarSede(medicoId, body) {
+        const medico = await this.medicosRepository.findMedicoById(medicoId)
+        const sede = await this.sedeService.FindById(body.sede.id)
+        medico.agregarSede(sede)
+        await this.medicosRepository.Save(medico)
     }
 
-    eliminarDisponibilidad(medicoId, body) {
-        const medico = this.FindById(medicoId)
+    async eliminarDisponibilidad(medicoId, body) {
+        const medico = await this.medicosRepository.findMedicoById(medicoId)
         medico.eliminarDisponibilidad(body.disponibilidad)
+        await this.medicosRepository.Save(medico)
     }
 
     //Validaciones de paginado y filtros
@@ -114,5 +144,14 @@ export class MedicoService {
         if (!Number.isInteger(numero) || numero <= 0) {
             throw new BadRequestError(`${parametro} debe ser un entero positivo`)
         }
+    }
+
+    async AgregarPractica(id, req){
+        const medico = await this.FindById(id);
+        const practica = await this.practicaService.FindById(req.practica);
+        medico.practicas.push(practica);
+        
+        await this.medicosRepository.Save(medico);
+        return medico;
     }
 }

@@ -1,4 +1,4 @@
-import { MedicoService } from "../service/MedicoService.js"
+import MedicoService from "../service/MedicoService.js"
 import { BadRequestError } from "../errors/Errors.js";
 
 export class MedicoController {
@@ -105,4 +105,13 @@ export class MedicoController {
         }
     }
     
+
+    async AgregarPractica(req, res, next){
+        try {
+            await this.medicoService.AgregarPractica(req.params.id, req.body)
+            return res.status(201).json({ status: "success" })
+        } catch (error) {
+            next(error)
+        }
+    }
 }

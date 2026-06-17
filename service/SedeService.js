@@ -1,28 +1,48 @@
+import z from "zod";
 import Sede from "../domain/Sede.js";
+import { InputError, ResourceNotFoundError } from "../errors/Errors.js";
 import { SedeRepository } from "../repository/SedeRepository.js";
+import { stringSchema, ValidarZodSchema } from "./zodSchemas.js";
 
-export class SedeService {
-    constructor(sedeRepository = new SedeRepository) {
-        this.sedeRepository = sedeRepository;
+const sedeSchema = 
+    z.object({
+        nombre: stringSchema("nombre"),
+        direccion: stringSchema("direccion")
+    })
+
+export default class SedeService {
+    constructor(sedeRepository = new SedeRepository()) {
+        this.repository = sedeRepository;
     }
 
-    create(sedeReq) {
-        //TODO validaciones
-        const sede = new Sede(
-            new Date(),
-            sedeReq.nombre,
-            sedeReq.direccion
-        )
-
-        return this.sedeRepository.create(sede)
+    async FindAll() {
+        return await this.repository.FindAll();
     }
 
-    findAll() {
-        return this.sedeRepository.findAll();
+    async FindById(id) {
+        const sede = await this.repository.FindById(id); 
+		if(sede == null)
+			throw new ResourceNotFoundError("La sede buscada no existe");
+		return sede;
     }
 
-    findById(id) {
-        return this.sedeRepository.findById(id)
+    async Create(req) {
+        ValidarZodSchema(sedeSchema, req);
+        const sede = new Sede(req.nombre,req.direccion);
+        await this.repository.Save(sede);
+        return sede;
+    }
+
+    async Update(id, req){
+        ValidarZodSchema(sedeSchema, req);
+        
+        const sede = await this.FindById(id);
+
+        sede.nombre    = req.nombre;
+        sede.direccion = req.direccion;
+
+        await  this.repository.Save(sede)
+        return sede;
     }
 
 }

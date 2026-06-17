@@ -1,58 +1,72 @@
+import z from "zod";
 import Practica 			from "../domain/Practica.js";
-import { InputError } 		from "../errors/Errors.js";
+import { InputError, ResourceNotFoundError } 		from "../errors/Errors.js";
 import PracticaRepository 	from "../repository/PracticaRepository.js";
+import { intergerSchema, numberSchema, stringSchema, ValidarZodSchema } from "./zodSchemas.js";
+
+
+const crearPracticaSchema = z.object({
+	nombre: stringSchema("nombre"),
+	costo: 	numberSchema("costo").nonnegative("el costo debe ser mayor a 0"),
+	duracionEnMins: intergerSchema("duracionEnMins").nonnegative("la duracionEnMins debe ser mayor a 0")
+});
+
+const actualizarPracticaSchema = z.object({
+	nombre: stringSchema("nombre"),
+	costo: 	numberSchema("costo").nonnegative("el costo debe ser mayor a 0"),
+	duracionEnMins: intergerSchema("duracionEnMins").nonnegative("la duracionEnMins debe ser mayor a 0")
+});
+
 
 export default class PracticaService {
 	constructor(
 		practicaRepository = new PracticaRepository()
 	) {
-		this.practicaRepository = practicaRepository;
+		this.repository = practicaRepository;
 	}
 
-	/**
-	 * @param {String} id
-	 * @returns {Practica} 
-	 */
-	FindById(id) {
-		return this.practicaRepository.FindPracticaById(id);
+
+	async FindAll(){
+		return await this.repository.FindAll();
 	}
 
-	/** @param {String} id */
-	validarId(id){
-		if (typeof id !== "string" || Number.isNaN(Number(id))) {
-            throw new InputError("El id de la practica no es valido");
-        }
+	async FindById(id) {
+		const practica = await this.repository.FindById(id); 
+		if(practica == null)
+			throw new ResourceNotFoundError("La practica buscada no existe");
+		return practica;
 	}
 
-	ValidarDatos(datosPracticaNueva) {
-		if(!datosPracticaNueva || typeof datosPracticaNueva !== "object" || Array.isArray(datosPracticaNueva))
-            throw new InputError("No se envio un objeto como body de la request");
+	/** @returns {Practica} */
+	async Create(request) {
+		ValidarZodSchema(crearPracticaSchema, request);
+
+		const practica = this.CreatePractica(request);
 		
-		const {codigo, nombre, duracion, costo} = datosPracticaNueva;
-
-		if(typeof codigo !== "string")
-			throw new InputError("El codigo enviado es invalido");
-		if(typeof nombre !== "string")
-			throw new InputError("El nombre enviado es invalido");
-		if(typeof duracion !== "number" || !Number.isInteger(duracion) || (duracion < 0))
-			throw new InputError("La duracion enviada es invalida");
-		if(typeof costo !== "number" || (costo < 0))
-			throw new InputError("El costo enviado es invalido");
+		await this.repository.Save(practica);
+		return practica;
 	}
+
+	async Update(id, request){
+		ValidarZodSchema(actualizarPracticaSchema, request);
+		
+		const practica = await this.FindById(id);
+
+		const {codigo, duracionEnMins, nombre, costo} = request;
+
+		practica.codigo	= codigo
+		practica.nombre = nombre;
+		practica.costo  = costo;
+		practica.duracionEnMins = duracionEnMins;
+
+		await this.repository.Save(practica);
+		return practica;
+	}
+
 
 	/** @returns {Practica} */
 	CreatePractica(reqBody){
-		const {codigo, nombre, duracion, costo} = reqBody;
-		return new Practica(codigo, nombre, duracion, costo);
-	}
-
-	/** @returns {Practica} */
-	Create(reqBody) {
-		this.ValidarDatos(reqBody);
-
-		const practica = this.CreatePractica(reqBody);
-		
-		this.practicaRepository.Save(practica);
-		return practica;
+		const {codigo, nombre, duracionEnMins, costo} = reqBody;
+		return new Practica(codigo, nombre, duracionEnMins, costo);
 	}
 }

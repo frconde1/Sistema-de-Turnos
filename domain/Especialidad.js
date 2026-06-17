@@ -1,20 +1,19 @@
 export default class Especialidad {
+	/**@type {String} */
 	id; 
 	nombre; 
 	duracionEnMins; 
-	costoConsulta; 
+	costo; 
 
 	/**
-	 * @param {String} id 
 	 * @param {String} nombre 
 	 * @param {Number} duracionEnMins 
-	 * @param {Number} costoConsulta 
+	 * @param {Number} costo 
 	 */
-	constructor(id, nombre, duracionEnMins, costoConsulta) { 
-		this.id =  id; 
+	constructor(nombre, duracionEnMins, costo) { 
 		this.nombre = nombre; 
+		this.costo  = costo; 
 		this.duracionEnMins = duracionEnMins; 
-		this.costoConsulta = costoConsulta; 
 	}
 
 	/**

@@ -5,16 +5,22 @@ const turnoController = new TurnoController();
 const router = express.Router();
 
 router.route('')
-    .get (  (req, res) => turnoController.FindAll(req, res))
-    .post(  (req, res) => turnoController.Create(req, res))
+    .get (async (req, res, next) => await turnoController.FindAll(req, res, next))
+    .post(async  (req, res, next) => await turnoController.Create(req, res, next))
 
-    
 router.route('/:id/estado')
-    .patch(   (req, res) => turnoController.UpdateStatus(req, res))
+    .patch(async (req, res, next) => await turnoController.UpdateStatus(req, res, next))
 
 router.route('/:id')
-    .get(   (req, res) => turnoController.FindById(req, res))
-    .delete((req, res) => turnoController.Delete(req, res))
-    .put(   (req, res) => turnoController.Update(req, res))
+    .get(   async (req, res, next) => await turnoController.FindById(req, res, next))
+    .delete(async (req, res, next) => await turnoController.Delete  (req, res, next))
+    .put(   async (req, res, next) => await turnoController.Update  (req, res, next))
+
+router.route('/:id/estados')
+    .post(async (req, res, next) => await turnoController.UpdateStatus(req, res, next))
+
+router.route('/:id/fecha')
+    .put( async (req, res, next) => await turnoController.updateFecha(req, res, next))
+
 
 export default router;
