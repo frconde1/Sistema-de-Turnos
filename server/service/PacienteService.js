@@ -64,7 +64,7 @@ export default class PacienteService {
         if(usuario.registrado)
             throw new InputError("El usuario ya se encuentra registrado");
         else 
-           usuario.registrado = true;
+           usuario.Registrar("Paciente");
         await this.usuarioService.actualizar(usuario);
 
         const paciente = new Paciente(usuario, reqBody.dni, reqBody.nombre, null, null)

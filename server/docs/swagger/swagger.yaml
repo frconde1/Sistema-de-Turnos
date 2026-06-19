@@ -1,0 +1,65 @@
+paths:
+  /health:
+    get:
+      summary: Verifica el estado del servicio
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Servicio disponible
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+  /medicos:
+    get:
+      summary: Obtiene medicos paginados y filtrados
+      tags:
+        - Medicos
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 1
+          description: Número de página
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            example: 10
+          description: Cantidad de resultados por página
+      responses:
+        '200':
+          description: Lista de médicos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: array
+                    items:
+                      type: object
+                  paginacion:
+                    type: object
+                    properties:
+                      numeroPagina:
+                        type: integer
+                        example: 1
+                      limitePorPagina:
+                        type: integer
+                        example: 10
+                      totalMedicos:
+                        type: integer
+                        example: 42
+                      totalPaginas:
+                        type: integer
+                        example: 5

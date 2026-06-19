@@ -11,6 +11,9 @@ const UsuarioSchema = new mongoose.Schema({
         type: String, 
         required: true
     },
+    rol: {
+        type: String
+    },
     registrado: {
         type: Boolean,
         requred: true

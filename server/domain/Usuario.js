@@ -4,6 +4,8 @@ export default class Usuario {
 	username;
 	password;
 	registrado = false;
+	/**@type {String} */
+	rol
 
 	/**
 	 * @param {String} username 
@@ -11,7 +13,12 @@ export default class Usuario {
 	 */
 	constructor(username, password) {
 		this.username = username;
-		this.password = password; 
+		this.password = password;
 	}
 
+	/** @param {String} rol */
+	Registrar(rol){
+		this.registrado = true;
+		this.rol = rol;
+	}
 }

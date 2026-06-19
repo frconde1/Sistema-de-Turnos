@@ -1,7 +1,10 @@
 import app from "./app.js"
 import mongoose from "mongoose"
+import dotenv from "dotenv";
 
-const port = process.env.PORT || 3000
+dotenv.config();
+
+const port = process.env.PORT || 3001
 const host = 'localhost'
 
 const mongoUri = process.env.MONGO_URI || 'mongodb://admin:admin123@localhost:27017/sweetmedical?authSource=admin'

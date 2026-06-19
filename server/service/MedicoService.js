@@ -48,7 +48,7 @@ export default class MedicoService {
         if(usuario.registrado)
             throw new InputError("El usuario ya se encuentra registrado");
         else 
-            usuario.registrado = true;
+            usuario.Registrar("Medico");
         await this.usuarioService.actualizar(usuario);
 
         const medico = new Medico(
