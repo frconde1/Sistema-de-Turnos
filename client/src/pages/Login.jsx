@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import api from '../utils/api';
 import { useNavigate } from 'react-router-dom';
+import { Alert, Button, Form, Toast } from 'react-bootstrap';
 
 export default function Login() {
 	const [errorMsg, setErrorMsg]  	  = useState();
@@ -29,22 +30,25 @@ export default function Login() {
 			setErrorMsg(err.response?.data?.message || "error :(")
 		}
 
-
 	}
 
   	return (
 		<>
-			{errorMsg && (<p1>ERROR {errorMsg}</p1>)}
-			<div>
-				<form onSubmit={enviar}>
-					<label>Usuario</label>
-					<input type="text" name="usuario" onChange={e=>setUsuario(e.target.value)}/>
-
-					<label>Contraseña</label>
-					<input type="text" name="contraseña" onChange={e=>setContrasena(e.target.value)}/>
-
-					<button type="submit">Ingresar</button>
-				</form>
+			<Form onSubmit={enviar}>
+				<Form.Group className="mb-3" controlId="formBasicEmail">
+					<Form.Label>Usuario</Form.Label>
+					<Form.Control type="text" placeholder="Ingrese su usuario" onChange={e=>setUsuario(e.target.value)}/>
+				</Form.Group>
+				<Form.Group className="mb-3" controlId="formBasicPassword">
+					<Form.Label>Contraseña</Form.Label>
+					<Form.Control type="password" placeholder="Ingrese su contraseña" onChange={e=>setContrasena(e.target.value)}/>
+				</Form.Group>
+				<Button variant="primary" type="submit">
+					Ingresar
+				</Button>
+			</Form>
+			<div className='mt-4'>
+				{errorMsg && (<Alert variant='danger'>{errorMsg}</Alert>)}
 			</div>
 		</>
   	)
