@@ -1,6 +1,7 @@
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
-import Login from './pages/Login';
+import Login    from './pages/sesiones/Login';
+import Register from './pages/sesiones/Register';
 import Layout from './features/Layout';
 import Landing from './pages/Landing';
 import BusquedaTurnos from './pages/pacientes/BusquedaTurnos';
@@ -13,8 +14,11 @@ function App() {
   return (
     <Routes>
       <Route path='/' element={<Layout/>}>
-        <Route index element={<Landing/>}></Route>
-        <Route path='login' element={<Login />} />
+        <Route index element={<Landing/>} />
+        
+        <Route path='login'    element={<Login />} />
+        <Route path='register' element={<Register />} />
+
         <Route path='home' element={<Home />} />
 
         <Route path='paciente'>
