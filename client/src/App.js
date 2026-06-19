@@ -7,13 +7,15 @@ import BusquedaTurnos from './pages/pacientes/BusquedaTurnos';
 import PacienteDashboard from './pages/pacientes/PacienteDashboard';
 import PreseleccionTurnos from './pages/pacientes/PreseleccionTurnos';
 import MedicoDashboard from './pages/medicos/MedicoDashboard';
+import Home from './pages/home/Home';
 
 function App() {
   return (
     <Routes>
       <Route path='/' element={<Layout/>}>
         <Route index element={<Landing/>}></Route>
-        <Route path='login'   element={<Login />} />
+        <Route path='login' element={<Login />} />
+        <Route path='home' element={<Home />} />
 
         <Route path='paciente'>
           <Route index element={<PacienteDashboard />} />

@@ -16,15 +16,16 @@ export default function Login() {
 		event.preventDefault();
 		
 		try{
-			const res = await api.post(
-				'/usuarios',
-				{
-					"username": usuario,
-					"password": contrasena
-				}
-			)
-			console.log(res)
-			navigate("../paciente")
+			// const res = await api.post(
+			// 	'/usuarios',
+			// 	{
+			// 		"username": usuario,
+			// 		"password": contrasena
+			// 	}
+			// )
+			// console.log(res)
+
+			navigate("/home")
 		}
 		catch (err){
 			setErrorMsg(err.response?.data?.message || "error :(")
