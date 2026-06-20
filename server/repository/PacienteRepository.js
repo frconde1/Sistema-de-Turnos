@@ -21,6 +21,13 @@ export default class PacienteRepository {
 		return paciente != null? PacienteMapper.toEntity(paciente) : null;
 	}
 
+	async FindByUsuarioId(id) {
+		if(!mongoose.Types.ObjectId.isValid(id))
+			return null;
+		const paciente = await PacienteModel.findOne({ usuario: id }).populate(PacienteMapper.populate);
+		return paciente != null? PacienteMapper.toEntity(paciente) : null;
+	}
+
     async Save(paciente) {
 		if (paciente.id) 
 			await PacienteModel.findByIdAndUpdate(paciente.id, PacienteMapper.toSchema(paciente), { upsert: true });

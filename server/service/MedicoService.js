@@ -8,11 +8,14 @@ import { SedeRepository } from "../repository/SedeRepository.js";
 import UsuarioService from "./UsuarioService.js";
 import SedeService from "./SedeService.js";
 import PracticaService from "./PracticaService.js";
+import Usuario from "../domain/Usuario.js";
+import { stringSchema } from "./zodSchemas.js";
 
 const medicoSchema = z.object({
-    usuario: z.string({required_error: "El usuario es obligatorio", invalid_type_error: "El usuario debe ser un string" }).min(1, "El usuario no puede estar vacío"),
-    matricula: z.string({ required_error: "La matricula es obligatoria", invalid_type_error: "La matricula debe ser un string" }).min(1, "La matrícula no puede estar vacía"),
-    nombre: z.string({ required_error: "El nombre es obligatorio", invalid_type_error: "El nombre debe ser un string" }).min(1, "El nombre no puede estar vacío")
+    username:  stringSchema("username"),
+    password:  stringSchema("password"),
+    matricula: stringSchema("matricula"),
+    nombre:    stringSchema("nombre")
 });
 
 const disponibilidadSchema = z.object({
@@ -43,13 +46,9 @@ export default class MedicoService {
         }
 
 
-        const usuario = await this.usuarioService.FindById(medicoReq.usuario);
-
-        if(usuario.registrado)
-            throw new InputError("El usuario ya se encuentra registrado");
-        else 
-            usuario.Registrar("Medico");
-        await this.usuarioService.actualizar(usuario);
+        const usuario = new Usuario(medicoReq.username, medicoReq.password);
+        usuario.Registrar("Medico");
+        await this.usuarioService.GuardarUsuario(usuario);
 
         const medico = new Medico(
             usuario,
@@ -58,6 +57,10 @@ export default class MedicoService {
         )
 
         return await this.medicosRepository.Save(medico)
+    }
+
+    async FindByUserId(id){
+        return await this.FindByUserId(id);
     }
 
     /**

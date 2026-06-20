@@ -11,12 +11,20 @@ export default class UsuarioRepository {
 		return (await UsuarioModel.find()).map(UsuarioMapper.toEntity);
 	}
 
+	async existeUsuario(username) {
+		return await UsuarioModel.exists({ username });
+	}
+
+	async FindByUsername(username) {
+		const usuario = await UsuarioModel.findOne({ username });
+		return usuario ? UsuarioMapper.toEntity(usuario) : null;
+	}
 
 	async FindById(id) {
 		if(!mongoose.Types.ObjectId.isValid(id))
 			return null;
-		const plan = await UsuarioModel.findById(id)
-		return plan != null? UsuarioMapper.toEntity(plan) : null;
+		const usr = await UsuarioModel.findById(id)
+		return usr != null? UsuarioMapper.toEntity(usr) : null;
 	}
 
     async Save(usuario) {

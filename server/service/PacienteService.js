@@ -9,11 +9,13 @@ import UsuarioService from "./UsuarioService.js";
 import TurnoService from "./TurnoService.js";
 import ObraSocialService from "./ObraSocialService.js";
 import PlanService from "./PlanService.js";
+import Usuario from "../domain/Usuario.js";
 
 const crearPacienteSchema = z.object({
-    usuario: idSchema("usuario"),
-    dni:     stringSchema("dni").regex(/^\d+$/, "El dni solo contiene digitos"),
-    nombre:  stringSchema("nombre")
+    username:    stringSchema("usuario"),
+    password: stringSchema("contrasena"),
+    dni:        stringSchema("dni").regex(/^\d+$/, "El dni solo contiene digitos"),
+    nombre:     stringSchema("nombre")
 })
 
 const actualizarPacienteSchema = z.object({
@@ -52,6 +54,10 @@ export default class PacienteService {
         return paciente;
 	}
 
+    async FindByUserId(id){
+        return await this.FindByUserId(id);
+    }
+
     async FindAll() {
         return await this.repository.FindAll();
     }
@@ -59,13 +65,9 @@ export default class PacienteService {
     async Create(reqBody) {
         ValidarZodSchema(crearPacienteSchema, reqBody);
 
-        const usuario = await this.usuarioService.FindById(reqBody.usuario);
-
-        if(usuario.registrado)
-            throw new InputError("El usuario ya se encuentra registrado");
-        else 
-           usuario.Registrar("Paciente");
-        await this.usuarioService.actualizar(usuario);
+        const usuario = new Usuario(reqBody.username, reqBody.password);
+        usuario.Registrar("Paciente");
+        await this.usuarioService.GuardarUsuario(usuario);
 
         const paciente = new Paciente(usuario, reqBody.dni, reqBody.nombre, null, null)
         

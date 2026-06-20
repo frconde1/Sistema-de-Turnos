@@ -33,16 +33,14 @@ export default class UsuarioService {
         const {username, password} = reqBody;
         const usuario = new Usuario(username, password);
 
-        try {
-            await this.repository.Save(usuario);
-        } catch (e) {
-            if(e.code == 11000)
-                throw new InputError("El usuario ya existe");
-            throw e;
-        }
+        return await GuardarUsuario(usuario);
+    }
 
-
-        return usuario;
+    /** @param {Usuario} usuario */
+    async GuardarUsuario(usuario){
+        if(await this.repository.existeUsuario(usuario.username))
+            throw new InputError("el usuario ya existe");
+        return await this.repository.Save(usuario);
     }
 
     async Update(id, reqBody){
@@ -66,5 +64,13 @@ export default class UsuarioService {
 
     async actualizar(usuario){
         await this.repository.Save(usuario);
+    }
+
+    async Login(reqBody){
+        ValidarZodSchema(usuarioSchema, reqBody);
+        const usuario = await this.repository.FindByUsername(reqBody.username);
+        if(!usuario || usuario.password != reqBody.password)
+            throw new InputError("el usuario o contraseña no existe")
+        return {rol: usuario.rol, id: usuario.id};
     }
 }

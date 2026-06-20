@@ -57,6 +57,13 @@ export class MedicosRepository {
 		return MedicoMapper.toEntity(medico) 
     }
 
+    async FindByUsuarioId(id) {
+		if(!mongoose.Types.ObjectId.isValid(id))
+			return null;
+		const medico = await MedicoModel.findOne({ usuario: id }).populate(MedicoMapper.populate);
+		return medico != null? MedicoMapper.toEntity(medico) : null;
+	}
+
     async agregarDisponibilidad(medicoId, disponibilidad) {
         const medico = await this.findMedicoById(medicoId)
         if (medico) {

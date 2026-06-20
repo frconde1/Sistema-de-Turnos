@@ -1,9 +1,17 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
+import React, {useEffect} from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 
-export default function PacienteDashboard() {
+export default function PacienteDashboard({userId}) {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if(userId==="")
+      navigate("/")
+  }, [userId, navigate])
+  
   return (
+    
     <>
       <NavLink to="./busqueda" end>Busqueda</NavLink>
       <hr />

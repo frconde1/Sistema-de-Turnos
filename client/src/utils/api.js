@@ -5,7 +5,8 @@ const api = axios.create({
 	baseURL: 'http://localhost:3001',
 	headers: {
 		"Content-Type": "application/json"
-	}
+	},
+	validateStatus: () => true
 });
 
 export default api;
