@@ -17,9 +17,9 @@ export class MedicosRepository {
         const filtrosMDB = {};
 
         if (filtros.nombre !== undefined)       filtrosMDB.nombre       = filtros.nombre;
-        if (filtros.especialidad !== undefined) filtrosMDB.especialidad = filtros.especialidad
-        if (filtros.practica !== undefined)     filtrosMDB.practica     = filtros.practica
-        if (filtros.sede !== undefined)         filtrosMDB.sede         = filtros.sede
+        if (filtros.especialidad !== undefined) filtrosMDB.especialidades = filtros.especialidad
+        if (filtros.practica !== undefined)     filtrosMDB.practicas      = filtros.practica
+        if (filtros.sede !== undefined)         filtrosMDB.sedes          = filtros.sede
 
         const inicio = (numeroPagina - 1) * limitePorPagina;
 
@@ -31,7 +31,7 @@ export class MedicosRepository {
 
         return {
             medicos: medicos,
-            totalMedicos: await MedicoModel.countDocuments()
+            totalMedicos: await MedicoModel.countDocuments(filtrosMDB) //el total de medicos que cumple con los filtros, sino te da el total sin el filtro
         }
     }
 

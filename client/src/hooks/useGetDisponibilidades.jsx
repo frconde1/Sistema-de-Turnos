@@ -6,22 +6,24 @@ const useGetDisponibilidades = () => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 
+	const fetchDisponibilidades = async (params = {}) => {
+		try {
+			setLoading(true);
+			setError(null);
+
+			const response = await axios.get('/medicos', {
+				params,
+			});
+
+			setDisponibilidades(response.data?.data ?? []);
+		} catch (err) {
+			setError(err);
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	useEffect(() => {
-		const fetchDisponibilidades = async () => {
-			try {
-				setLoading(true);
-				setError(null);
-
-				const response = await axios.get('/medicos');
-				setDisponibilidades(response.data?.data ?? []);
-
-			} catch (err) {
-				setError(err);
-			} finally {
-				setLoading(false);
-			}
-		};
-
 		fetchDisponibilidades();
 	}, []);
 
@@ -29,7 +31,7 @@ const useGetDisponibilidades = () => {
 		disponibilidades,
 		loading,
 		error,
-		setDisponibilidades,
+		fetchDisponibilidades,
 	};
 };
 
