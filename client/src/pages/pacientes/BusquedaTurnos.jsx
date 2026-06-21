@@ -1,12 +1,28 @@
-import React from 'react'
+import React, { useState } from 'react';
 import { Alert, Badge, Card, Col, Container, ListGroup, Row, Spinner } from 'react-bootstrap';
 import useGetDisponibilidades from '../../hooks/useGetDisponibilidades';
+import BusquedaTurnosFiltros from './BusquedaTurnosFiltros.jsx';
 
 export default function BusquedaTurnos() {
-  const { disponibilidades, loading, error } = useGetDisponibilidades();
+  const { disponibilidades, loading, error, fetchDisponibilidades } = useGetDisponibilidades();
+  const [filtros, setFiltros] = useState({
+    nombre: '',
+    especialidadId: '',
+    practicaId: '',
+    sedeId: '',
+  });
 
   const formatDisponibilidad = (disponibilidad) => {
     return `${disponibilidad.diaSemana} · ${disponibilidad.horaDesde} a ${disponibilidad.horaHasta}`;
+  };
+
+  const handleSearch = () => {
+    fetchDisponibilidades({
+      nombre: filtros.nombre || undefined,
+      especialidad: filtros.especialidadId || undefined,
+      practica: filtros.practicaId || undefined,
+      sede: filtros.sedeId || undefined,
+    });
   };
 
   if (loading) {
@@ -29,10 +45,20 @@ export default function BusquedaTurnos() {
         </Col>
       </Row>
 
+      <Row>
+        <Col>
+          <BusquedaTurnosFiltros
+            filtros={filtros}
+            onChange={setFiltros}
+            onSearch={handleSearch}
+          />
+        </Col>
+      </Row>
+
       {disponibilidades.length === 0 ? (
         <Alert variant="info">No hay médicos cargados.</Alert>
       ) : (
-        <Row>
+        <Row className="mt-4">
           {disponibilidades.map((medico) => (
             <Col key={medico._id} md={6} lg={4}>
               <Card>
