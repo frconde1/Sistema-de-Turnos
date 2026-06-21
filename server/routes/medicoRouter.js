@@ -9,6 +9,9 @@ router.route('')
     .get((req, res, next) => medicoController.findAll(req, res, next))
     .post((req, res, next) => medicoController.create(req, res, next))
 
+router.route("/:username")
+    .get(async (req, res) => await medicoController.FindByUsername(req, res))
+
 router.route('/:id/disponibilidades')
     .post((req, res, next) => medicoController.agregarDisponibilidad(req, res, next))
     .delete((req, res, next) => medicoController.eliminarDisponibilidad(req, res, next))

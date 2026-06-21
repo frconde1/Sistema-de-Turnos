@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import DisponibilidadHoraria from "../domain/DisponibilidadHoraria.js";
 import Especialidad from "../domain/Especialidad.js";
 import Medico from "../domain/Medico.js";
@@ -39,13 +40,12 @@ export class MedicosRepository {
     }
 
     async Save(medico) {
-        if (medico.id) {
-            await MedicoModel.findByIdAndUpdate(medico.id, MedicoMapper.toSchema(medico), {upsert: true });
-        } else {
-            const created = await MedicoModel.create(MedicoMapper.toSchema(medico));
-            medico.id = created._id.toString();
-        }
-        return medico;
+        await MedicoModel.findOneAndUpdate(
+			{_id: medico.usuario.id},
+			{$set: MedicoMapper.toSchema(medico)},
+			{upsert: true}
+		);
+		return medico;
     }
 
     async findMedicoById(medicoId) {

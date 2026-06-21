@@ -15,6 +15,11 @@ export class MedicoController {
             next(error)
         }
     }
+
+    async FindByUsername(req, res){
+        const medico = await this.medicoService.FindByUsername(req.params.username);
+        return res.status(200).json(medico);
+    }
     
     findAll = async (req, res, next) => {
         try {

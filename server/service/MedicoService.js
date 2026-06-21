@@ -1,6 +1,6 @@
 import Medico from "../domain/Medico.js";
 import { MedicosRepository } from "../repository/MedicosRepository.js";
-import { InputError, BadRequestError } 		from "../errors/Errors.js";
+import { InputError, BadRequestError, ResourceNotFoundError } 		from "../errors/Errors.js";
 import DisponibilidadHoraria from "../domain/DisponibilidadHoraria.js";
 import { z } from "zod";
 import { DiaSemana } from "../domain/Enums.js";
@@ -41,9 +41,9 @@ export default class MedicoService {
 
     async create(medicoReq) {
         const result = medicoSchema.safeParse(medicoReq);
-        if (!result.success) {
+        if (!result.success) 
             throw new InputError(result.error.issues.map(err => err.message).join(", "));
-        }
+        
 
 
         const usuario = new Usuario(medicoReq.username, medicoReq.password);
@@ -59,8 +59,13 @@ export default class MedicoService {
         return await this.medicosRepository.Save(medico)
     }
 
-    async FindByUserId(id){
-        return await this.FindByUserId(id);
+    async FindByUsername(username){
+        const usuario = await this.usuarioService.FindByUsername(username);
+        const medico  = await this.medicosRepository.FindByUsuarioId(usuario.id);
+
+        if(medico == null)
+            throw new ResourceNotFoundError("El usuario no existe");
+        return medico;
     }
 
     /**

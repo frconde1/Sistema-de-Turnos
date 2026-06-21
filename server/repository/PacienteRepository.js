@@ -28,13 +28,13 @@ export default class PacienteRepository {
 		return paciente != null? PacienteMapper.toEntity(paciente) : null;
 	}
 
+	/**@param {Paciente} paciente */
     async Save(paciente) {
-		if (paciente.id) 
-			await PacienteModel.findByIdAndUpdate(paciente.id, PacienteMapper.toSchema(paciente), { upsert: true });
-		else {
-			const created = await PacienteModel.create(PacienteMapper.toSchema(paciente));
-			paciente.id = created._id.toString();
-		}
+		await PacienteModel.findOneAndUpdate(
+			{_id: paciente.usuario.id},
+			{$set: PacienteMapper.toSchema(paciente)},
+			{upsert: true}
+		);
 		return paciente;
     }
 

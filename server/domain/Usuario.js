@@ -3,7 +3,6 @@ export default class Usuario {
 	id; 
 	username;
 	password;
-	registrado = false;
 	/**@type {String} */
 	rol
 
@@ -18,7 +17,6 @@ export default class Usuario {
 
 	/** @param {String} rol */
 	Registrar(rol){
-		this.registrado = true;
 		this.rol = rol;
 	}
 }

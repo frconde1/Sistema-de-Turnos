@@ -55,7 +55,13 @@ export default class PacienteService {
 	}
 
     async FindByUserId(id){
-        return await this.FindByUserId(id);
+        const usuario = await this.usuarioService.FindByUsername(id);
+        const paciente  = await this.repository.FindByUsuarioId(usuario.id);
+
+        if(paciente == null)
+            throw new ResourceNotFoundError("El usuario no existe");
+        
+        return paciente;
     }
 
     async FindAll() {
@@ -77,7 +83,7 @@ export default class PacienteService {
 
     async Update(id, reqBody){
         ValidarZodSchema(actualizarPacienteSchema, reqBody);
-        const paciente = await this.FindById(id);
+        const paciente = await this.FindByUserId(id);
 
         paciente.nombre = reqBody.nombre;
         paciente.dni    = reqBody.dni;

@@ -27,6 +27,13 @@ export default class UsuarioService {
 		return usuario;
     }
 
+    async FindByUsername(username) {
+		const usuario = await this.repository.FindByUsername(username);
+		if(usuario == null)
+			throw new ResourceNotFoundError("El usuario buscado no existe");
+		return usuario;
+    }
+
     async Create(reqBody) {
         ValidarZodSchema(usuarioSchema, reqBody);
 

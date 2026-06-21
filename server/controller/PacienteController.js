@@ -16,9 +16,9 @@ export default class PacienteController {
         }
     }
 
-    async FindById(req, res, next) {
+    async FindByUsername(req, res, next) {
         try {
-            const resultado = await this.pacienteService.FindById(req.params.id);
+            const resultado = await this.pacienteService.FindByUserId(req.params.username);
             return res.status(200).json(resultado);
         } catch (error) {
             next(error);
@@ -36,7 +36,7 @@ export default class PacienteController {
 
     async Update(req, res, next) {
         try {
-            const paciente = await this.pacienteService.Update(req.params.id, req.body);
+            const paciente = await this.pacienteService.Update(req.params.username, req.body);
             return res.status(200).json(paciente);
         } catch (error) {
             next(error);
