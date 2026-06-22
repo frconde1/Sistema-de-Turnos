@@ -10,7 +10,7 @@ router.route('')
     .post((req, res, next) => medicoController.create(req, res, next))
 
 router.route("/:username")
-    .get(async (req, res) => await medicoController.FindByUsername(req, res))
+    .get((req, res, next) => medicoController.FindByUsername(req, res, next))
 
 router.route('/:id/disponibilidades')
     .post((req, res, next) => medicoController.agregarDisponibilidad(req, res, next))
