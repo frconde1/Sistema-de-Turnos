@@ -2,18 +2,10 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { Outlet, NavLink } from "react-router-dom";
+import { useAuth } from "../context/auth/AuthContext";
 
 export default function Layout({ id, setId }) {
-  const [registrado, setRegistrado] = useState(false);
-
-  useEffect(
-    () => {
-      if (id !== "")
-        setRegistrado(true);
-      else
-        setRegistrado(false);
-    },
-    [id])
+  const { usuario, logout } = useAuth();
 
   return (
     <div className="d-flex flex-column min-vh-100">
@@ -23,9 +15,11 @@ export default function Layout({ id, setId }) {
         </NavLink>
         <nav className="d-flex gap-2">
           {
-            registrado ? 
+            usuario ? 
             <>
-              <NavLink to="/" onClick={()=>setId("")} className="btn btn-outline-primary">logout</NavLink>
+              <NavLink to="/" onClick={()=>{logout()}} className="btn btn-outline-primary">
+                logout
+              </NavLink>
             </> :
               <>
                 <NavLink to="/login" className="btn btn-outline-primary">

@@ -9,33 +9,32 @@ import PacienteDashboard from './pages/pacientes/PacienteDashboard';
 import PreseleccionTurnos from './pages/pacientes/PreseleccionTurnos';
 import MedicoDashboard from './pages/medicos/MedicoDashboard';
 import Home from './pages/home/Home';
-import { useState } from 'react';
+import { AuthProvider } from './context/auth/AuthContext';
 
 function App() {
-
-  const [userId, setUserId] = useState("");
-
   return (
-    <Routes>
-      <Route path='/' element={<Layout id={userId} setId={setUserId}/>}>
-        <Route index element={<Landing/>} />
-        
-        <Route path='login'    element={<Login setId={setUserId} />} />
-        <Route path='register' element={<Register setId={setUserId} />} />
+    <AuthProvider>
+      <Routes>
+        <Route path='/' element={<Layout />}>
+          <Route index element={<Landing/>} />
+          
+          <Route path='login' element={<Login />} />
+          <Route path='register' element={<Register />} />
 
-        <Route path='home' element={<Home />} />
+          <Route path='home' element={<Home />} />
 
-        <Route path='paciente'>
-          <Route index element={<PacienteDashboard userId={userId}/>} />
-          <Route path='busqueda' element={<BusquedaTurnos userId={userId}/>} />
-          <Route path='preseleccion' element={<PreseleccionTurnos userId={userId}/>} />
+          <Route path='paciente'>
+            <Route index element={<PacienteDashboard />} />
+            <Route path='busqueda' element={<BusquedaTurnos />} />
+            <Route path='preseleccion' element={<PreseleccionTurnos />} />
+          </Route>
+
+          <Route path='medico'>
+            <Route index element={<MedicoDashboard />} />
+          </Route>
         </Route>
-
-        <Route path='medico'>
-          <Route index element={<MedicoDashboard userId={userId}/>} />
-        </Route>
-      </Route>
-    </Routes>
+      </Routes>
+    </AuthProvider>
   );
 }
 

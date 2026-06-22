@@ -1,14 +1,16 @@
 import React, {useEffect} from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/auth/AuthContext';
 
 
-export default function PacienteDashboard({userId}) {
+export default function PacienteDashboard() {
   const navigate = useNavigate();
+  const { usuario } = useAuth();
 
   useEffect(() => {
-    if(userId==="")
+    if(usuario === null || usuario.rol !== "Paciente")
       navigate("/")
-  }, [userId, navigate])
+  }, [usuario, navigate])
   
   return (
     

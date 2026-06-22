@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import api from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
+import { useAuth } from '../../context/auth/AuthContext';
 
-export default function Login({ setId }) {
+export default function Login() {
 	const [usuario, setUsuario] = useState("");
 	const [contrasena, setContrasena] = useState("");
-
-	const [cargando, setCargando] = useState(false);
+	const { login, error, loading } = useAuth();
 
 	const navigate = useNavigate();
 
@@ -16,27 +16,18 @@ export default function Login({ setId }) {
 
 		event.preventDefault();
 
+		const usuarioLogueado = await login(usuario, contrasena);
 
-		setCargando(true);
-		const res = await api.post(
-			'/usuarios/login',
-			{
-				"username": usuario,
-				"password": contrasena
-			}
-		)
-		setCargando(false);
-
-		if (res.status === 200) {
-			setId(res.data.id);
-			if (res.data.rol === "Paciente")
-				navigate("/paciente")
-			else
-				navigate("/medico")
-		} else {
-			console.error(res.data)
+		if (usuarioLogueado?.rol === "Paciente") {
+			navigate("/paciente")
+			return;
 		}
-
+		if (usuarioLogueado?.rol === "Medico") {
+			navigate("/medico")
+			return;
+		}
+		
+		navigate("/")
 	}
 
 	return (
@@ -51,8 +42,8 @@ export default function Login({ setId }) {
 					<Form.Control type="password" placeholder="Ingrese su contraseña" onChange={e => setContrasena(e.target.value)} />
 				</Form.Group>
 
-				<Button type="submit" variant="primary" disabled={cargando} >
-					{cargando ? (
+				<Button type="submit" variant="primary" disabled={loading} >
+					{loading ? (
 						<>
 							<span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" />
 							Ingresando...

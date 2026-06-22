@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/auth/AuthContext';
 
 export default function MedicoDashboard({userId}) {
   const navigate = useNavigate();
+  const { usuario } = useAuth();
 
   useEffect(() => {
-    if(userId==="")
+    if(usuario === null || usuario.rol !== "Medico")
       navigate("/")
-  }, [userId, navigate])
+  }, [usuario, navigate])
 
 
   return (

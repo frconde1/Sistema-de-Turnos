@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../../utils/api";
 
-export default function Register({setId}) {
+export default function Register() {
 	const [usuario, setUsuario] = useState("");
 	const [contrasena, setContrasena] = useState("");
 
