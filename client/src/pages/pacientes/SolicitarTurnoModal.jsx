@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Form, ListGroup, Modal } from 'react-bootstrap';
+import { Alert, Button, Card, Form, ListGroup, Modal } from 'react-bootstrap';
 import useSolicitarTurno from '../../hooks/useSolicitarTurno';
 import { useAuth } from '../../context/auth/AuthContext';
 
@@ -8,7 +8,7 @@ export default function SolicitarTurnoModal({ show, seleccionado, onHide }) {
     const [practicaSeleccionada, setPracticaSeleccionada] = useState('');
     const [sedeSeleccionada, setSedeSeleccionada] = useState('');
     const [horaSeleccionada, setHoraSeleccionada] = useState('');
-    const { loading, solicitarTurno } = useSolicitarTurno();
+    const { loading, solicitarTurno, error } = useSolicitarTurno();
 
     useEffect(() => {
         if (!show) {
@@ -122,6 +122,9 @@ export default function SolicitarTurnoModal({ show, seleccionado, onHide }) {
                         </Form.Group>
                     </Card.Body>
                 </Card>
+                {error && (
+                    <Alert variant="danger">{error}</Alert>
+                )}
             </Modal.Body>
 
             <Modal.Footer>

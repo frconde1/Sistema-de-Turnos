@@ -19,7 +19,7 @@ const useSolicitarTurno = () => {
             });
 
         } catch (err) {
-            setError(err);
+            setError(err.response?.data?.message || 'Error al solicitar turno');
         } finally {
             setLoading(false);
         }
