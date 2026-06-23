@@ -25,7 +25,7 @@ export default class NotificationRepository {
 
         return {
 			notificaciones: notificaciones.map(NotificacionMapper.toEntity),
-            totalNotificaciones: await NotificacionModel.countDocuments()
+            totalNotificaciones: await NotificacionModel.countDocuments(filtrosMDB) //el total de notificaciones que cumple con los filtros, sino te da el total sin el filtro
         }
 	}
 
