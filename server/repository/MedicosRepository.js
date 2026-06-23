@@ -30,7 +30,7 @@ export class MedicosRepository {
                         .populate(MedicoMapper.populate)
 
         return {
-            medicos: medicos,
+            medicos: medicos.map(MedicoMapper.toEntity),
             totalMedicos: await MedicoModel.countDocuments(filtrosMDB) //el total de medicos que cumple con los filtros, sino te da el total sin el filtro
         }
     }

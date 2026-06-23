@@ -8,6 +8,7 @@ export default function TurnoLayout() {
 
   const isBusqueda = location.pathname.endsWith("busqueda");
   const isPreseleccion = location.pathname.endsWith("preseleccion");
+  const isLanding = location.pathname.endsWith("paciente");
 
   return (
     <div className="container py-3">
@@ -28,6 +29,12 @@ export default function TurnoLayout() {
               {turnos.length}
             </span>
           )}
+        </NavLink>
+		<NavLink
+          to=""
+          className={`btn ${isLanding ? "btn-primary" : "btn-outline-primary"}`}
+        >
+          Landing
         </NavLink>
       </div>
 

@@ -70,7 +70,7 @@ export default function BusquedaTurnos() {
       ) : (
         <Row className="mt-4">
           {disponibilidades.map((medico) => (
-            <Col key={medico._id} md={6} lg={4}>
+            <Col key={medico.id} md={6} lg={4}>
               <Card
                 role="button"
                 tabIndex={0}
@@ -106,7 +106,7 @@ export default function BusquedaTurnos() {
                     <div>
                       {(medico.disponibilidades ?? []).length > 0 ? (
                         medico.disponibilidades.map((disponibilidad, index) => (
-                          <Badge bg="primary" key={`${medico._id}-${disponibilidad.diaSemana}-${disponibilidad.horaDesde}-${index}`}>
+                          <Badge bg="primary" key={`${medico.id}-${disponibilidad.diaSemana}-${disponibilidad.horaDesde}-${index}`}>
                             {formatDisponibilidad(disponibilidad)}
                           </Badge>
                         ))

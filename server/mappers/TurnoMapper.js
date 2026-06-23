@@ -26,7 +26,7 @@ class CambioEstadoMapper {
 
 export default class TurnoMapper {
 	
-	static populate = [{path: "medico"}, {path: "paciente", populate: PacienteMapper.populate}, {path: "sede"}, {path: "practica"}]
+	static populate = [{path: "medico", populate: MedicoMapper.populate}, {path: "paciente", populate: PacienteMapper.populate}, {path: "sede"}, {path: "practica"}]
 
 	/**@returns {Turno} */
 	static toEntity({medico, paciente, fechaHora, sede, practica, estado, historialEstados, costo, _id}){

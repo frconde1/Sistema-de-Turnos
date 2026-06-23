@@ -125,7 +125,7 @@ export default function SolicitarTurnoModal({ show, seleccionado, onHide }) {
                         <ListGroup variant="flush">
                             {(seleccionado.disponibilidades ?? []).length > 0 ? (
                                 seleccionado.disponibilidades.map((disponibilidad, index) => (
-                                    <ListGroup.Item key={`${seleccionado._id}-${disponibilidad.diaSemana}-${index}`} className="px-0 d-flex justify-content-between gap-3">
+                                    <ListGroup.Item key={`${seleccionado.id}-${disponibilidad.diaSemana}-${index}`} className="px-0 d-flex justify-content-between gap-3">
                                         <span className="text-muted">{disponibilidad.diaSemana}</span>
                                         <span className="fw-semibold text-end">
                                             {disponibilidad.horaDesde} - {disponibilidad.horaHasta}

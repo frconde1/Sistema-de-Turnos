@@ -4,13 +4,12 @@ import Button from "react-bootstrap/Button";
 import { formatAppointmentDate, formatHour } from "../../utils/dateFormatter";
 
 function TurnoCard({ turno, index, onRemove }) {
-	const { medico, fechaHora, paciente, practica, sede} = turno;
-	const medicoSede 	 = medico.sedes.find(s => s._id === sede);
-	const medicoPractica = medico.practicas.find(p => p._id === practica);
+	const { medico, fechaHora, paciente, practica, sede } = turno;
+	const medicoSede 	 = medico.sedes.find(s => s.id === sede);
+	const medicoPractica = medico.practicas.find(p => p.id === practica);
 
 	const hasta = new Date(fechaHora)
 	hasta.setMinutes(hasta.getMinutes() + medicoPractica.duracionEnMins);
-
 	const handleRemove = () => {
 		onRemove(index);
 	};
@@ -44,9 +43,11 @@ function TurnoCard({ turno, index, onRemove }) {
 
 				<div className="d-flex justify-content-between align-items-center">
 					<Badge bg="primary">Turno reservado</Badge>
-					<Button variant="outline-danger" size="sm" onClick={handleRemove}>
-						Quitar
-					</Button>
+					{onRemove && (
+						<Button variant="outline-danger" size="sm" onClick={handleRemove}>
+							Quitar
+						</Button>
+					)}
 				</div>
 			</Card.Body>
 		</Card>
