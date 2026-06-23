@@ -36,3 +36,26 @@
     transform: rotate(360deg);
   }
 }
+
+.notification-item.read {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  opacity: 0.9;
+}
+.notification-item.unread {
+  background-color: #ffffff;
+}
+.notification-item .notification-message {
+  word-break: break-word;
+}
+.notification-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #0d6efd; 
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.notification-item.read .notification-message {
+  color: #6c757d;
+}
