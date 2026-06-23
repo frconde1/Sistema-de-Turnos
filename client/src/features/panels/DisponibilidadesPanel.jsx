@@ -13,7 +13,7 @@ export default function DisponibilidadesPanel({ disponibilidadesActuales, onAgre
                                 <span className="fw-semibold me-2">{d.diaSemana}</span>
                                 <small className="text-muted">{d.horaDesde} – {d.horaHasta}</small>
                             </div>
-                            <Button variant="outline-danger" size="sm" onClick={() => onEliminar(d.id || d._id)}>
+                            <Button variant="outline-danger" size="sm" onClick={() => onEliminar(d)}>
                                 Eliminar
                             </Button>
                         </ListGroup.Item>

@@ -33,7 +33,7 @@ export default function TurnoLayout() {
           to=""
           className={`btn ${isLanding ? "btn-primary" : "btn-outline-primary"}`}
         >
-          Landing
+          Dashboard
         </NavLink>
       </div>
 

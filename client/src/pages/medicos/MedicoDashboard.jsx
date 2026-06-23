@@ -13,6 +13,7 @@ import EspecialidadesPanel from '../../features/panels/EspecialidadesPanel'
 import DisponibilidadesPanel from '../../features/panels/DisponibilidadesPanel'
 import SedeModal from '../../features/modals/SedeModal'
 import DisponibilidadModal from '../../features/modals/DisponibilidadesModal'
+import EspecialidadModal from '../../features/modals/especialidadesModal'
  
 const DIAS = ['LUNES','MARTES','MIERCOLES','JUEVES','VIERNES','SABADO','DOMINGO']
 
@@ -79,10 +80,25 @@ const [todasLasPracticas, setTodasLasPracticas] = useState([])
         }
     }
  
-    const eliminarDisponibilidad = async (id) => {
+    const eliminarDisponibilidad = async (disponibilidad) => {
         try {
-            // TODO: await axios.delete(`/medicos/${medico.id}/disponibilidades/${id}`)
-            setMedico(m => ({ ...m, disponibilidades: m.disponibilidades.filter(d => d.id !== id) }))
+            await axios.delete(`/medicos/${medico.id}/disponibilidades`,
+            {
+                data:{
+                    disponibilidad
+                }
+            })
+            setMedico(m => ({
+            ...m,
+            disponibilidades: m.disponibilidades.filter(
+                d =>
+                    !(
+                        d.diaSemana === disponibilidad.diaSemana &&
+                        d.horaDesde === disponibilidad.horaDesde &&
+                        d.horaHasta === disponibilidad.horaHasta
+                    )
+                ) 
+            }))
         } catch {
             setError('No se pudo eliminar la disponibilidad.')
         }
@@ -123,6 +139,22 @@ const agregarPractica = async (practicaId) => {
         setError('No se pudo asignar la sede.')
     }
 }
+
+    const asignarEspecialidad = async (especialidadId) => {
+        try {
+            const especialidadAsignada = todasLasEspecialidades.find(e => e.id === especialidadId)
+            if (!especialidadAsignada) return
+
+            await axios.post(`/medicos/${medico.id || medico._id}/especialidades`, { 
+                especialidad: { id: especialidadId } 
+            })
+
+            setMedico(m => ({ ...m, especialidades: [...m.especialidades, especialidadAsignada] }))
+            setModalEspecialidad(false)
+        } catch {
+            setError('No se pudo asignar la especialidad.')
+        }
+    }
  
     if (loading) return (
         <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
@@ -203,6 +235,15 @@ const agregarPractica = async (practicaId) => {
             onAsignar = {asignarSede}
                         
             />
+            <EspecialidadModal
+            show = {modalEspecialidad} 
+            onHide = { () => setModalEspecialidad(false)}
+            especialidadesActuales = {medico.especialidades}
+            todasLasEspecialidades = {todasLasEspecialidades}
+            onAsignar = {asignarEspecialidad}
+                        
+            />
+        <Outlet />
 
          </Container>
     )

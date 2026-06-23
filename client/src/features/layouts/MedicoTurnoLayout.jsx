@@ -21,7 +21,7 @@ export default function MedicoTurnoLayout() {
           to=""
           className={`btn ${isLanding ? "btn-primary" : "btn-outline-primary"}`}
         >
-          Landing
+          Dashboard
         </NavLink>
       </div>
 
