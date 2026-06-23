@@ -24,7 +24,6 @@ export default function NotificationsPage() {
     setError(null);
     try {
       const resp = await axios.get(`/notificaciones?destinatario=${usuario.id}&pagina=${p}&tamano=${size}`);
-      // resp.data should contain notificaciones and totalNotificaciones
       const { notificaciones, totalNotificaciones } = resp.data;
       const mapped = notificaciones.map(n => ({
         id: n.id,
