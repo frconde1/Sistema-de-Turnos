@@ -11,7 +11,7 @@ const useGetTurnos = (rol, id) => {
             setLoading(true);
             setError(null);
             const path = rol === "Paciente" ? 
-                "/turnos?paciente" + id :
+                "/pacientes/" + id + "/turnos" :
                 "/turnos?medico"   + id;
             const response = await axios.get(path);
             setTurnosPaciente(response.data.turnos ?? []);
