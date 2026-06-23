@@ -3,9 +3,20 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { Outlet, NavLink } from "react-router-dom";
 import { useAuth } from "../context/auth/AuthContext";
+import { useNotification } from "../context/auth/NotificationContext";
+import { Notificaciones } from "../features/Notificaciones";
+
+
 
 export default function Layout({ id, setId }) {
   const { usuario, logout } = useAuth();
+  const { notifications, cargarNotificaciones } = useNotification();
+ 
+  useEffect(() => {
+    if (usuario) {
+      cargarNotificaciones(usuario.id);
+    }
+  }, [usuario]);
 
   return (
     <div className="d-flex flex-column min-vh-100">
@@ -20,6 +31,7 @@ export default function Layout({ id, setId }) {
               <NavLink to="/" onClick={()=>{logout()}} className="btn btn-outline-primary">
                 logout
               </NavLink>
+              <Notificaciones />
             </> :
               <>
                 <NavLink to="/login" className="btn btn-outline-primary">
@@ -28,9 +40,11 @@ export default function Layout({ id, setId }) {
                 <NavLink to="/register" className="btn btn-primary">
                   Registrarse
                 </NavLink>
+
               </>
           }
         </nav>
+
       </header>
 
       <main className="flex-grow-1" style={{ backgroundColor: "lightgray" }}>
