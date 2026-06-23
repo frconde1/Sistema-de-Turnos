@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import api from "../../utils/api";
+import { Toast, ToastContainer, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
 	const [usuario, setUsuario] = useState("");
 	const [contrasena, setContrasena] = useState("");
+	
 
 	const [nombre, setNombre] = useState("");
 	const [tipo, setTipo] = useState("paciente");
@@ -13,36 +16,66 @@ export default function Register() {
 
 	const [cargando, setCargando] = useState(false);
 
-	/** @param {Event} e */
+	const [mostrarToast, setMostrarToast] = useState(false);
+	const [toastMensaje, setToastMensaje] = useState("");
+	const [toastTipo, setToastTipo] = useState("");
+	const [toastTitulo, setToastTitulo] = useState("");
+
+	const [mostrarPassword, setMostrarPassword] = useState(false);
+
+	const navigate = useNavigate();
+
 	async function enviar(e) {
 		e.preventDefault();
 
-		setCargando(true);
-		let res;
-		if (tipo === "paciente")
-			res = await api.post(
-				"pacientes",
-				{
-					"username": usuario,
-					"password": contrasena,
-					"nombre": nombre,
-					"dni": dni
-				}
-			);
-		else
-			res = await api.post(
-				"medicos",
-				{
-					"username": usuario,
-					"password": contrasena,
-					"nombre": nombre,
-					"matricula": matricula
-				}
-			);
 
-		console.log(res.status);
-		setCargando(false);
-	}
+		try {
+			setCargando(true);
+			let res;
+			if (tipo === "paciente")
+				res = await api.post(
+					"pacientes",
+					{
+						"username": usuario,
+						"password": contrasena,
+						"nombre": nombre,
+						"dni": dni
+					}
+				);
+			else
+				res = await api.post(
+					"medicos",
+					{
+						"username": usuario,
+						"password": contrasena,
+						"nombre": nombre,
+						"matricula": matricula
+					}
+				);
+
+			console.log(res.status);
+			setCargando(false);
+			setToastTitulo("Registro exitoso");
+			setToastMensaje("El registro se ha realizado correctamente.");
+			setToastTipo("success");
+			setMostrarToast(true);
+
+			setTimeout(() => {
+				navigate("/login");
+			}, 2000);
+
+		} catch (error) {
+				setToastTipo("error");
+				setToastTitulo("Error en el registro");
+				if (error.response && error.response.data && error.response.data.message) {
+					setToastMensaje(error.response.data.message);
+				} else {
+					setToastMensaje("Ocurrió un error al registrar el usuario.");
+				}
+				setMostrarToast(true);
+				setCargando(false);
+			}
+		}
 
 	useEffect(() => {
 		setDni("");
@@ -50,6 +83,7 @@ export default function Register() {
 	}, [tipo]);
 
 	return (
+		<>
 		<div className="container mt-5" style={{ maxWidth: "500px" }}>
 			<h2 className="mb-4">Registro</h2>
 			<form onSubmit={enviar}>
@@ -63,16 +97,34 @@ export default function Register() {
 						onChange={(e) => setUsuario(e.target.value)}
 					/>
 				</div>
-				<div className="mb-3">
-					<label htmlFor="password" className="form-label">
-						Contraseña
-					</label>
+			<div className="mb-3">
+				<label htmlFor="password" className="form-label">
+					Contraseña
+				</label>
+
+				<div className="position-relative">
 					<input
-						type="password"
+						type={mostrarPassword ? "text" : "password"}
 						className="form-control"
+						style={{ paddingRight: "80px" }}
 						onChange={(e) => setContrasena(e.target.value)}
 					/>
+
+					<button
+						type="button"
+						className="btn btn-sm position-absolute"
+						style={{
+							right: "10px",
+							top: "50%",
+							transform: "translateY(-50%)",
+							zIndex: 10
+						}}
+						onClick={() => setMostrarPassword(!mostrarPassword)}
+					>
+						{mostrarPassword ? "Ocultar" : "Mostrar"}
+					</button>
 				</div>
+			</div>
 
 				<div className="mb-3">
 					<label htmlFor="nombre" className="form-label">
@@ -143,5 +195,23 @@ export default function Register() {
 			</form>
 			<br />
 		</div>
+		
+		<ToastContainer position="top-end" className="p-3">
+			<Toast
+				onClose={() => setMostrarToast(false)}
+				show={mostrarToast}
+				bg={toastTipo === "success" ? "success" : "danger"}
+				delay={5000}
+				autohide
+			>
+				<Toast.Header>
+					<strong className="me-auto">{toastTitulo}</strong>
+				</Toast.Header>
+				<Toast.Body className="text-white">{toastMensaje}</Toast.Body>
+			</Toast>
+		</ToastContainer>
+
+		</>
+		
 	);
 }

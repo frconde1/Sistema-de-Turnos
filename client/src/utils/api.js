@@ -12,7 +12,7 @@ const api = axios.create({
 	headers: {
 		"Content-Type": "application/json"
 	},
-	validateStatus: () => true
+	//validateStatus: () => true
 });
 
 export default api;
