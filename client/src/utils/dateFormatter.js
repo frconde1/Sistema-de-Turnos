@@ -47,3 +47,13 @@ export const formatAppointmentDate = (date) => {
     
     return formatter.format(appointmentDate);
 };
+
+export const formatHour = (date) => {
+    if(!date) return '';
+    const appointmentDate = new Date(date);
+
+    const hours = String(appointmentDate.getHours()).padStart(2, '0');
+    const minutes = String(appointmentDate.getMinutes()).padStart(2, '0');
+  
+    return `${hours}:${minutes}`;
+}

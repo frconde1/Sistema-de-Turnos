@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import PracticaCard from './PracticaCard'; // Tu componente de tarjeta con el botón Seleccionar
+import PracticaCard from '../cards/PracticaCard'; // Tu componente de tarjeta con el botón Seleccionar
 
 export default function PracticaModal({ show, onHide, todasLasPracticas = [], practicasActuales = [], onAsignar }) {
     // Acá guardamos el ID de la tarjeta que el usuario cliquee

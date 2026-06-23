@@ -1,37 +1,54 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Form, ListGroup, Modal } from 'react-bootstrap';
-import useSolicitarTurno from '../../hooks/useSolicitarTurno';
+
 import { useAuth } from '../../context/auth/AuthContext';
+import { useOutletContext } from 'react-router-dom';
 
 export default function SolicitarTurnoModal({ show, seleccionado, onHide }) {
     const { usuario } = useAuth();
     const [practicaSeleccionada, setPracticaSeleccionada] = useState('');
     const [sedeSeleccionada, setSedeSeleccionada] = useState('');
+    const [fechaSeleccionada, setFechaSeleccionada] = useState('');
     const [horaSeleccionada, setHoraSeleccionada] = useState('');
-    const { loading, solicitarTurno } = useSolicitarTurno();
+
+    const { turnos, setTurnos } = useOutletContext();
+
+    const agregarTurno = (turno) => { setTurnos(t => [...t, turno]) };
 
     useEffect(() => {
         if (!show) {
             setPracticaSeleccionada('');
             setSedeSeleccionada('');
+            setFechaSeleccionada('');
             setHoraSeleccionada('');
         }
     }, [show, seleccionado]);
 
     if (!seleccionado) return null;
 
+    
     const handleSolicitarTurno = () => {
-        solicitarTurno({
-            medico: seleccionado._id,
+        const formularioCompleto = !!(sedeSeleccionada && practicaSeleccionada && fechaSeleccionada && horaSeleccionada);
+
+        if (!formularioCompleto || !usuario || !seleccionado)
+            return;
+
+        // fechaSeleccionada: "YYYY-MM-DD", horaSeleccionada: "HH:MM"
+        const fechaHora = new Date(`${fechaSeleccionada}T${horaSeleccionada}`);
+
+        agregarTurno({
+            medico: seleccionado,
             paciente: usuario.id,
             sede: sedeSeleccionada,
             practica: practicaSeleccionada,
-            fechaHora: horaSeleccionada,
+            fechaHora,
         });
+
+        onHide();
     };
 
     return (
-        <Modal show={show} onHide={onHide} centered size="lg">
+        <Modal show={show} onHide={onHide} centered size="lg" fullscreen="sm-down">
             <Modal.Header closeButton>
                 <Modal.Title>Detalle del turno</Modal.Title>
             </Modal.Header>
@@ -64,12 +81,13 @@ export default function SolicitarTurnoModal({ show, seleccionado, onHide }) {
                             </ListGroup.Item>
                         </ListGroup>
 
-                        <Form className="mb-3">
+                        <Form className="mb-3" noValidate>
                             <Form.Group className="mb-3">
                                 <Form.Label>Práctica</Form.Label>
                                 <Form.Select
                                     value={practicaSeleccionada}
                                     onChange={(event) => setPracticaSeleccionada(event.target.value)}
+                                    isInvalid={!practicaSeleccionada}
                                 >
                                     <option value="">Seleccionar práctica</option>
                                     {(seleccionado.practicas ?? []).map((practica, index) => (
@@ -78,6 +96,9 @@ export default function SolicitarTurnoModal({ show, seleccionado, onHide }) {
                                         </option>
                                     ))}
                                 </Form.Select>
+                                <Form.Control.Feedback type="invalid">
+                                    Seleccioná una práctica.
+                                </Form.Control.Feedback>
                             </Form.Group>
 
                             <Form.Group className="mb-3">
@@ -85,6 +106,7 @@ export default function SolicitarTurnoModal({ show, seleccionado, onHide }) {
                                 <Form.Select
                                     value={sedeSeleccionada}
                                     onChange={(event) => setSedeSeleccionada(event.target.value)}
+                                    isInvalid={!sedeSeleccionada}
                                 >
                                     <option value="">Seleccionar sede</option>
                                     {(seleccionado.sedes ?? []).map((sede, index) => (
@@ -93,6 +115,9 @@ export default function SolicitarTurnoModal({ show, seleccionado, onHide }) {
                                         </option>
                                     ))}
                                 </Form.Select>
+                                <Form.Control.Feedback type="invalid">
+                                    Seleccioná una sede.
+                                </Form.Control.Feedback>
                             </Form.Group>
                         </Form>
 
@@ -112,23 +137,42 @@ export default function SolicitarTurnoModal({ show, seleccionado, onHide }) {
                             )}
                         </ListGroup>
 
-                        <Form.Group className="mt-3">
-                            <Form.Label>Seleccione un horario</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={horaSeleccionada}
-                                onChange={(event) => setHoraSeleccionada(event.target.value)}
-                            />
-                        </Form.Group>
+                        <div className="row mt-3 g-3">
+                            <Form.Group className="col-12 col-sm-6">
+                                <Form.Label>Fecha</Form.Label>
+                                <Form.Control
+                                    type="date"
+                                    value={fechaSeleccionada}
+                                    onChange={(event) => setFechaSeleccionada(event.target.value)}
+                                    isInvalid={!fechaSeleccionada}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    Seleccioná una fecha.
+                                </Form.Control.Feedback>
+                            </Form.Group>
+
+                            <Form.Group className="col-12 col-sm-6">
+                                <Form.Label>Hora</Form.Label>
+                                <Form.Control
+                                    type="time"
+                                    value={horaSeleccionada}
+                                    onChange={(event) => setHoraSeleccionada(event.target.value)}
+                                    isInvalid={!horaSeleccionada}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    Indicá un horario.
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </div>
                     </Card.Body>
                 </Card>
             </Modal.Body>
 
-            <Modal.Footer>
-                <Button variant="secondary" onClick={onHide}>
+            <Modal.Footer className="flex-wrap gap-2">
+                <Button variant="secondary" onClick={onHide} className="flex-grow-1 flex-sm-grow-0">
                     Cancelar
                 </Button>
-                <Button variant="primary" onClick={handleSolicitarTurno} disabled={loading}>
+                <Button variant="primary" onClick={handleSolicitarTurno} className="flex-grow-1 flex-sm-grow-0">
                     Solicitar turno
                 </Button>
             </Modal.Footer>

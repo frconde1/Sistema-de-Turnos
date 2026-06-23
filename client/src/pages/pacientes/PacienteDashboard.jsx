@@ -15,9 +15,7 @@ export default function PacienteDashboard() {
   return (
     
     <>
-      <NavLink to="./busqueda" end>Busqueda</NavLink>
-      <hr />
-      <NavLink to="./preseleccion" end>Preseleccion</NavLink>
+      <h1>PACIENTE DASHBOARD</h1>
     </>
   )
 }

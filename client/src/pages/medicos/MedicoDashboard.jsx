@@ -6,13 +6,13 @@ import {
     Container, Row, Col, Card, Badge, Button, Modal,
     Form, Spinner, Alert, ListGroup
 } from 'react-bootstrap'
-import PracticaModal from '../../features/PracticaModal'
-import PracticasPanel from '../../features/PracticasPanel'
-import SedesPanel from '../../features/SedePanel'
-import EspecialidadesPanel from '../../features/EspecialidadesPanel'
-import DisponibilidadesPanel from '../../features/DisponibilidadesPanel'
-import SedeModal from '../../features/SedeModal'
-import DisponibilidadModal from '../../features/DisponibilidadesModal'
+import PracticaModal from '../../features/modals/PracticaModal'
+import PracticasPanel from '../../features/panels/PracticasPanel'
+import SedesPanel from '../../features/panels/SedePanel'
+import EspecialidadesPanel from '../../features/panels/EspecialidadesPanel'
+import DisponibilidadesPanel from '../../features/panels/DisponibilidadesPanel'
+import SedeModal from '../../features/modals/SedeModal'
+import DisponibilidadModal from '../../features/modals/DisponibilidadesModal'
  
 const DIAS = ['LUNES','MARTES','MIERCOLES','JUEVES','VIERNES','SABADO','DOMINGO']
 

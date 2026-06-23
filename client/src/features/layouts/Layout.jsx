@@ -2,9 +2,9 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { Outlet, NavLink } from "react-router-dom";
-import { useAuth } from "../context/auth/AuthContext";
-import { useNotification } from "../context/auth/NotificationContext";
-import { Notificaciones } from "../features/Notificaciones";
+import { useAuth } from "../../context/auth/AuthContext";
+import { useNotification } from "../../context/auth/NotificationContext";
+import { Notificaciones } from "../Notificaciones";
 
 
 

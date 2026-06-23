@@ -2,7 +2,7 @@ import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import Login    from './pages/sesiones/Login';
 import Register from './pages/sesiones/Register';
-import Layout from './features/Layout';
+import Layout from './features/layouts/Layout';
 import Landing from './pages/Landing';
 import BusquedaTurnos from './pages/pacientes/BusquedaTurnos';
 import PacienteDashboard from './pages/pacientes/PacienteDashboard';
@@ -11,6 +11,7 @@ import MedicoDashboard from './pages/medicos/MedicoDashboard';
 import Home from './pages/home/Home';
 import { AuthProvider } from './context/auth/AuthContext';
 import { NotificationProvider } from './context/auth/NotificationContext';
+import TurnoLayout from './features/layouts/TurnoLayout';
 
 function App() {
   return (
@@ -26,9 +27,11 @@ function App() {
             <Route path='home' element={<Home />} />
 
             <Route path='paciente'>
-              <Route index element={<PacienteDashboard />} />
-              <Route path='busqueda' element={<BusquedaTurnos />} />
-              <Route path='preseleccion' element={<PreseleccionTurnos />} />
+              <Route element={<TurnoLayout />} >
+                <Route index element={<PacienteDashboard />} />
+                <Route path='busqueda' element={<BusquedaTurnos />} />
+                <Route path='preseleccion' element={<PreseleccionTurnos />} />
+              </Route>
             </Route>
 
             <Route path='medico'>
