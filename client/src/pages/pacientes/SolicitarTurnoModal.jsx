@@ -166,6 +166,12 @@ export default function SolicitarTurnoModal({ show, seleccionado, onHide }) {
                         </div>
                     </Card.Body>
                 </Card>
+                {error && (
+                    <Alert variant="danger">{error}</Alert>
+                )}
+                {turnoSolicitado && (
+                    <Alert variant="success">Turno solicitado!!</Alert>
+                )}
             </Modal.Body>
 
             <Modal.Footer className="flex-wrap gap-2">

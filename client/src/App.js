@@ -12,6 +12,7 @@ import Home from './pages/home/Home';
 import { AuthProvider } from './context/auth/AuthContext';
 import { NotificationProvider } from './context/auth/NotificationContext';
 import TurnoLayout from './features/layouts/TurnoLayout';
+import NotificationsPage from './pages/NotificationsPage';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
             <Route path='medico'>
               <Route index element={<MedicoDashboard />} />
             </Route>
+            <Route path='notificaciones' element={<NotificationsPage />} />
           </Route>
         </Routes>
       </NotificationProvider>
