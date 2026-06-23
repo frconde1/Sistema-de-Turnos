@@ -8,8 +8,7 @@ export default function TurnoLayout() {
 
   const isBusqueda = location.pathname.endsWith("busqueda");
   const isPreseleccion = location.pathname.endsWith("preseleccion");
-  const isLanding = location.pathname.endsWith("paciente");
-
+  const isLanding = location.pathname.endsWith("paciente")
   return (
     <div className="container py-3">
       <div className="d-flex justify-content-center gap-2 mb-4">

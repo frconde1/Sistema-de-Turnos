@@ -11,7 +11,7 @@ export default class TurnoController {
 		const resultado = await this.service.FindAll(req.query);
 		
 		return res.status(200).json({ 
-			data: resultado.turnos,
+			turnos: resultado.turnos,
 			paginacion: {
 				numeroPagina: 	 resultado.numeroPagina,
 				limitePorPagina: resultado.limitePagina,

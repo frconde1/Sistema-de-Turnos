@@ -8,7 +8,7 @@ import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 
 import { useAuth } from "../../context/auth/AuthContext";
-import useGetTurnosPaciente from "../../hooks/useGetTurnosPaciente";
+import useGetTurnos from "../../hooks/useGetTurnos";
 import TurnoCard from "../../features/cards/TurnoCard";
 
 export default function PacienteDashboard() {
@@ -21,7 +21,7 @@ export default function PacienteDashboard() {
 
   }, [usuario, navigate]);
 
-  const { turnos, loading, error } = useGetTurnosPaciente(usuario?.id);
+  const { turnos, loading, error } = useGetTurnos(usuario?.rol, usuario?.id);
   return (
     <Container className="py-4">
       <div className="d-flex align-items-center gap-2 mb-4">

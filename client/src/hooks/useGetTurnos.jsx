@@ -1,17 +1,19 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-const useGetTurnosPaciente = (id) => {
+const useGetTurnos = (rol, id) => {
     const [turnos, setTurnosPaciente] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const fetchTurnosPaciente = async () => {
+    const fetchTurnos = async () => {
         try {
             setLoading(true);
             setError(null);
-
-            const response = await axios.get('/pacientes/'+id+'/turnos');
+            const path = rol === "Paciente" ? 
+                "/pacientes/" + id + "/turnos" :
+                "/turnos?medico" + id;
+            const response = await axios.get(path);
             setTurnosPaciente(response.data.turnos ?? []);
 
         } catch (err) {
@@ -22,7 +24,7 @@ const useGetTurnosPaciente = (id) => {
     };
 
     useEffect(() => {
-        fetchTurnosPaciente();
+        fetchTurnos();
     }, []);
 
     return {
@@ -32,4 +34,4 @@ const useGetTurnosPaciente = (id) => {
     };
 };
 
-export default useGetTurnosPaciente;
+export default useGetTurnos;

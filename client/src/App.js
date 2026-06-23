@@ -13,6 +13,8 @@ import { AuthProvider } from './context/auth/AuthContext';
 import { NotificationProvider } from './context/auth/NotificationContext';
 import TurnoLayout from './features/layouts/TurnoLayout';
 import NotificationsPage from './pages/NotificationsPage';
+import MedicoTurnoLayout from './features/layouts/MedicoTurnoLayout';
+import MedicoTurnos from './pages/medicos/MedicoTurnos';
 
 function App() {
   return (
@@ -27,16 +29,15 @@ function App() {
 
             <Route path='home' element={<Home />} />
 
-            <Route path='paciente'>
-              <Route element={<TurnoLayout />} >
+            <Route path='paciente' element={<TurnoLayout />}>
                 <Route index element={<PacienteDashboard />} />
                 <Route path='busqueda' element={<BusquedaTurnos />} />
                 <Route path='preseleccion' element={<PreseleccionTurnos />} />
-              </Route>
             </Route>
 
-            <Route path='medico'>
-              <Route index element={<MedicoDashboard />} />
+            <Route path='medico' element={<MedicoTurnoLayout />}>
+                <Route index element={<MedicoDashboard />} />
+                <Route path='turnos' element={<MedicoTurnos />} />
             </Route>
             <Route path='notificaciones' element={<NotificationsPage />} />
           </Route>
