@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Alert, Badge, Card, Col, Container, ListGroup, Row, Spinner } from 'react-bootstrap';
 import useGetDisponibilidades from '../../hooks/useGetDisponibilidades';
 import BusquedaTurnosFiltros from './BusquedaTurnosFiltros.jsx';
+import SolicitarTurnoModal from './SolicitarTurnoModal.jsx';
 
 export default function BusquedaTurnos() {
   const { disponibilidades, loading, error, fetchDisponibilidades } = useGetDisponibilidades();
@@ -11,9 +12,18 @@ export default function BusquedaTurnos() {
     practicaId: '',
     sedeId: '',
   });
+  const [seleccionado, setSeleccionado] = useState(null);
 
   const formatDisponibilidad = (disponibilidad) => {
     return `${disponibilidad.diaSemana} · ${disponibilidad.horaDesde} a ${disponibilidad.horaHasta}`;
+  };
+
+  const handleOpen = (medico) => {
+    setSeleccionado(medico);
+  };
+
+  const handleClose = () => {
+    setSeleccionado(null);
   };
 
   const handleSearch = () => {
@@ -61,7 +71,18 @@ export default function BusquedaTurnos() {
         <Row className="mt-4">
           {disponibilidades.map((medico) => (
             <Col key={medico._id} md={6} lg={4}>
-              <Card>
+              <Card
+                role="button"
+                tabIndex={0}
+                onClick={() => handleOpen(medico)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    handleOpen(medico);
+                  }
+                }}
+                style={{ cursor: 'pointer' }}
+              >
                 <Card.Body>
                   <Card.Title>{medico.nombre ?? 'Sin nombre'}</Card.Title>
                   <Card.Subtitle>Matrícula: {medico.matricula ?? '-'}</Card.Subtitle>
@@ -100,6 +121,12 @@ export default function BusquedaTurnos() {
           ))}
         </Row>
       )}
+
+      <SolicitarTurnoModal
+        show={Boolean(seleccionado)}
+        seleccionado={seleccionado}
+        onHide={handleClose}
+      />
     </Container>
   )
 }
