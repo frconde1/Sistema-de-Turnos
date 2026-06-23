@@ -52,7 +52,7 @@ export default class Turno {
 	 * @param {String} motivo 
 	 */
 	CambiarEstado(nuevoEstado, quien, motivo) { 
-		this.estado = nuevoEstado.estado;
+		this.estado = nuevoEstado;
 
 		this.historialEstados.push(
 			new CambioEstadoTurno(

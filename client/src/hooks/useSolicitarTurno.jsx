@@ -10,8 +10,9 @@ const useSolicitarTurno = () => {
         try {
             setLoading(true);
             setError(null);
+
             await axios.post('/turnos', {
-                medico,
+                medico: medico.id,
                 paciente,
                 sede,
                 practica,
@@ -19,8 +20,8 @@ const useSolicitarTurno = () => {
             });
             return { ok: true };
         } catch (err) {
-            setError(err);
-            return { ok: false, error: err };
+            setError(err.response.data.message);
+            return { ok: false, error: err.response.data.message };
         } finally {
             setLoading(false);
         }

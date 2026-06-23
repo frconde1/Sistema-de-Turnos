@@ -88,6 +88,7 @@ export default function PreseleccionTurnos() {
                 index={index}
                 turno={turno}
                 onRemove={handleRemoveTurno}
+                botonText={"Cancelar"}
               />
             </Col>
           ))}

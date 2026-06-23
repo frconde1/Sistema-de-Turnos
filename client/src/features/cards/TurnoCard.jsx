@@ -3,8 +3,8 @@ import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
 import { formatAppointmentDate, formatHour } from "../../utils/dateFormatter";
 
-function TurnoCard({ turno, index, onRemove }) {
-	const { medico, fechaHora, paciente, practica, sede } = turno;
+function TurnoCard({ turno, index, onRemove, botonText }) {
+	const { medico, fechaHora, paciente, practica, estado, sede } = turno;
 	const medicoSede 	 = medico.sedes.find(s => s.id === sede);
 	const medicoPractica = medico.practicas.find(p => p.id === practica);
 
@@ -24,8 +24,8 @@ function TurnoCard({ turno, index, onRemove }) {
 				</Card.Subtitle>
 
 				<div className="mb-2">
-					<strong>Sede:</strong> {medicoSede.nombre}
-					{medicoSede.direccion}
+					<p><strong>Sede:</strong> {medicoSede.nombre}</p>
+					<p>{medicoSede.direccion}</p>
 				</div>
 
 				<div className="mb-2">
@@ -41,11 +41,18 @@ function TurnoCard({ turno, index, onRemove }) {
 					{"]"}
 				</div>
 
+				{estado && (
+					<div className="mb-2">
+						<strong>Estado: </strong>
+						{estado}
+					</div>
+				)}
+
 				<div className="d-flex justify-content-between align-items-center">
 					<Badge bg="primary">Turno reservado</Badge>
 					{onRemove && (
 						<Button variant="outline-danger" size="sm" onClick={handleRemove}>
-							Quitar
+							{botonText}
 						</Button>
 					)}
 				</div>
