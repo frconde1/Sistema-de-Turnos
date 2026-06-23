@@ -52,8 +52,6 @@ export default function Register() {
 						"matricula": matricula
 					}
 				);
-
-			console.log(res.status);
 			setCargando(false);
 			setToastTitulo("Registro exitoso");
 			setToastMensaje("El registro se ha realizado correctamente.");

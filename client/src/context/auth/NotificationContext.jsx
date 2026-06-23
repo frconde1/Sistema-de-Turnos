@@ -16,8 +16,6 @@ export const NotificationProvider = ({ children }) => {
         setLoading(true);
         try {
             const response = await axios.get(`/notificaciones?destinatario=${usuarioId}&leida=false`);
-            
-            console.log(response.data);
 
             const notificaciones = response.data.notificaciones.map(
                 (notificacion) => ({

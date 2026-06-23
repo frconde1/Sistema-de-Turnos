@@ -14,7 +14,6 @@ export function AuthProvider({ children }) {
 
         try {
             const response = await axios.post('/usuarios/login', { username, password });
-          console.log("respuesta login:", response.data)
 
             const usuarioLogueado = {
                 id: response.data.id,

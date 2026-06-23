@@ -45,7 +45,6 @@ const [todasLasPracticas, setTodasLasPracticas] = useState([])
 
     const fetchMedico = async () => {
         try {
-            console.log("username: QUIENB TE CONOCE", usuario.username)
             const res = await axios.get(`/medicos/${usuario.username}`)
             setMedico(res.data)
             const resSedes = await axios.get('/sedes')
@@ -55,8 +54,6 @@ const [todasLasPracticas, setTodasLasPracticas] = useState([])
             const resPracticasGlobales = await axios.get('/practicas') // O el endpoint que tengan para el catálogo general
             setTodasLasPracticas(resPracticasGlobales.data)
         } catch (error) {
-            console.log("Error status:", error.response?.status)
-            console.log("Error data:", error.response?.data)
             setError('No se pudo cargar la información del médico.')
         } finally {
             setLoading(false)
