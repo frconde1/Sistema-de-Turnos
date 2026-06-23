@@ -20,7 +20,7 @@ export default class TurnoRepository {
 		if(practica) filtrosMDB.practica	= practica;
 		if(estado)	 filtrosMDB.estado		= estado;
 		
-		if(fechaInicio || fechaFin) filtrosMongo.fecha = {};
+		if(fechaInicio || fechaFin) filtrosMDB.fecha = {};
 		if(fechaInicio) filtrosMDB.fecha.$gte = fechaInicio;
 		if(fechaFin) 	filtrosMDB.fecha.$lte = fechaFin;
 
@@ -40,7 +40,7 @@ export default class TurnoRepository {
 
         return {
 			turnos: turnos.map(TurnoMapper.toEntity),
-            totalTurnos: await TurnoModel.countDocuments()
+            totalTurnos: await TurnoModel.countDocuments(filtrosMDB) //el total de turnos que cumple con los filtros, sino te da el total sin el filtro
         }
 	}
 
