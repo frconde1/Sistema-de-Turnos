@@ -4,6 +4,7 @@ import { useState } from 'react';
 const useSolicitarTurno = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [turnoSolicitado, setTurnoSolicitado] = useState(false);
 
     const solicitarTurno = async ({ medico, paciente, sede, practica, fechaHora }) => {
         try {
@@ -17,7 +18,7 @@ const useSolicitarTurno = () => {
                 practica,
                 fechaHora,
             });
-
+            setTurnoSolicitado(true);
         } catch (err) {
             setError(err.response?.data?.message || 'Error al solicitar turno');
         } finally {
@@ -28,6 +29,7 @@ const useSolicitarTurno = () => {
     return {
         loading,
         error,
+        turnoSolicitado,
         solicitarTurno,
     };
 };

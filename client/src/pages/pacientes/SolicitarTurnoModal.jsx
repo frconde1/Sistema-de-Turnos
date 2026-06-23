@@ -8,7 +8,7 @@ export default function SolicitarTurnoModal({ show, seleccionado, onHide }) {
     const [practicaSeleccionada, setPracticaSeleccionada] = useState('');
     const [sedeSeleccionada, setSedeSeleccionada] = useState('');
     const [horaSeleccionada, setHoraSeleccionada] = useState('');
-    const { loading, solicitarTurno, error } = useSolicitarTurno();
+    const { loading, solicitarTurno, error, turnoSolicitado } = useSolicitarTurno();
 
     useEffect(() => {
         if (!show) {
@@ -20,8 +20,8 @@ export default function SolicitarTurnoModal({ show, seleccionado, onHide }) {
 
     if (!seleccionado) return null;
 
-    const handleSolicitarTurno = () => {
-        solicitarTurno({
+    const handleSolicitarTurno = async () => {
+        await solicitarTurno({
             medico: seleccionado._id,
             paciente: usuario.id,
             sede: sedeSeleccionada,
@@ -124,6 +124,9 @@ export default function SolicitarTurnoModal({ show, seleccionado, onHide }) {
                 </Card>
                 {error && (
                     <Alert variant="danger">{error}</Alert>
+                )}
+                {turnoSolicitado && (
+                    <Alert variant="success">Turno solicitado!!</Alert>
                 )}
             </Modal.Body>
 
