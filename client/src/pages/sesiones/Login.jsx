@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { Button, Form, Toast, ToastContainer } from "react-bootstrap";
 import { useAuth } from "../../context/auth/AuthContext";
+
 
 export default function Login() {
 	const [usuario, setUsuario] = useState("");
@@ -10,7 +11,7 @@ export default function Login() {
 
 	const [mostrarToast, setMostrarToast] = useState(false);
 
-	const { login, error, loading } = useAuth();
+	const { usuario: usuarioActual, login, error, loading } = useAuth();
 
 	const navigate = useNavigate();
 
@@ -30,6 +31,14 @@ export default function Login() {
 		}
 
 		setMostrarToast(true);
+	}
+
+	if (usuario?.rol === "Paciente") {
+		return <Navigate to="/paciente" replace />;
+	}
+
+	if (usuario?.rol === "Medico") {
+		return <Navigate to="/medico" replace />;
 	}
 
 	return (
