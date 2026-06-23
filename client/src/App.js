@@ -13,6 +13,7 @@ import { AuthProvider } from './context/auth/AuthContext';
 import { NotificationProvider } from './context/auth/NotificationContext';
 import TurnoLayout from './features/layouts/TurnoLayout';
 import NotificationsPage from './pages/NotificationsPage';
+import HomeRoute from './features/HomeRoute';
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
       <NotificationProvider>
         <Routes>
           <Route path='/' element={<Layout />}>
-            <Route index element={<Landing/>} />
+            <Route index element={<HomeRoute />} />
             
             <Route path='login' element={<Login />} />
             <Route path='register' element={<Register />} />
