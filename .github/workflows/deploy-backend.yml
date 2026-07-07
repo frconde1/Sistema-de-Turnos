@@ -2,7 +2,7 @@ name: Deploy Backend (EC2 + Docker Compose)
 
 on:
   push:
-    branches: [main]
+    branches: [develop]
     paths:
       - 'server/**'
       - 'docker-compose.prod.yml'
@@ -23,6 +23,6 @@ jobs:
           script: |
             set -e
             cd ~/2026-1c-backend-grupo-06
-            git pull origin main
+            git pull origin develop
             docker compose -f docker-compose.prod.yml up -d --build
             docker image prune -f
