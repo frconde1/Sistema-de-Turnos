@@ -4,6 +4,7 @@ import { Outlet, NavLink, useLocation } from "react-router-dom";
 
 export default function TurnoLayout() {
   const [turnos, setTurnos] = useState([]);
+  const [obraSocialId, setObraSocialId] = useState(null);
   const location = useLocation();
 
   const isBusqueda = location.pathname.endsWith("busqueda");
@@ -37,7 +38,7 @@ export default function TurnoLayout() {
         </NavLink>
       </div>
 
-      <Outlet context={{ turnos, setTurnos }} />
+      <Outlet context={{ turnos, setTurnos, obraSocialId, setObraSocialId }} />
     </div>
   );
 }

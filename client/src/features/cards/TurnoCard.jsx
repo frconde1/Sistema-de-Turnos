@@ -8,9 +8,7 @@ function TurnoCard({ turno, index, onRemove, botonText }) {
 	const medicoSede 	 = turno.sede;
 	const medicoPractica = turno.practica;
 	const hasta = new Date(fechaHora)
-	console.log(JSON.stringify(turno.practica))
 	hasta.setMinutes(hasta.getMinutes() + medicoPractica.duracionEnMins);
-	console.log(medicoPractica.duracionEnMins)
 	const handleRemove = () => {
 		onRemove(index);
 	};

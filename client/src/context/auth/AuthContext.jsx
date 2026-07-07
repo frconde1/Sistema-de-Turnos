@@ -25,7 +25,7 @@ export function AuthProvider({ children }) {
             return usuarioLogueado;
         } catch (error) {
             console.error('Error al iniciar sesión:', error);
-            setError(error.response.data.message);
+            setError(error.response?.data?.message || 'Error de conexión con el servidor');
         } finally {
             setLoading(false);
         }

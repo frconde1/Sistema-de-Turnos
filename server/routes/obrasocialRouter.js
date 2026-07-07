@@ -19,6 +19,9 @@ router.route('/:id/planes')
 
 router.route('/:id/planes/:idPlan')
 	.delete(async (req, res, next) => await controller.EliminarPlan(req, res, next))
+router.route('/:id/practicas/:idPractica')
+	.get(async (req, res, next) => await controller.FindPrecio(req, res, next))
+
 
 
 export default router;

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Alert, Badge, Card, Col, Container, ListGroup, Row, Spinner } from 'react-bootstrap';
+import { useOutletContext } from 'react-router-dom';
 import useGetDisponibilidades from '../../hooks/useGetDisponibilidades';
 import BusquedaTurnosFiltros from './BusquedaTurnosFiltros.jsx';
 import SolicitarTurnoModal from './SolicitarTurnoModal.jsx';
 
 export default function BusquedaTurnos() {
+  const { obraSocialId } = useOutletContext();
   const { disponibilidades, loading, error, fetchDisponibilidades } = useGetDisponibilidades();
   const [filtros, setFiltros] = useState({
     nombre: '',
@@ -126,6 +128,7 @@ export default function BusquedaTurnos() {
         show={Boolean(seleccionado)}
         seleccionado={seleccionado}
         onHide={handleClose}
+        obraSocialId={obraSocialId}
       />
     </Container>
   )

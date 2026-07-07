@@ -4,6 +4,8 @@ import { idSchema, stringSchema, ValidarZodSchema } from "./zodSchemas.js";
 import { BadRequestError, ResourceNotFoundError } from "../errors/Errors.js";
 import ObraSocial from "../domain/ObraSocial.js";
 import PlanService from "./PlanService.js";
+import PracticaService from "./PracticaService.js";
+import { NivelCobertura } from "../domain/Enums.js";
 
 const crearObraSocialSchema = z.object({
 	nombre: stringSchema("nombre")
@@ -20,10 +22,12 @@ const agregarPlanSchema = z.object({
 export default class ObraSocialService {
 	constructor(
 		obraSocialRepository = new ObraSocialRepository(),
-		planService = new PlanService()
+		planService = new PlanService(),
+		practicaService = new PracticaService()
 	){
 		this.repository  = obraSocialRepository;
 		this.planService = planService;
+		this.practicaService = practicaService;
 	}
 
 	async FindAll(){
@@ -42,6 +46,23 @@ export default class ObraSocialService {
 		if(obra == null)
 			throw new ResourceNotFoundError("la obra social buscada no existe");
 		return obra.planes;
+	}
+
+	async FindPrecio(id, idPractica){
+		const obra = await this.repository.FindById(id);
+		const practica = await this.practicaService.FindById(idPractica);
+		
+
+		switch(obra.ObtenerCobertura(practica)) {
+			case NivelCobertura.TOTAL:
+				return { precioFinal: 0 };
+			case NivelCobertura.PARCIAL:
+				return { precioFinal: practica.costo * 0.5 };
+			case NivelCobertura.NINGUNA:
+				return { precioFinal: practica.costo };
+			default:
+				throw new BadRequestError("Cobertura desconocida");
+		}
 	}
 
 	async Create(req){

@@ -101,4 +101,13 @@ export default class ObraSocialController {
 		}
 	}
 
+	async FindPrecio(req, res, next) {
+		try {
+			const { id, idPractica } = req.params;
+			return res.json(await this.service.FindPrecio(id, idPractica));
+		} catch (error) {
+			next(error)
+		}
+	}
+
 }

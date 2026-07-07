@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Form, ListGroup, Modal } from 'react-bootstrap';
+import { Button, Card, Form, ListGroup, Modal, Spinner } from 'react-bootstrap';
 
 import { useAuth } from '../../context/auth/AuthContext';
 import { useOutletContext } from 'react-router-dom';
+import useGetPrecio from '../../hooks/useGetPrecio';
 
-export default function SolicitarTurnoModal({ show, seleccionado, onHide }) {
+export default function SolicitarTurnoModal({ show, seleccionado, onHide, obraSocialId }) {
     const { usuario } = useAuth();
     const [practicaSeleccionada, setPracticaSeleccionada] = useState('');
     const [sedeSeleccionada, setSedeSeleccionada] = useState('');
     const [fechaSeleccionada, setFechaSeleccionada] = useState('');
     const [horaSeleccionada, setHoraSeleccionada] = useState('');
+    const { precio, loading: loadingPrecio } = useGetPrecio(practicaSeleccionada?.id, obraSocialId);
 
     const { turnos, setTurnos } = useOutletContext();
 
@@ -51,9 +53,9 @@ export default function SolicitarTurnoModal({ show, seleccionado, onHide }) {
         
     };
 
-    const precioFormateado = practicaSeleccionada?.costo != null
-    ? new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(practicaSeleccionada.costo)
-    : null;
+    const precioFormateado = precio != null
+    ? new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(precio)
+    : new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(practicaSeleccionada.costo);
     return (
         <Modal show={show} onHide={onHide} centered size="lg" fullscreen="sm-down">
             <Modal.Header closeButton>
@@ -173,9 +175,13 @@ export default function SolicitarTurnoModal({ show, seleccionado, onHide }) {
                         </div>
                     {practicaSeleccionada && (
                             <div className="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
-                                <span className="text-muted text-uppercase small fw-semibold">Precio</span>
+                                <span className="text-muted text-uppercase small fw-semibold">Precio final</span>
                                 <span className="fs-5 fw-bold">
-                                    {precioFormateado ?? 'Sin precio'}
+                                    {loadingPrecio ? (
+                                        <Spinner animation="border" size="sm" />
+                                    ) : (
+                                        precioFormateado ?? 'Sin precio'
+                                    )}
                                 </span>
                             </div>
                         )}
