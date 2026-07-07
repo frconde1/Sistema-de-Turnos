@@ -1,10 +1,21 @@
 import { createContext, useContext, useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-    const [usuario, setUsuario] = useState(null);
+    const [usuario, setUsuario] = useState(() => {
+        const token = localStorage.getItem('token');
+        if (!token) return null;
+        try {
+            const decoded = jwtDecode(token);
+            return decoded.exp * 1000 < Date.now() ? null : decoded;
+        } catch {
+            return null;
+        }
+    });
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -14,15 +25,11 @@ export function AuthProvider({ children }) {
 
         try {
             const response = await axios.post('/usuarios/login', { username, password });
-
-            const usuarioLogueado = {
-                id: response.data.id,
-                rol: response.data.rol,
-                username: username
-            };
-
-            setUsuario(usuarioLogueado);
-            return usuarioLogueado;
+            const token = response.data.token;
+            localStorage.setItem('token', token);
+            const decoded = jwtDecode(token);
+            setUsuario(decoded);
+            return decoded;
         } catch (error) {
             console.error('Error al iniciar sesión:', error);
             setError(error.response?.data?.message || 'Error de conexión con el servidor');
@@ -32,6 +39,7 @@ export function AuthProvider({ children }) {
     };
 
     const logout = () => {
+        localStorage.removeItem('token');
         setUsuario(null);
     };
 

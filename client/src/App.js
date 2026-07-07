@@ -3,7 +3,6 @@ import { Route, Routes } from 'react-router-dom';
 import Login    from './pages/sesiones/Login';
 import Register from './pages/sesiones/Register';
 import Layout from './features/layouts/Layout';
-import Landing from './pages/Landing';
 import BusquedaTurnos from './pages/pacientes/BusquedaTurnos';
 import PacienteDashboard from './pages/pacientes/PacienteDashboard';
 import PreseleccionTurnos from './pages/pacientes/PreseleccionTurnos';
@@ -16,6 +15,7 @@ import NotificationsPage from './pages/NotificationsPage';
 import MedicoTurnoLayout from './features/layouts/MedicoTurnoLayout';
 import MedicoTurnos from './pages/medicos/MedicoTurnos';
 import HomeRoute from './features/HomeRoute';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -30,15 +30,19 @@ function App() {
 
             <Route path='home' element={<Home />} />
 
-            <Route path='paciente' element={<TurnoLayout />}>
+            <Route path='paciente' element={<ProtectedRoute rolRequerido="Paciente" />}>
+              <Route element={<TurnoLayout />}>
                 <Route index element={<PacienteDashboard />} />
                 <Route path='busqueda' element={<BusquedaTurnos />} />
                 <Route path='preseleccion' element={<PreseleccionTurnos />} />
+              </Route>
             </Route>
 
-            <Route path='medico' element={<MedicoTurnoLayout />}>
+            <Route path='medico' element={<ProtectedRoute rolRequerido="Medico" />}>
+              <Route element={<MedicoTurnoLayout />}>
                 <Route index element={<MedicoDashboard />} />
                 <Route path='turnos' element={<MedicoTurnos />} />
+              </Route>
             </Route>
             <Route path='notificaciones' element={<NotificationsPage />} />
           </Route>

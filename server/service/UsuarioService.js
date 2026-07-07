@@ -1,6 +1,7 @@
 import z from "zod";
+import jwt from "jsonwebtoken";
 import { stringSchema, ValidarZodSchema } from "./zodSchemas.js";
-import { InputError, BadRequestError, ResourceNotFoundError } 		from "../errors/Errors.js";
+import { InputError, BadRequestError, ResourceNotFoundError } from "../errors/Errors.js";
 
 import UsuarioRepository from "../repository/UsuarioRepository.js"
 import Usuario           from "../domain/Usuario.js";
@@ -78,6 +79,13 @@ export default class UsuarioService {
         const usuario = await this.repository.FindByUsername(reqBody.username);
         if(!usuario || usuario.password != reqBody.password)
             throw new InputError("el usuario o contraseña no existe")
-        return {rol: usuario.rol, id: usuario.id};
+
+        const token = jwt.sign(
+            { id: usuario.id, rol: usuario.rol, username: usuario.username },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        return { token };
     }
 }
