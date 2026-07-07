@@ -40,7 +40,7 @@ export default class UsuarioService {
         const {username, password} = reqBody;
         const usuario = new Usuario(username, password);
 
-        return await GuardarUsuario(usuario);
+        return await this.GuardarUsuario(usuario);
     }
 
     /** @param {Usuario} usuario */
