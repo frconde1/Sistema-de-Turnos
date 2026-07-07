@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const port = process.env.PORT || 3001
-const host = 'localhost'
+const host = process.env.HOST || '0.0.0.0'
 
 const mongoUri = process.env.MONGO_URI || 'mongodb://admin:admin123@localhost:27017/sweetmedical?authSource=admin'
 
