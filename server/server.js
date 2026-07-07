@@ -1,8 +1,11 @@
 import app from "./app.js"
 import mongoose from "mongoose"
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 
-dotenv.config();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.resolve(__dirname, ".env") });
 
 const port = process.env.PORT || 3001
 const host = 'localhost'

@@ -33,11 +33,11 @@ export default function Login() {
 		setMostrarToast(true);
 	}
 
-	if (usuario?.rol === "Paciente") {
+	if (usuarioActual?.rol === "Paciente") {
 		return <Navigate to="/paciente" replace />;
 	}
 
-	if (usuario?.rol === "Medico") {
+	if (usuarioActual?.rol === "Medico") {
 		return <Navigate to="/medico" replace />;
 	}
 
