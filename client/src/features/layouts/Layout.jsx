@@ -66,7 +66,7 @@ export default function Layout({ id, setId }) {
 
       <footer className="py-3 mt-auto border-top">
         <div className="container d-flex flex-wrap justify-content-between align-items-center">
-          <span className="text-body-secondary">Sweet medical</span>
+          <span className="text-body-secondary">Swit medical</span>
           <div className="d-flex gap-3">
             <p className="text-decoration-none text-body-secondary">
               Acerca de
