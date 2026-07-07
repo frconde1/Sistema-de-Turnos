@@ -62,4 +62,13 @@ export default class EspecialidadController {
 			next(error)
 		}
 	}
+
+	async delete(req, res, next) {
+		try {
+			await this.service.delete(req.params.id);
+			return res.status(200).json({ message: "Especialidad eliminada correctamente" });
+		} catch (error) {
+			next(error)
+		}
+	}
 }

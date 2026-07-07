@@ -16,13 +16,19 @@ router.route('/:id/disponibilidades')
     .post((req, res, next) => medicoController.agregarDisponibilidad(req, res, next))
     .delete((req, res, next) => medicoController.eliminarDisponibilidad(req, res, next))
 
-
 router.route('/:id/sedes')
     .post((req, res, next) => medicoController.agregarSede(req, res, next))
-
+router.route('/:id/sedes/:sedeId')
+    .delete((req, res, next) => medicoController.eliminarSede(req, res, next))
 
 router.route('/:id/practicas')
     .post((req, res, next) => medicoController.AgregarPractica(req, res, next))
+router.route('/:id/practicas/:practicaId')
+    .delete((req, res, next) => medicoController.eliminarPractica(req, res, next)) 
 
+router.route("/:id/especialidades")    
+    .post((req, res, next) => medicoController.agregarEspecialidad(req, res, next))
+router.route("/:id/especialidades/:especialidadId")
+    .delete((req, res, next) => medicoController.eliminarEspecialidad(req, res, next))
 
 export default router

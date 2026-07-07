@@ -63,4 +63,20 @@ export default class Medico {
         this.sedes.push(sede)
     }
 
+	eliminarPractica(practicaId) {
+		this.practicas = this.practicas.filter(p => p.id !== practicaId)
+	}
+
+	eliminarSede(sede) {
+		this.sedes = this.sedes.filter(s => s.id !== sede.id)
+	}
+
+	agregarEspecialidad(especialidad) {
+		this.especialidades.push(especialidad)
+	}
+
+	eliminarEspecialidad(especialidadId) {
+		this.especialidades = this.especialidades.filter(e => e.id !== especialidadId)
+	}
+
 }

@@ -79,7 +79,30 @@ const [todasLasPracticas, setTodasLasPracticas] = useState([])
             setError('No se pudo agregar la disponibilidad.')
         }
     }
- 
+
+    const eliminarPractica = async (practica) => {
+        try {
+            await axios.delete(`/medicos/${medico.id}/practicas/${practica.id}`, {})
+            setMedico(m => ({
+                ...m,
+                practicas: m.practicas.filter(p => p.id !== practica.id)
+            }))
+        } catch {
+            setError('No se pudo eliminar la práctica.')
+        }
+    }
+
+    const eliminarSede = async (sedeId) => {
+        try {
+            await axios.delete(`/medicos/${medico.id}/sedes/${sedeId}`, {})
+            setMedico(m => ({
+                ...m,
+                sedes: m.sedes.filter(s => s.id !== sedeId)
+            }))
+        } catch {
+            setError('No se pudo eliminar la sede.')
+        }
+    }
     const eliminarDisponibilidad = async (disponibilidad) => {
         try {
             await axios.delete(`/medicos/${medico.id}/disponibilidades`,
@@ -145,7 +168,7 @@ const agregarPractica = async (practicaId) => {
             const especialidadAsignada = todasLasEspecialidades.find(e => e.id === especialidadId)
             if (!especialidadAsignada) return
 
-            await axios.post(`/medicos/${medico.id || medico._id}/especialidades`, { 
+            await axios.post(`/medicos/${medico.id}/especialidades`, { 
                 especialidad: { id: especialidadId } 
             })
 
@@ -155,7 +178,16 @@ const agregarPractica = async (practicaId) => {
             setError('No se pudo asignar la especialidad.')
         }
     }
- 
+
+    const eliminarEspecialidad = async (especialidadId) => {
+        try {
+            await axios.delete(`/medicos/${medico.id}/especialidades/${especialidadId}`)
+            setMedico(m => ({ ...m, especialidades: m.especialidades.filter(e => e.id !== especialidadId) }))
+        } catch {
+            setError('No se pudo eliminar la especialidad.')
+        }
+    }
+
     if (loading) return (
         <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
             <Spinner animation="border" variant="primary" />
@@ -184,13 +216,15 @@ const agregarPractica = async (practicaId) => {
                 <SedesPanel 
                     sedesActuales={medico.sedes} 
                     onAsignarClick={() => setModalSede(true)} 
+                    onEliminarSede = {eliminarSede}
                 />
             </Col>
             
             <Col xs={12} md={6}>
                 <EspecialidadesPanel 
                     especialidadesActuales={medico.especialidades} 
-                    onAsignarClick={() => setModalEspecialidad(true)} 
+                    onAsignarClick={() => setModalEspecialidad(true)}
+                    onEliminar={eliminarEspecialidad}
                 />
             </Col>
 
@@ -198,6 +232,7 @@ const agregarPractica = async (practicaId) => {
                 <PracticasPanel 
                     practicasActuales={medico.practicas} 
                     onAgregarClick={() => setModalPractica(true)} 
+                    onEliminar={eliminarPractica}
                 />
             </Col>
 

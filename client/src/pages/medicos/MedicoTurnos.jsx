@@ -49,7 +49,7 @@ export default function MedicoTurnos() {
           {turnos.map((turno, index) => (
             <Col key={turno.id ?? index}>
               <TurnoCard 
-              turno={{...turno, fechaHora: new Date(turno.fechaHora), sede: turno.sede.id, practica: turno.practica.id}} 
+              turno={{...turno, fechaHora: new Date(turno.fechaHora), sede: turno.sede, practica: turno.practica}} 
               index={index} 
               onRemove={turno.estado === "CANCELADO" ? null : handleCancelar}
               botonText={"Canclear"}

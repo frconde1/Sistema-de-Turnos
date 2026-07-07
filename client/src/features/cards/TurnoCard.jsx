@@ -5,11 +5,12 @@ import { formatAppointmentDate, formatHour } from "../../utils/dateFormatter";
 
 function TurnoCard({ turno, index, onRemove, botonText }) {
 	const { medico, fechaHora, paciente, practica, estado, sede } = turno;
-	const medicoSede 	 = medico.sedes.find(s => s.id === sede);
-	const medicoPractica = medico.practicas.find(p => p.id === practica);
-
+	const medicoSede 	 = turno.sede;
+	const medicoPractica = turno.practica;
 	const hasta = new Date(fechaHora)
+	console.log(JSON.stringify(turno.practica))
 	hasta.setMinutes(hasta.getMinutes() + medicoPractica.duracionEnMins);
+	console.log(medicoPractica.duracionEnMins)
 	const handleRemove = () => {
 		onRemove(index);
 	};

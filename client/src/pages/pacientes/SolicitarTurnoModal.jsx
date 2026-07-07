@@ -41,12 +41,19 @@ export default function SolicitarTurnoModal({ show, seleccionado, onHide }) {
             paciente: usuario.id,
             sede: sedeSeleccionada,
             practica: practicaSeleccionada,
-            fechaHora,
+            fechaHora
         });
 
+
+        
+
         onHide();
+        
     };
 
+    const precioFormateado = practicaSeleccionada?.costo != null
+    ? new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(practicaSeleccionada.costo)
+    : null;
     return (
         <Modal show={show} onHide={onHide} centered size="lg" fullscreen="sm-down">
             <Modal.Header closeButton>
@@ -86,12 +93,12 @@ export default function SolicitarTurnoModal({ show, seleccionado, onHide }) {
                                 <Form.Label>Práctica</Form.Label>
                                 <Form.Select
                                     value={practicaSeleccionada}
-                                    onChange={(event) => setPracticaSeleccionada(event.target.value)}
+                                    onChange={(event) => setPracticaSeleccionada(seleccionado.practicas.find(p => p.id === event.target.value))}
                                     isInvalid={!practicaSeleccionada}
                                 >
                                     <option value="">Seleccionar práctica</option>
                                     {(seleccionado.practicas ?? []).map((practica, index) => (
-                                        <option key={practica._id ?? practica.id ?? index} value={practica._id ?? practica.id ?? practica.nombre}>
+                                        <option key={practica._id ?? practica.id ?? index} value={practica.id}>
                                             {practica.nombre}
                                         </option>
                                     ))}
@@ -164,6 +171,14 @@ export default function SolicitarTurnoModal({ show, seleccionado, onHide }) {
                                 </Form.Control.Feedback>
                             </Form.Group>
                         </div>
+                    {practicaSeleccionada && (
+                            <div className="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                                <span className="text-muted text-uppercase small fw-semibold">Precio</span>
+                                <span className="fs-5 fw-bold">
+                                    {precioFormateado ?? 'Sin precio'}
+                                </span>
+                            </div>
+                        )}
                     </Card.Body>
                 </Card>
             </Modal.Body>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Button, Badge } from 'react-bootstrap';
 
-export default function EspecialidadesPanel({ especialidadesActuales, onAsignarClick }) {
+export default function EspecialidadesPanel({ especialidadesActuales, onAsignarClick, onEliminar }) {
     return (
         <Card className="shadow-sm mb-3">
             <Card.Body>
@@ -10,6 +10,13 @@ export default function EspecialidadesPanel({ especialidadesActuales, onAsignarC
                     {especialidadesActuales && especialidadesActuales.map((e, index) => (
                         <Badge key={e.id || e._id || index} bg="success" className="fw-normal fs-6 py-2 px-3">
                             {e.nombre}
+                            <span
+                                onClick={() => onEliminar(e.id)}
+                                style={{ cursor: 'pointer', fontSize: '0.9rem', lineHeight: 1 }}
+                                aria-label={`Eliminar ${e.nombre}`}
+                            >
+                                ×
+                            </span>
                         </Badge>
                     ))}
                     {(!especialidadesActuales || especialidadesActuales.length === 0) && (

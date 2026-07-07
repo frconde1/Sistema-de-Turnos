@@ -8,6 +8,7 @@ import { SedeRepository } from "../repository/SedeRepository.js";
 import UsuarioService from "./UsuarioService.js";
 import SedeService from "./SedeService.js";
 import PracticaService from "./PracticaService.js";
+import EspecialidadService from "./EspecialidadService.js";
 import Usuario from "../domain/Usuario.js";
 import { stringSchema } from "./zodSchemas.js";
 
@@ -31,12 +32,14 @@ export default class MedicoService {
         medicosRepository = new MedicosRepository(),
         sedeService = new SedeService(),
         usuarioService = new UsuarioService(),
-        practicaService = new PracticaService()
+        practicaService = new PracticaService(),
+        especialidadService = new EspecialidadService()
     ) {
         this.medicosRepository = medicosRepository;
         this.sedeService = sedeService;
         this.usuarioService = usuarioService;
         this.practicaService = practicaService;
+        this.especialidadService = especialidadService;
     }
 
     async create(medicoReq) {
@@ -115,9 +118,35 @@ export default class MedicoService {
         await this.medicosRepository.Save(medico)
     }
 
+    async agregarEspecialidad(medicoId, body) {
+        const medico = await this.medicosRepository.findMedicoById(medicoId)
+        const especialidad = await this.especialidadService.FindById(body.especialidad.id)
+        medico.agregarEspecialidad(especialidad)
+        await this.medicosRepository.Save(medico)
+    }
+
+    async eliminarEspecialidad(medicoId, especialidadId) {
+        const medico = await this.medicosRepository.findMedicoById(medicoId)
+        medico.eliminarEspecialidad(especialidadId)
+        await this.medicosRepository.Save(medico)
+    }
+
     async eliminarDisponibilidad(medicoId, body) {
         const medico = await this.medicosRepository.findMedicoById(medicoId)
         medico.eliminarDisponibilidad(body.disponibilidad)
+        await this.medicosRepository.Save(medico)
+    }
+
+    async eliminarPractica(medicoId, practicaId) {
+        const medico = await this.medicosRepository.findMedicoById(medicoId)
+        medico.eliminarPractica(practicaId)
+        await this.medicosRepository.Save(medico)
+    }
+
+    async eliminarSede(medicoId, sedeId) {
+        const medico = await this.medicosRepository.findMedicoById(medicoId)
+        const sede = await this.sedeService.FindById(sedeId)
+        medico.eliminarSede(sede)
         await this.medicosRepository.Save(medico)
     }
 

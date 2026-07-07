@@ -15,7 +15,7 @@ const useSolicitarTurno = () => {
                 medico: medico.id,
                 paciente,
                 sede,
-                practica,
+                practica: practica.id,
                 fechaHora,
             });
             return { ok: true };

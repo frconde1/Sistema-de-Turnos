@@ -45,6 +45,24 @@ export class MedicoController {
             next(error)
         }        
     }
+
+    agregarEspecialidad = async (req, res, next) => {
+        try {
+            await this.medicoService.agregarEspecialidad(req.params.id, req.body)
+            return res.status(201).json({ status: "success" })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    eliminarEspecialidad = async (req, res, next) => {
+        try {
+            await this.medicoService.eliminarEspecialidad(req.params.id, req.params.especialidadId)
+            return res.status(200).json({ status: "success" })
+        } catch (error) {
+            next(error)
+        }
+    }
     
     agregarDisponibilidad = async (req, res, next) => {
         try {
@@ -64,10 +82,28 @@ export class MedicoController {
         }
     }
 
+    eliminarSede = async (req, res, next) => {
+        try {
+            await this.medicoService.eliminarSede(req.params.id, req.params.sedeId)
+            return res.status(200).json({ status: "success" })
+        } catch (error) {
+            next(error)
+        }
+    }
+
 
     eliminarDisponibilidad = async (req, res, next) => {
         try {
             await this.medicoService.eliminarDisponibilidad(req.params.id, req.body)
+            return res.status(200).json({ status: "success" })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    eliminarPractica = async (req, res, next) => {
+        try {
+            await this.medicoService.eliminarPractica(req.params.id, req.params.practicaId)
             return res.status(200).json({ status: "success" })
         } catch (error) {
             next(error)
