@@ -94,7 +94,7 @@ export default function SolicitarTurnoModal({ show, seleccionado, onHide, obraSo
                             <Form.Group className="mb-3">
                                 <Form.Label>Práctica</Form.Label>
                                 <Form.Select
-                                    value={practicaSeleccionada}
+                                    value={practicaSeleccionada.id}
                                     onChange={(event) => setPracticaSeleccionada(seleccionado.practicas.find(p => p.id === event.target.value))}
                                     isInvalid={!practicaSeleccionada}
                                 >
@@ -113,8 +113,8 @@ export default function SolicitarTurnoModal({ show, seleccionado, onHide, obraSo
                             <Form.Group className="mb-3">
                                 <Form.Label>Sede</Form.Label>
                                 <Form.Select
-                                    value={sedeSeleccionada}
-                                    onChange={(event) => setSedeSeleccionada(event.target.value)}
+                                    value={sedeSeleccionada.id}
+                                    onChange={(event) => setSedeSeleccionada(seleccionado.sedes.find(s => s.id === event.target.value))}
                                     isInvalid={!sedeSeleccionada}
                                 >
                                     <option value="">Seleccionar sede</option>

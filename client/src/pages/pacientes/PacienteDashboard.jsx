@@ -152,7 +152,7 @@ export default function PacienteDashboard() {
           {turnos.map((turno, index) => (
             <Col key={turno.id ?? index}>
               <TurnoCard 
-                turno={{...turno, fechaHora: new Date(turno.fechaHora), sede: turno.sede.id, practica: turno.practica}} 
+                turno={{...turno, fechaHora: new Date(turno.fechaHora), sede: turno.sede, practica: turno.practica}} 
                 index={index} 
                 onRemove={turno.estado === "CANCELADO"? null : handleCancelar}
                 botonText={"Cancelar"}

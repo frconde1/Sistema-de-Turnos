@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const BASE_URL = process.env.BASE_URL || 'http://localhost:3001';
+const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 
 axios.defaults.baseURL = BASE_URL;
-axios.defaults.timeout = process.env.BASE_URL || 10000;
+axios.defaults.timeout = 10000;
 
 const attachToken = (config) => {
   const token = localStorage.getItem('token');

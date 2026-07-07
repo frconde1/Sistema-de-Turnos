@@ -14,7 +14,7 @@ const useSolicitarTurno = () => {
             await axios.post('/turnos', {
                 medico: medico.id,
                 paciente,
-                sede,
+                sede: sede.id,
                 practica: practica.id,
                 fechaHora,
             });

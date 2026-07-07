@@ -23,17 +23,25 @@ function TurnoCard({ turno, index, onRemove, botonText }) {
 				</Card.Subtitle>
 
 				<div className="mb-2">
-					<p><strong>Sede:</strong> {medicoSede.nombre}</p>
-					<p>{medicoSede.direccion}</p>
+					<p><strong>Sede:</strong> {medicoSede.nombre} {medicoSede.direccion}</p>
 				</div>
 
+    				{( turno.costo != null &&
+              <div className="mb-2">
+					<strong>Precio:</strong>{" "}
+					{new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(turno.costo)}
+          
+				</div>)}
+
+
+
 				<div className="mb-2">
-					<strong>Fecha:</strong>{" "}
+					<strong>Fecha: </strong>{" "}
 					{new Date(fechaHora).toLocaleDateString("es-AR")}
 				</div>
 
 				<div className="mb-3">
-					<strong>Hora:</strong>{"["}
+					<strong>Hora:</strong>{" ["}
 					{formatHour(fechaHora)}
 					{" - "}
 					{formatHour(hasta)}

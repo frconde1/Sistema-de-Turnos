@@ -1,0 +1,25 @@
+services:
+  backend:
+    build: ./server
+    container_name: sweetmedical-backend
+    restart: unless-stopped
+    ports:
+      - "80:3001"
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:7
+    container_name: sweetmedical-mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
+      MONGO_INITDB_DATABASE: ${MONGO_DB}
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
